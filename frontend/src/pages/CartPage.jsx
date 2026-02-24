@@ -11,10 +11,15 @@ export default function CartPage() {
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [shippingAddress, setShippingAddress] = useState('');
 
   const handleCheckout = async () => {
     if (!user) {
       navigate('/login');
+      return;
+    }
+    if (!shippingAddress.trim()) {
+      setError('Please enter a shipping address.');
       return;
     }
     setPlacing(true);
@@ -22,6 +27,7 @@ export default function CartPage() {
     try {
       const orderData = {
         items: items.map((i) => ({ productId: i.id, quantity: i.quantity })),
+        shippingAddress: shippingAddress.trim(),
       };
       const res = await placeOrder(orderData);
       clearCart();
@@ -89,6 +95,15 @@ export default function CartPage() {
           <div className="cart-total-row">
             <span>Total</span>
             <strong>${total.toFixed(2)}</strong>
+          </div>
+          <div className="form-group mt-1">
+            <label>Shipping Address</label>
+            <input
+              type="text"
+              value={shippingAddress}
+              onChange={(e) => setShippingAddress(e.target.value)}
+              placeholder="Enter your shipping address"
+            />
           </div>
           <button
             className="btn btn-primary btn-full mt-1"

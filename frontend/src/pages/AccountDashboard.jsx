@@ -149,7 +149,7 @@ export default function AccountDashboard() {
                   <div className="order-card-body">
                     <p>
                       <strong>Items:</strong>{' '}
-                      {order.items?.map((i) => `${i.quantity}×`).join(', ') || '—'}
+                      {order.items?.map((i) => `${i.quantity}× ${i.productName}`).join(', ') || '—'}
                     </p>
                     <p><strong>Total:</strong> ${order.totalAmount?.toFixed(2)}</p>
                     <p><strong>Date:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>

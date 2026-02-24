@@ -28,7 +28,8 @@ export default function LoginPage() {
     try {
       if (mode === 'login') {
         const res = await login({ email: form.email, password: form.password });
-        loginUser(res.data.token, res.data.user ?? { email: form.email });
+        const { token, userId, email, firstName, role } = res.data;
+        loginUser(token, { id: userId, email, firstName, role });
         navigate('/');
       } else {
         await register({
