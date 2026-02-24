@@ -97,8 +97,9 @@ export default function CartPage() {
             <strong>${total.toFixed(2)}</strong>
           </div>
           <div className="form-group mt-1">
-            <label>Shipping Address</label>
+            <label htmlFor="shipping-address">Shipping Address</label>
             <input
+              id="shipping-address"
               type="text"
               value={shippingAddress}
               onChange={(e) => setShippingAddress(e.target.value)}
