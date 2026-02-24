@@ -1,0 +1,55 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: 
+              - "http://localhost:5173"
+              - "https://shop.praveen-challa.tech"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+      routes:
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/products/**
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/orders/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+        - id: inventory-service
+          uri: lb://inventory-service
+          predicates:
+            - Path=/api/inventory/**
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://eureka:password123@${EUREKA_HOST:localhost}:8763/eureka/
+
+jwt:
+  secret: ${JWT_SECRET:my-very-long-and-secure-jwt-secret-key-that-is-at-least-512-bits-long-so-it-works-with-shopease-microservices}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,gateway
+  endpoint:
+    health:
+      show-details: always

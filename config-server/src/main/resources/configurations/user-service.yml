@@ -1,0 +1,50 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    url: ${USER_DB_URL:jdbc:postgresql://127.0.0.1:5433/user_db}
+    username: ${USER_DB_USER:shopease}
+    password: ${USER_DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://eureka:password123@${EUREKA_HOST:localhost}:8763/eureka/
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://${ZIPKIN_HOST:localhost}:9411/api/v2/spans
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,circuitbreakers
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: ${spring.application.name:user-service}
+    version: 1.0.0
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+jwt:
+  secret: ${JWT_SECRET:my-very-long-and-secure-jwt-secret-key-that-is-at-least-512-bits-long-so-it-works-with-shopease-microservices}
+  expiration: 86400000

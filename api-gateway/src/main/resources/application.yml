@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  config:
+    import: "optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888}"
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"

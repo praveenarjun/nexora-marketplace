@@ -1,0 +1,10 @@
+.git
+.idea
+*.iml
+**/target/
+!.mvn/wrapper/maven-wrapper.jar
+log/
+.vscode/
+docker-compose*.yml
+.env
+.DS_Store

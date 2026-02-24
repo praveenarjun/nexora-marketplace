@@ -1,0 +1,223 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # Infrastructure Services
+  # ==========================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: shopease
+      POSTGRES_PASSWORD: password
+      # the init script will create our microservice-specific DBs
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U shopease -d postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "check_port_connectivity" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
+  # ==========================================
+  # Core Microservices
+  # ==========================================
+  discovery-server:
+    build:
+      context: .
+      dockerfile: discovery-server/Dockerfile
+    container_name: discovery-server
+    ports:
+      - "8763:8763"
+    environment:
+      eureka.client.fetch-registry: "false"
+      eureka.client.register-with-eureka: "false"
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-O", "-", "http://localhost:8763/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  config-server:
+    build:
+      context: .
+      dockerfile: config-server/Dockerfile
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+    environment:
+      EUREKA_HOST: discovery-server
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-O", "-", "http://localhost:8888/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      EUREKA_HOST: discovery-server
+      CONFIG_SERVER_URL: http://config-server:8888
+      ZIPKIN_HOST: zipkin
+      JWT_SECRET: my-very-long-and-secure-jwt-secret-key-that-is-at-least-512-bits-long-so-it-works-with-shopease-microservices
+
+  product-service:
+    build:
+      context: .
+      dockerfile: product-service/Dockerfile
+    container_name: product-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      EUREKA_HOST: discovery-server
+      CONFIG_SERVER_URL: http://config-server:8888
+      PRODUCT_DB_URL: jdbc:postgresql://postgres:5432/product_db
+      REDIS_HOST: redis
+      RABBITMQ_HOST: rabbitmq
+      ZIPKIN_HOST: zipkin
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    container_name: user-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      EUREKA_HOST: discovery-server
+      CONFIG_SERVER_URL: http://config-server:8888
+      USER_DB_URL: jdbc:postgresql://postgres:5432/user_db
+      ZIPKIN_HOST: zipkin
+      JWT_SECRET: my-very-long-and-secure-jwt-secret-key-that-is-at-least-512-bits-long-so-it-works-with-shopease-microservices
+
+  inventory-service:
+    build:
+      context: .
+      dockerfile: inventory-service/Dockerfile
+    container_name: inventory-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      EUREKA_HOST: discovery-server
+      CONFIG_SERVER_URL: http://config-server:8888
+      INVENTORY_DB_URL: jdbc:postgresql://postgres:5432/inventory_db
+      RABBITMQ_HOST: rabbitmq
+      ZIPKIN_HOST: zipkin
+
+  order-service:
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
+    container_name: order-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      EUREKA_HOST: discovery-server
+      CONFIG_SERVER_URL: http://config-server:8888
+      ORDER_DB_URL: jdbc:postgresql://postgres:5432/order_db
+      RABBITMQ_HOST: rabbitmq
+      ZIPKIN_HOST: zipkin
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
+    container_name: notification-service
+    ports:
+      - "8085:8085"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      EUREKA_HOST: discovery-server
+      CONFIG_SERVER_URL: http://config-server:8888
+      RABBITMQ_HOST: rabbitmq
+      ZIPKIN_HOST: zipkin
+
+volumes:
+  postgres-data:

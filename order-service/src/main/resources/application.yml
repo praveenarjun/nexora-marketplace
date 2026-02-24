@@ -1,0 +1,22 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: order-service
+  config:
+    import: "configserver:${CONFIG_SERVER_URL:http://localhost:8888}"
+
+resilience4j.circuitbreaker:
+  instances:
+    orderService:
+      slidingWindowSize: 10
+      failureRateThreshold: 50
+      waitDurationInOpenState: 30s
+      permittedNumberOfCallsInHalfOpenState: 3
+
+resilience4j.retry:
+  instances:
+    orderService:
+      maxAttempts: 3
+      waitDuration: 2s

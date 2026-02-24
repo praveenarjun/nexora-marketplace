@@ -1,0 +1,54 @@
+server:
+  port: 8085
+
+spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+  mail:
+    host: ${SMTP_HOST:smtp.gmail.com}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:shopeasemicroservices@gmail.com}
+    password: ${SMTP_PASSWORD:vcop majr aosp eqyv}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://eureka:password123@${EUREKA_HOST:localhost}:8763/eureka/
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://${ZIPKIN_HOST:localhost}:9411/api/v2/spans
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,circuitbreakers
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: ${spring.application.name:notification-service}
+    version: 1.0.0
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
