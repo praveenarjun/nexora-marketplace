@@ -50,9 +50,12 @@ services:
       REDIS_HOST: ${UPSTASH_REDIS_HOST}
       REDIS_PORT: ${UPSTASH_REDIS_PORT}
       REDIS_PASSWORD: ${UPSTASH_REDIS_PASSWORD}
+      REDIS_SSL: "true"
       RABBITMQ_HOST: ${CLOUDAMQP_HOST}
       RABBITMQ_USER: ${CLOUDAMQP_USER}
       RABBITMQ_PASSWORD: ${CLOUDAMQP_PASSWORD}
+      RABBITMQ_VHOST: ${CLOUDAMQP_VHOST}
+      RABBITMQ_SSL: "true"
 
   user-service:
     image: ghcr.io/praveenchalla/shopease/user-service:latest
@@ -87,6 +90,8 @@ services:
       RABBITMQ_HOST: ${CLOUDAMQP_HOST}
       RABBITMQ_USER: ${CLOUDAMQP_USER}
       RABBITMQ_PASSWORD: ${CLOUDAMQP_PASSWORD}
+      RABBITMQ_VHOST: ${CLOUDAMQP_VHOST}
+      RABBITMQ_SSL: "true"
 
   order-service:
     image: ghcr.io/praveenchalla/shopease/order-service:latest
@@ -105,6 +110,8 @@ services:
       RABBITMQ_HOST: ${CLOUDAMQP_HOST}
       RABBITMQ_USER: ${CLOUDAMQP_USER}
       RABBITMQ_PASSWORD: ${CLOUDAMQP_PASSWORD}
+      RABBITMQ_VHOST: ${CLOUDAMQP_VHOST}
+      RABBITMQ_SSL: "true"
 
   notification-service:
     image: ghcr.io/praveenchalla/shopease/notification-service:latest
@@ -120,6 +127,8 @@ services:
       RABBITMQ_HOST: ${CLOUDAMQP_HOST}
       RABBITMQ_USER: ${CLOUDAMQP_USER}
       RABBITMQ_PASSWORD: ${CLOUDAMQP_PASSWORD}
+      RABBITMQ_VHOST: ${CLOUDAMQP_VHOST}
+      RABBITMQ_SSL: "true"
       SMTP_HOST: ${PROD_SMTP_HOST}
       SMTP_PORT: ${PROD_SMTP_PORT}
       SMTP_USERNAME: ${PROD_SMTP_USERNAME}
