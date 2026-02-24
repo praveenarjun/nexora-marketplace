@@ -219,5 +219,15 @@ services:
       RABBITMQ_HOST: rabbitmq
       ZIPKIN_HOST: zipkin
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api-gateway
+
 volumes:
   postgres-data:
