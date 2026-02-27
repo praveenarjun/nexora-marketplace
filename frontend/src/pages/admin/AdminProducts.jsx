@@ -48,7 +48,8 @@ export default function AdminProducts() {
                 name: formData.name,
                 description: formData.description,
                 price: price,
-                skuCode: formData.skuCode,
+                sku: formData.skuCode, // Backend explicitly expects 'sku'
+                status: 'ACTIVE',      // Backend expects 'status' to not be null
                 categoryId: window.parseInt(formData.categoryId)
             };
 
@@ -80,6 +81,21 @@ export default function AdminProducts() {
 
     return (
         <div className="max-w-7xl mx-auto py-8">
+            {/* Admin Navigation Tabs */}
+            <div className="mb-8 border-b border-gray-200">
+                <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+                    <a href="/admin/orders" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        Orders Fulfillment
+                    </a>
+                    <a href="/admin/products" className="border-primary-500 text-primary-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        Product Catalog
+                    </a>
+                    <a href="/admin/inventory" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        Inventory Levels
+                    </a>
+                </nav>
+            </div>
+
             <div className="md:flex md:items-center md:justify-between mb-8">
                 <div className="flex-1 min-w-0">
                     <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate flex items-center">
