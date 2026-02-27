@@ -3,6 +3,7 @@ package com.shopease.productservice.publisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -27,10 +28,11 @@ public class ProductEventPublisher {
                     "eventType", "CREATED");
             rabbitTemplate.convertAndSend(EXCHANGE, "product.created", event);
             log.info("✅ product.created event published for ID: {}", productId);
-        } catch (Exception e) {
+        } catch (AmqpException e) {
             // Event publishing is best-effort — product was saved to DB successfully.
-            // RabbitMQ may be unavailable or SSL misconfigured. Log and continue.
-            log.error("⚠️ Failed to publish product.created event for ID: {} — {}", productId, e.getMessage());
+            // RabbitMQ may be unavailable or SSL misconfigured. Log full trace and
+            // continue.
+            log.error("⚠️ Failed to publish product.created event for ID: {}", productId, e);
         }
     }
 
@@ -44,8 +46,8 @@ public class ProductEventPublisher {
                     "eventType", "UPDATED");
             rabbitTemplate.convertAndSend(EXCHANGE, "product.updated", event);
             log.info("✅ product.updated event published for ID: {}", productId);
-        } catch (Exception e) {
-            log.error("⚠️ Failed to publish product.updated event for ID: {} — {}", productId, e.getMessage());
+        } catch (AmqpException e) {
+            log.error("⚠️ Failed to publish product.updated event for ID: {}", productId, e);
         }
     }
 
@@ -57,8 +59,8 @@ public class ProductEventPublisher {
                     "eventType", "DELETED");
             rabbitTemplate.convertAndSend(EXCHANGE, "product.deleted", event);
             log.info("✅ product.deleted event published for ID: {}", productId);
-        } catch (Exception e) {
-            log.error("⚠️ Failed to publish product.deleted event for ID: {} — {}", productId, e.getMessage());
+        } catch (AmqpException e) {
+            log.error("⚠️ Failed to publish product.deleted event for ID: {}", productId, e);
         }
     }
 }
