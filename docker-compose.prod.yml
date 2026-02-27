@@ -2,9 +2,16 @@ version: '3.8'
 
 services:
   discovery-server:
-    image: ghcr.io/praveenarjun/shopease-discovery-server:latest
+    image: ghcr.io/praveenarjun/shopease-discovery-server:${IMAGE_TAG:-latest}
     container_name: discovery-server-prod
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
     ports:
       - "8763:8761"
     environment:
@@ -12,9 +19,16 @@ services:
       eureka.client.register-with-eureka: "false"
 
   config-server:
-    image: ghcr.io/praveenarjun/shopease-config-server:latest
+    image: ghcr.io/praveenarjun/shopease-config-server:${IMAGE_TAG:-latest}
     container_name: config-server-prod
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
     ports:
       - "8888:8888"
     depends_on:
@@ -23,9 +37,16 @@ services:
       EUREKA_HOST: discovery-server
 
   api-gateway:
-    image: ghcr.io/praveenarjun/shopease-api-gateway:latest
+    image: ghcr.io/praveenarjun/shopease-api-gateway:${IMAGE_TAG:-latest}
     container_name: api-gateway-prod
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
     ports:
       - "8080:8080"
     depends_on:
@@ -37,9 +58,16 @@ services:
       JWT_SECRET: ${JWT_SECRET}
 
   product-service:
-    image: ghcr.io/praveenarjun/shopease-product-service:latest
+    image: ghcr.io/praveenarjun/shopease-product-service:${IMAGE_TAG:-latest}
     container_name: product-service-prod
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
     ports:
       - "8081:8081"
     depends_on:
@@ -63,9 +91,16 @@ services:
       RABBITMQ_SSL: "true"
 
   user-service:
-    image: ghcr.io/praveenarjun/shopease-user-service:latest
+    image: ghcr.io/praveenarjun/shopease-user-service:${IMAGE_TAG:-latest}
     container_name: user-service-prod
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
     ports:
       - "8083:8083"
     depends_on:
@@ -85,9 +120,16 @@ services:
       FRONTEND_URL: "https://shop.praveen-challa.tech"
 
   inventory-service:
-    image: ghcr.io/praveenarjun/shopease-inventory-service:latest
+    image: ghcr.io/praveenarjun/shopease-inventory-service:${IMAGE_TAG:-latest}
     container_name: inventory-service-prod
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
     ports:
       - "8084:8084"
     depends_on:
@@ -107,9 +149,16 @@ services:
       RABBITMQ_SSL: "true"
 
   order-service:
-    image: ghcr.io/praveenarjun/shopease-order-service:latest
+    image: ghcr.io/praveenarjun/shopease-order-service:${IMAGE_TAG:-latest}
     container_name: order-service-prod
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
     ports:
       - "8082:8082"
     depends_on:
@@ -129,9 +178,16 @@ services:
       RABBITMQ_SSL: "true"
 
   notification-service:
-    image: ghcr.io/praveenarjun/shopease-notification-service:latest
+    image: ghcr.io/praveenarjun/shopease-notification-service:${IMAGE_TAG:-latest}
     container_name: notification-service-prod
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
     ports:
       - "8085:8085"
     depends_on:
