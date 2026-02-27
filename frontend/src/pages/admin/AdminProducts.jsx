@@ -48,21 +48,20 @@ export default function AdminProducts() {
                 name: formData.name,
                 description: formData.description,
                 price: price,
-                sku: formData.skuCode, // Backend explicitly expects 'sku'
-                status: 'ACTIVE',      // Backend expects 'status' to not be null
+                sku: formData.skuCode,  // Backend expects 'sku' in format: XX-XX-XX (e.g. ELEC-PHN-001)
+                status: 'ACTIVE',       // Backend requires status: ACTIVE | DRAFT | INACTIVE | ARCHIVED
                 categoryId: window.parseInt(formData.categoryId)
             };
 
             const response = await api.post('/api/products', productPayload);
+            // The product creation returns: { data: { id, name, sku, ... } }
+            const createdProduct = response.data?.data || response.data;
+            const productId = createdProduct?.id;
 
-            // 2. Initialize the Stock via inventory-service 
-            // (This is an incredible admin feature shortcut!)
-            if (formData.stockQuantity) {
+            // 2. Initialize the Stock via inventory-service using the returned productId
+            if (formData.stockQuantity && productId) {
                 try {
-                    await api.post('/api/inventory', {
-                        skuCode: formData.skuCode,
-                        quantity: parseInt(formData.stockQuantity, 10)
-                    });
+                    await api.post(`/api/inventory/restock?productId=${productId}&quantity=${parseInt(formData.stockQuantity, 10)}`);
                     toast.success(`Product created with ${formData.stockQuantity} units in stock!`);
                 } catch (invErr) {
                     toast.success('Product created, but stock initialization failed. Add stock manually.');
@@ -75,7 +74,16 @@ export default function AdminProducts() {
             setFormData({ name: '', description: '', price: '', skuCode: '', categoryId: 1, stockQuantity: '' });
             fetchProducts(); // Refresh table
         } catch (err) {
-            toast.error(err.response?.data?.message || 'Failed to create product');
+            // Show validation error details if available
+            const validationErrors = err.response?.data?.validationErrors;
+            if (validationErrors) {
+                const messages = Object.entries(validationErrors)
+                    .map(([field, msg]) => `${field}: ${msg}`)
+                    .join(' | ');
+                toast.error(`Validation failed — ${messages}`);
+            } else {
+                toast.error(err.response?.data?.message || 'Failed to create product');
+            }
         }
     };
 
@@ -126,8 +134,9 @@ export default function AdminProducts() {
                                 <input required type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" />
                             </div>
                             <div className="sm:col-span-3">
-                                <label className="block text-sm font-medium text-gray-700">SKU Code (Unique ID)</label>
-                                <input required type="text" value={formData.skuCode} onChange={(e) => setFormData({ ...formData, skuCode: e.target.value.toUpperCase() })} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm font-mono uppercase" />
+                                <label className="block text-sm font-medium text-gray-700">SKU Code</label>
+                                <input required type="text" placeholder="e.g. ELEC-PHN-001" value={formData.skuCode} onChange={(e) => setFormData({ ...formData, skuCode: e.target.value.toUpperCase() })} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm font-mono uppercase" />
+                                <p className="mt-1 text-xs text-gray-500">Format: CAT-SUBCAT-CODE (e.g. <span className="font-mono">ELEC-PHN-001</span>)</p>
                             </div>
                             <div className="sm:col-span-6">
                                 <label className="block text-sm font-medium text-gray-700">Description</label>
