@@ -65,3 +65,21 @@ management:
   endpoint:
     health:
       show-details: always
+
+resilience4j:
+  timelimiter:
+    instances:
+      orderServiceCB:
+        timeoutDuration: 10s
+      inventoryServiceCB:
+        timeoutDuration: 10s
+  circuitbreaker:
+    instances:
+      orderServiceCB:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 5
+        waitDurationInOpenState: 30s
+        failureRateThreshold: 60
+        slowCallDurationThreshold: 8s
+        slowCallRateThreshold: 80
