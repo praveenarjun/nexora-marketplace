@@ -4,6 +4,7 @@ services:
   discovery-server:
     image: ghcr.io/praveenarjun/shopease-discovery-server:latest
     container_name: discovery-server-prod
+    restart: always
     ports:
       - "8763:8761"
     environment:
@@ -13,6 +14,7 @@ services:
   config-server:
     image: ghcr.io/praveenarjun/shopease-config-server:latest
     container_name: config-server-prod
+    restart: always
     ports:
       - "8888:8888"
     depends_on:
@@ -23,6 +25,7 @@ services:
   api-gateway:
     image: ghcr.io/praveenarjun/shopease-api-gateway:latest
     container_name: api-gateway-prod
+    restart: always
     ports:
       - "8080:8080"
     depends_on:
@@ -36,6 +39,7 @@ services:
   product-service:
     image: ghcr.io/praveenarjun/shopease-product-service:latest
     container_name: product-service-prod
+    restart: always
     ports:
       - "8081:8081"
     depends_on:
@@ -61,6 +65,7 @@ services:
   user-service:
     image: ghcr.io/praveenarjun/shopease-user-service:latest
     container_name: user-service-prod
+    restart: always
     ports:
       - "8083:8083"
     depends_on:
@@ -82,6 +87,7 @@ services:
   inventory-service:
     image: ghcr.io/praveenarjun/shopease-inventory-service:latest
     container_name: inventory-service-prod
+    restart: always
     ports:
       - "8084:8084"
     depends_on:
@@ -103,6 +109,7 @@ services:
   order-service:
     image: ghcr.io/praveenarjun/shopease-order-service:latest
     container_name: order-service-prod
+    restart: always
     ports:
       - "8082:8082"
     depends_on:
@@ -124,6 +131,7 @@ services:
   notification-service:
     image: ghcr.io/praveenarjun/shopease-notification-service:latest
     container_name: notification-service-prod
+    restart: always
     ports:
       - "8085:8085"
     depends_on:
