@@ -40,7 +40,8 @@ public class RouteConfig {
 
                                 // --- PROTECTED ROUTES (Auth Required) ---
                                 .route("product-service-protected", r -> r
-                                                .method(HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE)
+                                                .method(HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH,
+                                                                HttpMethod.DELETE)
                                                 .and()
                                                 .path("/api/products/**")
                                                 .filters(f -> f
@@ -50,7 +51,8 @@ public class RouteConfig {
                                                                                 new AuthenticationFilter.Config())))
                                                 .uri("lb://product-service"))
                                 .route("category-service-protected", r -> r
-                                                .method(HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE)
+                                                .method(HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH,
+                                                                HttpMethod.DELETE)
                                                 .and()
                                                 .path("/api/categories/**")
                                                 .filters(f -> f
