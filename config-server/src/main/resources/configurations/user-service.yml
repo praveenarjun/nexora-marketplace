@@ -2,6 +2,9 @@ server:
   port: 8083
   forward-headers-strategy: framework
 
+frontend:
+  url: ${FRONTEND_URL:http://localhost:5173}
+
 spring:
   datasource:
     url: ${USER_DB_URL:jdbc:postgresql://127.0.0.1:5433/user_db}
