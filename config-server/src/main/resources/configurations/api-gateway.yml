@@ -17,6 +17,16 @@ spring:
               - DELETE
               - OPTIONS
             allowedHeaders: "*"
+      default-filters:
+        - name: RequestHeaderToRequestUri
+        - name: PreserveHostHeader
+      x-forwarded:
+        enabled: true
+        for-enabled: true
+        host-enabled: true
+        port-enabled: true
+        proto-enabled: true
+        prefix-enabled: true
       routes:
         - id: product-service
           uri: lb://product-service
