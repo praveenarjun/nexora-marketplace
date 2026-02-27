@@ -49,9 +49,9 @@ export default function Products() {
             name: product.name,
             price: product.price,
             skuCode: product.skuCode || product.sku,
-            quantity: 1
+            quantity: 1,
+            stockQuantity: product.stockQuantity
         });
-        toast.success(`Added ${product.name} to cart!`);
     };
 
     // Derive categories dynamically from available products

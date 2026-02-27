@@ -69,9 +69,15 @@ export default function AdminOrders() {
                                             </p>
                                         </div>
                                         <div>
-                                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
-                                                <Truck className="w-4 h-4 mr-2" /> Pending Dispatch
-                                            </span>
+                                            {order.status === 'COMPLETED' || order.status === 'SHIPPED' ? (
+                                                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                                    <CheckCircle className="w-4 h-4 mr-2" /> {order.status}
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
+                                                    <Clock className="w-4 h-4 mr-2" /> {order.status || 'Pending'}
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
 

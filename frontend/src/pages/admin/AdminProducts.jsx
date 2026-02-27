@@ -36,12 +36,18 @@ export default function AdminProducts() {
 
     const handleCreate = async (e) => {
         e.preventDefault();
+        const price = parseFloat(formData.price);
+        if (isNaN(price) || price < 0) {
+            toast.error('Please enter a valid price');
+            return;
+        }
+
         try {
             // 1. Create the Product via product-service
             const productPayload = {
                 name: formData.name,
                 description: formData.description,
-                price: window.parseFloat(formData.price),
+                price: price,
                 skuCode: formData.skuCode,
                 categoryId: window.parseInt(formData.categoryId)
             };

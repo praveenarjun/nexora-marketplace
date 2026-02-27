@@ -11,10 +11,10 @@ const useCart = create(
             addItem: (product) => {
                 const currentItems = get().items;
                 const existingItem = currentItems.find((item) => item.productId === product.id);
+                const stock = product.stockQuantity ?? 5;
 
                 if (existingItem) {
                     // Check if we hit inventory limits (Assuming max 5 per customer for safety if missing stock data)
-                    const stock = product.stockQuantity ?? 5;
                     if (existingItem.quantity >= stock) {
                         toast.error(`Cannot add more. Only ${stock} in stock!`);
                         return;
@@ -29,6 +29,11 @@ const useCart = create(
                     });
                     toast.success(`Increased ${product.name} quantity`);
                 } else {
+                    if (stock <= 0) {
+                        toast.error('This product is out of stock');
+                        return;
+                    }
+
                     set({
                         items: [...currentItems, {
                             productId: product.id,
@@ -36,6 +41,7 @@ const useCart = create(
                             name: product.name,
                             price: product.price,
                             quantity: 1,
+                            stockQuantity: product.stockQuantity,
                             // Keep original product data for rendering
                             product: product
                         }]

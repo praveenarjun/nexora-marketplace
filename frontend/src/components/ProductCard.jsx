@@ -45,11 +45,11 @@ export default function ProductCard({ product, onAddToCart }) {
                 {/* Footer actions */}
                 <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-100">
                     <span className="text-2xl font-black text-gray-900">
-                        ${product.price?.toFixed(2)}
+                        ${(product.price ?? 0).toFixed(2)}
                     </span>
 
                     <button
-                        onClick={() => onAddToCart(product)}
+                        onClick={() => onAddToCart?.(product)}
                         disabled={isOutOfStock}
                         className={`flex items-center justify-center p-3 rounded-xl transition-all duration-200 ${isOutOfStock
                             ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
