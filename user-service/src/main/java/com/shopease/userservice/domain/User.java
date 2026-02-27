@@ -41,6 +41,9 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    private String otpCode;
+    private LocalDateTime otpExpiryTime;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;

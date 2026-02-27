@@ -75,6 +75,11 @@ export default function Cart() {
                                                     <Plus className="w-4 h-4" />
                                                 </button>
                                             </div>
+                                            {item.stockQuantity !== undefined && (
+                                                <p className="mt-2 text-xs text-gray-400">
+                                                    {item.quantity >= item.stockQuantity ? 'Max available reached' : `${item.stockQuantity} available`}
+                                                </p>
+                                            )}
 
                                             <div className="absolute top-0 right-0">
                                                 <button

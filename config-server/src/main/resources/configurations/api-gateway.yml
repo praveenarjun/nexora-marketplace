@@ -42,6 +42,14 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/api/auth/**
+        - id: oauth2-auth
+          uri: lb://user-service
+          predicates:
+            - Path=/oauth2/**
+        - id: oauth2-login
+          uri: lb://user-service
+          predicates:
+            - Path=/login/oauth2/**
         - id: inventory-service
           uri: lb://inventory-service
           predicates:

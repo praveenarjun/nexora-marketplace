@@ -180,4 +180,161 @@ public class EmailService {
                     e.getMessage());
         }
     }
+
+    public void sendWelcomeEmail(String email, String firstName) {
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            String subject = "Welcome to ShopEase, " + firstName + "!";
+
+            String htmlContent = """
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <style>
+                            body { font-family: 'Inter', 'Segoe UI', sans-serif; background-color: #0f172a; margin: 0; padding: 0; color: #f8fafc; }
+                            .container { max-width: 600px; margin: 40px auto; background: rgba(30, 41, 59, 0.7); border-radius: 16px; overflow: hidden; backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+                            .header { background: linear-gradient(135deg, #6366f1 0%%, #8b5cf6 100%%); color: white; padding: 40px; text-align: center; }
+                            .header h1 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                            .content { padding: 40px; }
+                            .greeting { font-size: 22px; margin-bottom: 24px; font-weight: 600; color: #f1f5f9; }
+                            .message { line-height: 1.7; margin-bottom: 24px; font-size: 16px; color: #cbd5e1; }
+                            .feature-box { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 24px; margin: 32px 0; }
+                            .feature-box h3 { margin-top: 0; color: #818cf8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+                            .feature-row { display: flex; align-items: flex-start; margin-bottom: 16px; }
+                            .feature-row:last-child { margin-bottom: 0; }
+                            .feature-icon { background: rgba(99, 102, 241, 0.1); color: #818cf8; width: 24px; height: 24px; border-radius: 50%%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; margin-right: 12px; flex-shrink: 0; }
+                            .feature-text { color: #e2e8f0; font-size: 15px; line-height: 1.5; }
+                            .btn-container { text-align: center; margin: 40px 0 20px; }
+                            .btn { display: inline-block; background: linear-gradient(to right, #6366f1, #8b5cf6); color: white; text-decoration: none; padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4); text-transform: uppercase; letter-spacing: 0.5px; }
+                            .footer { background: rgba(15, 23, 42, 0.8); padding: 24px 40px; text-align: center; font-size: 13px; color: #64748b; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header">
+                                <h1>ShopEase</h1>
+                            </div>
+                            <div class="content">
+                                <div class="greeting">Welcome to the future of shopping, %s!</div>
+
+                                <div class="message">
+                                    We're thrilled to have you join our exclusive community. ShopEase is powered by a state-of-the-art microservices architecture designed to give you a lightning-fast, premium shopping experience.
+                                </div>
+
+                                <div class="feature-box">
+                                    <h3>Your Exclusive Benefits</h3>
+                                    <div class="feature-row">
+                                        <div class="feature-icon">✓</div>
+                                        <div class="feature-text"><strong>Priority Access:</strong> Be the first to know about new product drops and flash sales.</div>
+                                    </div>
+                                    <div class="feature-row">
+                                        <div class="feature-icon">✓</div>
+                                        <div class="feature-text"><strong>Real-time Tracking:</strong> Event-driven architecture ensures you always know where your order is.</div>
+                                    </div>
+                                    <div class="feature-row">
+                                        <div class="feature-icon">✓</div>
+                                        <div class="feature-text"><strong>Premium Security:</strong> Enterprise-grade OAuth2 and JWT protection for your peace of mind.</div>
+                                    </div>
+                                </div>
+
+                                <div class="btn-container">
+                                    <a href="http://localhost:5173/products" class="btn">Start Shopping</a>
+                                </div>
+                            </div>
+                            <div class="footer">
+                                &copy; 2026 ShopEase Inc. Built with Microservices Architecture.<br>
+                                This email was sent to %s.
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                    """
+                    .formatted(firstName, email);
+
+            helper.setFrom(FROM_EMAIL);
+            helper.setTo(email); // In real app, send to actual email. Using TO_EMAIL for testing usually, but
+                                 // let's use the actual email since Mailtrap catches all.
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true);
+
+            javaMailSender.send(mimeMessage);
+            log.info("Email sent successfully: [HTML Welcome] -> {}", email);
+        } catch (Exception e) {
+            log.warn("Failed to send HTML welcome email to {}. Cause: {}", email, e.getMessage());
+        }
+    }
+
+    public void sendPasswordResetOtpEmail(String email, String otp) {
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            String subject = "Your Password Reset OTP - ShopEase";
+
+            String htmlContent = """
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <style>
+                            body { font-family: 'Inter', 'Segoe UI', sans-serif; background-color: #0f172a; margin: 0; padding: 0; color: #f8fafc; }
+                            .container { max-width: 600px; margin: 40px auto; background: rgba(30, 41, 59, 0.7); border-radius: 16px; overflow: hidden; backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+                            .header { background: linear-gradient(135deg, #f59e0b 0%%, #d97706 100%%); color: white; padding: 30px; text-align: center; }
+                            .header h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+                            .content { padding: 40px; text-align: center; }
+                            .message { line-height: 1.6; margin-bottom: 30px; font-size: 16px; color: #cbd5e1; }
+                            .otp-container { background: rgba(255, 255, 255, 0.05); border: 1px dashed rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 30px; margin: 30px 0; }
+                            .otp-code { font-family: monospace; font-size: 42px; font-weight: 800; color: #fbbf24; letter-spacing: 8px; margin: 0; }
+                            .warning { color: #ef4444; font-size: 14px; margin-top: 20px; font-weight: 500; }
+                            .footer { background: rgba(15, 23, 42, 0.8); padding: 24px 40px; text-align: center; font-size: 13px; color: #64748b; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header">
+                                <h1>ShopEase Security</h1>
+                            </div>
+                            <div class="content">
+                                <div class="message">
+                                    We received a request to reset the password for your ShopEase account associated with this email address.
+                                    Please use the One-Time Password (OTP) below to reset your password.
+                                </div>
+
+                                <div class="otp-container">
+                                    <div class="otp-code">%s</div>
+                                </div>
+
+                                <div class="message" style="font-size: 14px;">
+                                    This OTP is valid for the next <b>15 minutes</b>.
+                                </div>
+                                <div class="warning">
+                                    If you did not request a password reset, please ignore this email or contact support if you have concerns.
+                                </div>
+                            </div>
+                            <div class="footer">
+                                &copy; 2026 ShopEase Inc. Built with Microservices Architecture.<br>
+                                This email was sent to %s.
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                    """
+                    .formatted(otp, email);
+
+            helper.setFrom(FROM_EMAIL);
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true);
+
+            javaMailSender.send(mimeMessage);
+            log.info("Email sent successfully: [HTML OTP] -> {}", email);
+        } catch (Exception e) {
+            log.warn("Failed to send HTML OTP email to {}. Cause: {}", email, e.getMessage());
+        }
+    }
 }

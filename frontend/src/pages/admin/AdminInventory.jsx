@@ -22,30 +22,30 @@ export default function AdminInventory() {
     const fetchInventoryState = async () => {
         try {
             setLoading(true);
-            // 1. Get all products
+            // 1. Get all products — response: { success, data: { content: [...] } }
             const productsRes = await api.get('/api/products');
-            const productsList = Array.isArray(productsRes.data) ? productsRes.data : productsRes.data?.content || [];
+            const productsList = productsRes.data?.data?.content || productsRes.data?.content || [];
 
-            // 2. Extract SKUs
-            const skus = productsList.map(p => p.skuCode).filter(Boolean);
-
-            if (skus.length === 0) {
+            if (productsList.length === 0) {
                 setInventory([]);
                 return;
             }
 
-            // 3. Batch fetch inventory status
-            // We assume /api/inventory?skuCode=SKU1&skuCode=SKU2 returns [{skuCode, isInStock, quantity}]
-            const skuQuery = skus.map(s => `skuCode=${encodeURIComponent(s)}`).join('&');
-            const invRes = await api.get(`/api/inventory?${skuQuery}`);
+            // 2. Fetch inventory for each product via GET /api/inventory/{productId}
+            const inventoryResults = await Promise.allSettled(
+                productsList.map(p => api.get(`/api/inventory/${p.id}`))
+            );
 
-            // 4. Merge data for display
-            const merged = productsList.map(p => {
-                const invInfo = invRes.data.find(inv => inv.skuCode === p.skuCode) || {};
+            // 3. Merge product + inventory data
+            const merged = productsList.map((p, i) => {
+                const result = inventoryResults[i];
+                const invData = result.status === 'fulfilled'
+                    ? (result.value.data?.data || result.value.data || {})
+                    : {};
                 return {
                     ...p,
-                    isInStock: invInfo.isInStock !== undefined ? invInfo.isInStock : false,
-                    stockLevel: invInfo.quantity !== undefined ? invInfo.quantity : (p.stockQuantity || 0)
+                    stockLevel: invData.quantity ?? invData.stockQuantity ?? 0,
+                    isInStock: (invData.quantity ?? 0) > 0,
                 };
             });
 
@@ -62,20 +62,23 @@ export default function AdminInventory() {
         e.preventDefault();
         if (!restockSku || !restockAmount || restockAmount <= 0) return;
 
+        // Look up productId from the already-loaded inventory list by SKU
+        const product = inventory.find(p => p.sku === restockSku.toUpperCase() || p.sku?.toUpperCase() === restockSku.toUpperCase());
+        if (!product) {
+            toast.error(`SKU "${restockSku}" not found. Check the SKU and try again.`);
+            return;
+        }
+
         setIsRestocking(true);
         try {
-            // Technically adding stock requires POST /api/inventory with the delta quantity
-            await api.post('/api/inventory', {
-                skuCode: restockSku.toUpperCase(),
-                quantity: window.parseInt(restockAmount)
-            });
-
-            toast.success(`Successfully added ${restockAmount} units to ${restockSku}`);
+            // POST /api/inventory/restock?productId={id}&quantity={n}
+            await api.post(`/api/inventory/restock?productId=${product.id}&quantity=${parseInt(restockAmount, 10)}`);
+            toast.success(`✅ Added ${restockAmount} units to ${product.sku}`);
             setRestockSku('');
             setRestockAmount('');
-            fetchInventoryState(); // Refresh table
+            fetchInventoryState();
         } catch (err) {
-            toast.error('Failed to restock item');
+            toast.error(err.response?.data?.message || 'Failed to restock item');
         } finally {
             setIsRestocking(false);
         }
@@ -147,10 +150,10 @@ export default function AdminInventory() {
                             <tr><td colSpan="4" className="text-center py-10 text-gray-500 font-medium">No products trackable. Create a product first!</td></tr>
                         ) : (
                             inventory.map((item) => (
-                                <tr key={item.skuCode} className="hover:bg-gray-50">
+                                <tr key={item.id} className="hover:bg-gray-50">
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm font-medium text-gray-900">{item.name}</div>
-                                        <div className="text-xs text-gray-500 font-mono mt-0.5">{item.skuCode}</div>
+                                        <div className="text-xs text-gray-500 font-mono mt-0.5">{item.sku}</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         {item.stockLevel > 10 ? (
@@ -172,7 +175,7 @@ export default function AdminInventory() {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <button
-                                            onClick={() => { setRestockSku(item.skuCode); setRestockAmount(50); }}
+                                            onClick={() => { setRestockSku(item.sku); setRestockAmount('50'); }}
                                             className="text-primary-600 hover:text-primary-900 bg-primary-50 px-3 py-1 rounded-md"
                                         >
                                             Quick Restock +50

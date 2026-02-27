@@ -31,6 +31,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Binding userBinding(Queue notificationQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(notificationQueue).to(exchange).with("user.*");
+    }
+
+    @Bean
     public Jackson2JsonMessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }

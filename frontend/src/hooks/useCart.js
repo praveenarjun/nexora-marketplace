@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { toast } from 'react-hot-toast';
 
+const DEFAULT_STOCK_LIMIT = 5;
+
 const useCart = create(
     persist(
         (set, get) => ({
@@ -11,7 +13,7 @@ const useCart = create(
             addItem: (product) => {
                 const currentItems = get().items;
                 const existingItem = currentItems.find((item) => item.productId === product.id);
-                const stock = product.stockQuantity ?? 5;
+                const stock = product.stockQuantity ?? DEFAULT_STOCK_LIMIT;
 
                 if (existingItem) {
                     // Check if we hit inventory limits (Assuming max 5 per customer for safety if missing stock data)
@@ -66,7 +68,7 @@ const useCart = create(
                 }
 
                 const item = get().items.find((i) => i.productId === productId);
-                const stock = item?.product?.stockQuantity ?? 5;
+                const stock = item?.product?.stockQuantity ?? DEFAULT_STOCK_LIMIT;
                 if (quantity > stock) {
                     toast.error(`Cannot set quantity above ${stock} (stock limit)`);
                     return;

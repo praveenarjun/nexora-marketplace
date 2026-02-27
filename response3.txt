@@ -1,0 +1,81 @@
+* processing: https://shop-api.praveen-challa.tech/api/products
+* Uses proxy env variable NO_PROXY == '*.azureedge.net'
+*   Trying 172.67.166.70:443...
+* Connected to shop-api.praveen-challa.tech (172.67.166.70) port 443
+* ALPN: offers h2,http/1.1
+} [5 bytes data]
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+} [512 bytes data]
+*  CAfile: /opt/local/share/curl/curl-ca-bundle.crt
+*  CApath: none
+{ [5 bytes data]
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+{ [122 bytes data]
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+{ [19 bytes data]
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+{ [2067 bytes data]
+* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+{ [80 bytes data]
+* TLSv1.3 (IN), TLS handshake, Finished (20):
+{ [52 bytes data]
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+} [1 bytes data]
+* TLSv1.3 (OUT), TLS handshake, Finished (20):
+} [52 bytes data]
+* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
+* ALPN: server accepted h2
+* Server certificate:
+*  subject: CN=praveen-challa.tech
+*  start date: Feb 19 18:11:35 2026 GMT
+*  expire date: May 20 18:11:34 2026 GMT
+*  subjectAltName: host "shop-api.praveen-challa.tech" matched cert's "*.praveen-challa.tech"
+*  issuer: C=US; O=Let's Encrypt; CN=E7
+*  SSL certificate verify ok.
+} [5 bytes data]
+* using HTTP/2
+* h2 [:method: POST]
+* h2 [:scheme: https]
+* h2 [:authority: shop-api.praveen-challa.tech]
+* h2 [:path: /api/products]
+* h2 [user-agent: curl/8.2.1]
+* h2 [accept: */*]
+* h2 [authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMSIsImVtYWlsIjoiYWRtaW40QGV4YW1wbGUuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiZmlyc3ROYW1lIjoiQWRtaW4iLCJpYXQiOjE3NzIxOTEwNzAsImV4cCI6MTc3MjI3NzQ3MH0.RwBiYEptgjFcSWM7Ax52pO4r0C4atYuYrx-54hcYYSo]
+* h2 [content-type: application/json]
+* h2 [content-length: 150]
+* Using Stream ID: 1
+} [5 bytes data]
+> POST /api/products HTTP/2
+> Host: shop-api.praveen-challa.tech
+> User-Agent: curl/8.2.1
+> Accept: */*
+> Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMSIsImVtYWlsIjoiYWRtaW40QGV4YW1wbGUuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiZmlyc3ROYW1lIjoiQWRtaW4iLCJpYXQiOjE3NzIxOTEwNzAsImV4cCI6MTc3MjI3NzQ3MH0.RwBiYEptgjFcSWM7Ax52pO4r0C4atYuYrx-54hcYYSo
+> Content-Type: application/json
+> Content-Length: 150
+> 
+} [150 bytes data]
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+{ [230 bytes data]
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+{ [230 bytes data]
+* old SSL session ID is stale, removing
+{ [5 bytes data]
+< HTTP/2 400 
+< date: Fri, 27 Feb 2026 11:17:50 GMT
+< content-type: application/json
+< server: cloudflare
+< nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+< vary: Origin
+< vary: Access-Control-Request-Method
+< vary: Access-Control-Request-Headers
+< vary: Origin
+< vary: Access-Control-Request-Method
+< vary: Access-Control-Request-Headers
+< cf-cache-status: DYNAMIC
+< report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=X%2FZlyp%2F826kLQ2oZK7JLbR5L87lhB7NSbtgFHK9YKT6arLSGus3ZNUSa5Y3%2BZFV23UTmxRBUefIQS1W9FU7tY%2F%2FxI26FAeQtWQUpjsO0fW3Ofw%2FXQHbxVugOh%2Bw%3D"}]}
+< cf-ray: 9d47472e5dd34621-DEL
+< alt-svc: h3=":443"; ma=86400
+< 
+{ [211 bytes data]
+* Connection #0 to host shop-api.praveen-challa.tech left intact
+{"status":400,"error":"Bad Request","message":"Validation Failed","path":"/api/v1/products","timestamp":"2026-02-27T11:17:50.734527478","validationErrors":{"sku":"SKU is required","status":"Status is required"}}
