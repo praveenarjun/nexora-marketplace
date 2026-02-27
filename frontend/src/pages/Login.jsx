@@ -102,10 +102,7 @@ export default function Login() {
                     {/* Social Auth */}
                     <div className="grid grid-cols-2 gap-3 mb-6">
                         <button
-                            onClick={() => {
-                                const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
-                                window.location.href = `${baseUrl}/oauth2/authorization/google`;
-                            }}
+                            onClick={() => window.location.href = '/oauth2/authorization/google'}
                             className="btn-secondary text-sm py-2.5"
                         >
                             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
@@ -117,10 +114,7 @@ export default function Login() {
                             Google
                         </button>
                         <button
-                            onClick={() => {
-                                const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
-                                window.location.href = `${baseUrl}/oauth2/authorization/github`;
-                            }}
+                            onClick={() => window.location.href = '/oauth2/authorization/github'}
                             className="btn-secondary text-sm py-2.5"
                         >
                             <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">

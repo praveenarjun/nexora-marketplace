@@ -32,11 +32,10 @@ public class UserEventPublisher {
     public void publishPasswordResetEvent(PasswordResetEvent event) {
         try {
             log.info("Publishing Password Reset Event for user: {}", event.getEmail());
-            // Routing key prefix 'user.password-reset' matches the topic binding 'user.*'
-            rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, "user.password-reset", event);
-            log.info("✅ user.password-reset event published for user: {}", event.getEmail());
+            rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, "user.passwordreset", event);
+            log.info("✅ user.passwordreset event published for user: {}", event.getEmail());
         } catch (AmqpException e) {
-            log.error("⚠️ Failed to publish user.password-reset event for {}", event.getEmail(), e);
+            log.error("⚠️ Failed to publish user.passwordreset event for {}", event.getEmail(), e);
         }
     }
 }
