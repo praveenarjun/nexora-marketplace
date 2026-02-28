@@ -43,11 +43,11 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         String email = oAuth2User.getAttribute("email");
         if (email == null) {
-            // GitHub might not return email if it's private, or might return it
-            // differently.
-            // Simplified handling for demonstration purposes.
             String login = oAuth2User.getAttribute("login");
-            email = login + "@github.com";
+            // If email is null, GitHub allows users to keep it private.
+            // We use username@github.com as a fallback, but log it.
+            email = login != null ? login + "@github.com" : UUID.randomUUID().toString() + "@oauth.shopease.com";
+            log.warn("OAuth user email is null. Using fallback: {}", email);
         }
 
         String name = oAuth2User.getAttribute("name");

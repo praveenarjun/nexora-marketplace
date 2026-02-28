@@ -45,6 +45,9 @@ public class UserService {
     }
 
     private User getUserByIdOrThrow(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("userId must not be null");
+        }
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
     }

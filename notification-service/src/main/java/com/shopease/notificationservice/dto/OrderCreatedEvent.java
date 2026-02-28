@@ -19,5 +19,7 @@ public class OrderCreatedEvent {
     private BigDecimal totalAmount;
     private Integer itemCount;
     private String shippingAddress;
+    private String customerEmail;
+    private String customerName;
     private LocalDateTime timestamp;
 }

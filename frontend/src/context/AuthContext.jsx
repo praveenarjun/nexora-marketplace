@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import api from '../services/api';
 
 export const AuthContext = createContext();
@@ -24,34 +24,43 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    const login = (userData, token) => {
+    const login = useCallback((userData, token) => {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(userData));
         setUser(userData);
-    };
+    }, []);
 
-    const register = async (userData) => {
-        // Standard registration implementation
+    const register = useCallback(async (userData) => {
         const response = await api.post('/api/auth/register', userData);
         return response.data;
-    };
+    }, []);
 
-    const logout = () => {
+    const logout = useCallback(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setUser(null);
-    };
+    }, []);
 
-    const isAdmin = () => {
+    const isAdmin = useCallback(() => {
         return user?.role === 'ADMIN';
-    };
+    }, [user]);
 
-    const isAuthenticated = () => {
+    const isAuthenticated = useCallback(() => {
         return !!user;
-    };
+    }, [user]);
+
+    const contextValue = useMemo(() => ({
+        user,
+        login,
+        register,
+        logout,
+        isAdmin,
+        isAuthenticated,
+        loading
+    }), [user, login, register, logout, isAdmin, isAuthenticated, loading]);
 
     return (
-        <AuthContext.Provider value={{ user, login, register, logout, isAdmin, isAuthenticated, loading }}>
+        <AuthContext.Provider value={contextValue}>
             {!loading && children}
         </AuthContext.Provider>
     );

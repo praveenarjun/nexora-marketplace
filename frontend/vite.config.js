@@ -13,16 +13,6 @@ export default defineConfig({
         changeOrigin: true,
         secure: true,
       },
-      '/oauth2': {
-        target: 'https://shop-api.praveen-challa.tech',
-        changeOrigin: true,
-        secure: true,
-      },
-      '/login/oauth2': {
-        target: 'https://shop-api.praveen-challa.tech',
-        changeOrigin: true,
-        secure: true,
-      }
     }
   }
 })

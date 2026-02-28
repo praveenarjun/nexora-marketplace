@@ -17,16 +17,19 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private static final String FROM_EMAIL = "shopeasemicroservices@gmail.com";
-    private static final String TO_EMAIL = "shopeasemicroservices@gmail.com"; // For testing
     private static final DecimalFormat DF = new DecimalFormat("#,##0.00");
 
-    public void sendOrderConfirmation(Long userId, String orderNumber, BigDecimal totalAmount, String shippingAddress) {
+    public void sendOrderConfirmation(String email, String name, String orderNumber, BigDecimal totalAmount,
+            String shippingAddress) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            String subject = "Order Confirmation: " + orderNumber;
-            String amountFormatted = DF.format(totalAmount);
+            String safeOrderNumber = orderNumber != null ? orderNumber : "Unknown";
+            String subject = "Order Confirmation: " + safeOrderNumber;
+            String amountFormatted = totalAmount != null ? DF.format(totalAmount) : "0.00";
+            String safeAddress = shippingAddress != null ? shippingAddress.replace("\n", "<br>") : "Not provided";
+            String safeName = name != null ? name : "Valued Customer";
 
             String htmlContent = """
                     <!DOCTYPE html>
@@ -51,7 +54,6 @@ public class EmailService {
                             .shippingbox p { margin: 0; color: #111827; line-height: 1.5; font-size: 15px; }
                             .message { line-height: 1.6; margin-bottom: 30px; font-size: 15px; color: #4b5563; }
                             .footer { background-color: #f9fafb; padding: 20px 40px; text-align: center; font-size: 13px; color: #6b7280; border-top: 1px solid #e5e7eb; }
-                            .btn { display: inline-block; background-color: #4f46e5; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: 500; text-align: center; margin-top: 10px; }
                         </style>
                     </head>
                     <body>
@@ -60,7 +62,7 @@ public class EmailService {
                                 <h1>ShopEase</h1>
                             </div>
                             <div class="content">
-                                <div class="greeting">Hello User %d,</div>
+                                <div class="greeting">Hello %s,</div>
                                 <div class="message">
                                     Thank you for shopping with us! We have received your order and we're getting it ready to be shipped.
                                 </div>
@@ -76,7 +78,7 @@ public class EmailService {
                                     </div>
                                     <div class="detail-row">
                                         <span class="label">Total Amount</span>
-                                        <span class="value">$%s</span>
+                                        <span class="value">₹%s</span>
                                     </div>
 
                                     <div class="shippingbox">
@@ -97,27 +99,33 @@ public class EmailService {
                     </body>
                     </html>
                     """
-                    .formatted(userId, orderNumber, amountFormatted, shippingAddress.replace("\n", "<br>"));
+                    .formatted(safeName, safeOrderNumber, amountFormatted, safeAddress);
 
             helper.setFrom(FROM_EMAIL);
-            helper.setTo(TO_EMAIL);
+            if (email == null || email.isBlank()) {
+                log.warn("Skipping email send: recipient email is null or blank");
+                return;
+            }
+            helper.setTo(email);
             helper.setSubject(subject);
-            helper.setText(htmlContent, true); // true indicates HTML content
+            helper.setText(htmlContent, true);
 
             javaMailSender.send(mimeMessage);
-            log.info("Email sent successfully: [HTML Confirmation] -> {}", TO_EMAIL);
+            log.info("Email sent successfully: [HTML Confirmation] -> {}", email);
         } catch (Exception e) {
             log.warn("Failed to send HTML order confirmation email for order {}. Cause: {}", orderNumber,
                     e.getMessage());
         }
     }
 
-    public void sendOrderCancellation(Long userId, String orderNumber) {
+    public void sendOrderCancellation(String email, String name, String orderNumber) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            String subject = "Order Cancellation: " + orderNumber;
+            String safeOrderNumber = orderNumber != null ? orderNumber : "Unknown";
+            String subject = "Order Cancellation: " + safeOrderNumber;
+            String safeName = name != null ? name : "Valued Customer";
 
             String htmlContent = """
                     <!DOCTYPE html>
@@ -144,7 +152,7 @@ public class EmailService {
                                 <h1>ShopEase</h1>
                             </div>
                             <div class="content">
-                                <div class="greeting">Hello User %d,</div>
+                                <div class="greeting">Hello %s,</div>
 
                                 <div class="alert-box">
                                     Your order <span class="order-id">%s</span> has been successfully cancelled.
@@ -166,15 +174,19 @@ public class EmailService {
                     </body>
                     </html>
                     """
-                    .formatted(userId, orderNumber);
+                    .formatted(safeName, safeOrderNumber);
 
             helper.setFrom(FROM_EMAIL);
-            helper.setTo(TO_EMAIL);
+            if (email == null || email.isBlank()) {
+                log.warn("Skipping cancellation email: recipient email is null or blank");
+                return;
+            }
+            helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
 
             javaMailSender.send(mimeMessage);
-            log.info("Email sent successfully: [HTML Cancellation] -> {}", TO_EMAIL);
+            log.info("Email sent successfully: [HTML Cancellation] -> {}", email);
         } catch (Exception e) {
             log.warn("Failed to send HTML order cancellation email for order {}. Cause: {}", orderNumber,
                     e.getMessage());
@@ -186,7 +198,7 @@ public class EmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            String subject = "Welcome to ShopEase, " + firstName + "!";
+            String subject = "Welcome to ShopEase!";
 
             String htmlContent = """
                     <!DOCTYPE html>
@@ -195,22 +207,20 @@ public class EmailService {
                         <meta charset="UTF-8">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
                         <style>
-                            body { font-family: 'Inter', 'Segoe UI', sans-serif; background-color: #0f172a; margin: 0; padding: 0; color: #f8fafc; }
-                            .container { max-width: 600px; margin: 40px auto; background: rgba(30, 41, 59, 0.7); border-radius: 16px; overflow: hidden; backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
-                            .header { background: linear-gradient(135deg, #6366f1 0%%, #8b5cf6 100%%); color: white; padding: 40px; text-align: center; }
-                            .header h1 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                            body { font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; color: #333; }
+                            .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+                            .header { background: linear-gradient(135deg, #4f46e5 0%%, #7c3aed 100%%); color: #ffffff; padding: 40px; text-align: center; }
+                            .header h1 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -1px; }
                             .content { padding: 40px; }
-                            .greeting { font-size: 22px; margin-bottom: 24px; font-weight: 600; color: #f1f5f9; }
-                            .message { line-height: 1.7; margin-bottom: 24px; font-size: 16px; color: #cbd5e1; }
-                            .feature-box { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 24px; margin: 32px 0; }
-                            .feature-box h3 { margin-top: 0; color: #818cf8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
-                            .feature-row { display: flex; align-items: flex-start; margin-bottom: 16px; }
-                            .feature-row:last-child { margin-bottom: 0; }
-                            .feature-icon { background: rgba(99, 102, 241, 0.1); color: #818cf8; width: 24px; height: 24px; border-radius: 50%%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; margin-right: 12px; flex-shrink: 0; }
-                            .feature-text { color: #e2e8f0; font-size: 15px; line-height: 1.5; }
-                            .btn-container { text-align: center; margin: 40px 0 20px; }
-                            .btn { display: inline-block; background: linear-gradient(to right, #6366f1, #8b5cf6); color: white; text-decoration: none; padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4); text-transform: uppercase; letter-spacing: 0.5px; }
-                            .footer { background: rgba(15, 23, 42, 0.8); padding: 24px 40px; text-align: center; font-size: 13px; color: #64748b; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+                            .greeting { font-size: 22px; font-weight: 700; margin-bottom: 20px; color: #1f2937; }
+                            .message { line-height: 1.6; margin-bottom: 25px; font-size: 16px; color: #4b5563; }
+                            .features { background-color: #f9fafb; border-radius: 8px; padding: 25px; margin: 30px 0; border: 1px solid #e5e7eb; }
+                            .feature-row { display: flex; align-items: flex-start; margin-bottom: 15px; }
+                            .feature-icon { color: #4f46e5; margin-right: 12px; font-size: 18px; }
+                            .feature-text { font-size: 14px; color: #6b7280; }
+                            .btn-container { text-align: center; margin-top: 35px; }
+                            .btn { display: inline-block; background-color: #4f46e5; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s; }
+                            .footer { background-color: #f9fafb; padding: 25px 40px; text-align: center; font-size: 13px; color: #94a3b8; border-top: 1px solid #e5e7eb; }
                         </style>
                     </head>
                     <body>
@@ -219,14 +229,12 @@ public class EmailService {
                                 <h1>ShopEase</h1>
                             </div>
                             <div class="content">
-                                <div class="greeting">Welcome to the future of shopping, %s!</div>
-
+                                <div class="greeting">Welcome to the family, %s!</div>
                                 <div class="message">
-                                    We're thrilled to have you join our exclusive community. ShopEase is powered by a state-of-the-art microservices architecture designed to give you a lightning-fast, premium shopping experience.
+                                    We're thrilled to have you on board! ShopEase is more than just a marketplace; it's a showcase of modern microservices architecture and seamless user experiences.
                                 </div>
 
-                                <div class="feature-box">
-                                    <h3>Your Exclusive Benefits</h3>
+                                <div class="features">
                                     <div class="feature-row">
                                         <div class="feature-icon">✓</div>
                                         <div class="feature-text"><strong>Priority Access:</strong> Be the first to know about new product drops and flash sales.</div>
@@ -256,8 +264,11 @@ public class EmailService {
                     .formatted(firstName, email);
 
             helper.setFrom(FROM_EMAIL);
-            helper.setTo(email); // In real app, send to actual email. Using TO_EMAIL for testing usually, but
-                                 // let's use the actual email since Mailtrap catches all.
+            if (email == null || email.isBlank()) {
+                log.warn("Skipping welcome email: recipient email is null or blank");
+                return;
+            }
+            helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
 
@@ -265,6 +276,68 @@ public class EmailService {
             log.info("Email sent successfully: [HTML Welcome] -> {}", email);
         } catch (Exception e) {
             log.warn("Failed to send HTML welcome email to {}. Cause: {}", email, e.getMessage());
+        }
+    }
+
+    public void sendAbandonedCartEmail(String email, String firstName) {
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            String subject = "You left something behind! - ShopEase";
+            String safeName = firstName != null ? firstName : "there";
+
+            String htmlContent = """
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <style>
+                            body { font-family: 'Segoe UI', sans-serif; background-color: #f8fafc; margin: 0; padding: 0; color: #1e293b; }
+                            .container { max-width: 600px; margin: 40px auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+                            .header { background: #6366f1; color: white; padding: 40px; text-align: center; }
+                            .header h1 { margin: 0; font-size: 24px; }
+                            .content { padding: 40px; text-align: center; }
+                            .greeting { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
+                            .message { line-height: 1.6; margin-bottom: 30px; color: #475569; }
+                            .btn { display: inline-block; background: #6366f1; color: white; text-decoration: none; padding: 14px 30px; border-radius: 8px; font-weight: 600; }
+                            .footer { background: #f1f5f9; padding: 20px; text-align: center; font-size: 13px; color: #64748b; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header"><h1>ShopEase</h1></div>
+                            <div class="content">
+                                <div class="greeting">Hey %s, we noticed you left some items in your cart!</div>
+                                <div class="message">
+                                    Don't worry, we've saved them for you. But they're selling fast! Come back and finish your checkout now to secure your items.
+                                </div>
+                                <a href="http://localhost:5173/cart" class="btn">Finish My Order</a>
+                            </div>
+                            <div class="footer">
+                                &copy; 2026 ShopEase Inc.<br>
+                                You're receiving this because you have items saved in your ShopEase cart.
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                    """
+                    .formatted(safeName);
+
+            helper.setFrom(FROM_EMAIL);
+            if (email == null || email.isBlank()) {
+                log.warn("Skipping email send: recipient email is null or blank");
+                return;
+            }
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true);
+
+            javaMailSender.send(mimeMessage);
+            log.info("Email sent successfully: [Abandoned Cart] -> {}", email);
+        } catch (Exception e) {
+            log.warn("Failed to send Abandoned Cart email. Cause: {}", e.getMessage());
         }
     }
 
@@ -327,6 +400,10 @@ public class EmailService {
                     .formatted(otp, email);
 
             helper.setFrom(FROM_EMAIL);
+            if (email == null || email.isBlank()) {
+                log.warn("Skipping email send: recipient email is null or blank");
+                return;
+            }
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);

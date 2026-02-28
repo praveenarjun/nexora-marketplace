@@ -20,7 +20,8 @@ public class OrderEventListener {
     public void handleOrderCreated(OrderCreatedEvent event) {
         log.info("📧 Order confirmation for order #{}", event.getOrderNumber());
         emailService.sendOrderConfirmation(
-                event.getUserId(),
+                event.getCustomerEmail(),
+                event.getCustomerName(),
                 event.getOrderNumber(),
                 event.getTotalAmount(),
                 event.getShippingAddress());
@@ -30,7 +31,8 @@ public class OrderEventListener {
     public void handleOrderCancelled(OrderCancelledEvent event) {
         log.info("📧 Cancellation notice for order #{}", event.getOrderNumber());
         emailService.sendOrderCancellation(
-                event.getUserId(),
+                event.getCustomerEmail(),
+                event.getCustomerName(),
                 event.getOrderNumber());
     }
 }

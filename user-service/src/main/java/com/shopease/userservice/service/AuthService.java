@@ -23,8 +23,6 @@ import com.shopease.userservice.publisher.UserEventPublisher;
 import com.shopease.userservice.dto.ForgotPasswordRequest;
 import com.shopease.userservice.dto.ResetPasswordRequest;
 import com.shopease.userservice.event.PasswordResetEvent;
-import com.shopease.userservice.dto.ResetPasswordRequest;
-import com.shopease.userservice.event.PasswordResetEvent;
 
 @Slf4j
 @Service

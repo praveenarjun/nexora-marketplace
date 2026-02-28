@@ -2,6 +2,8 @@ package com.shopease.orderservice.service;
 
 import com.shopease.orderservice.client.InventoryClient;
 import com.shopease.orderservice.client.ProductClient;
+import com.shopease.orderservice.client.UserClient;
+import com.shopease.orderservice.dto.UserProfileResponse;
 import com.shopease.orderservice.domain.Order;
 import com.shopease.orderservice.domain.OrderItem;
 import com.shopease.orderservice.domain.OrderStatus;
@@ -35,6 +37,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductClient productClient;
     private final InventoryClient inventoryClient;
+    private final UserClient userClient;
     private final OrderEventPublisher orderEventPublisher;
 
     @Transactional
@@ -110,13 +113,30 @@ public class OrderService {
         try {
             // 7. Save Order
             order = orderRepository.save(order);
+            if (order == null) {
+                throw new IllegalStateException("Failed to save order " + orderNumber);
+            }
             log.info("Order {} successfully saved to database.", orderNumber);
 
             // 8. Publish Event
+            String customerEmail = "shopeasemicroservices@gmail.com";
+            String customerName = "Valued Customer";
+            try {
+                UserProfileResponse userProfile = userClient.getUserById(userId);
+                if (userProfile != null) {
+                    customerEmail = userProfile.getEmail();
+                    customerName = userProfile.getFirstName() + " " + userProfile.getLastName();
+                }
+            } catch (Exception e_user) {
+                log.warn("Failed to fetch user profile for order {}. Using fallback contact.", orderNumber);
+            }
+
             OrderCreatedEvent event = OrderCreatedEvent.builder()
                     .orderId(order.getId())
                     .orderNumber(order.getOrderNumber())
                     .userId(order.getUserId())
+                    .customerEmail(customerEmail)
+                    .customerName(customerName)
                     .totalAmount(order.getTotalAmount())
                     .itemCount(order.getItems().size())
                     .shippingAddress(order.getShippingAddress())
@@ -149,6 +169,9 @@ public class OrderService {
 
     @Transactional
     public void cancelOrder(Long orderId, Long userId) {
+        if (orderId == null || userId == null) {
+            throw new IllegalArgumentException("orderId and userId must not be null");
+        }
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderId));
 
@@ -169,9 +192,23 @@ public class OrderService {
         order.setCancelledAt(LocalDateTime.now());
         orderRepository.save(order);
 
+        String customerEmail = "shopeasemicroservices@gmail.com";
+        String customerName = "Valued Customer";
+        try {
+            UserProfileResponse userProfile = userClient.getUserById(userId);
+            if (userProfile != null) {
+                customerEmail = userProfile.getEmail();
+                customerName = userProfile.getFirstName() + " " + userProfile.getLastName();
+            }
+        } catch (Exception e_user) {
+            log.warn("Failed to fetch user profile for cancellation {}. Using fallback.", order.getOrderNumber());
+        }
+
         OrderCancelledEvent event = OrderCancelledEvent.builder()
                 .orderNumber(order.getOrderNumber())
                 .userId(userId)
+                .customerEmail(customerEmail)
+                .customerName(customerName)
                 .timestamp(LocalDateTime.now())
                 .build();
         orderEventPublisher.publishOrderCancelledEvent(event);
@@ -187,6 +224,9 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderResponse getOrderById(Long orderId, Long userId) {
+        if (orderId == null || userId == null) {
+            throw new IllegalArgumentException("orderId and userId must not be null");
+        }
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderId));
 

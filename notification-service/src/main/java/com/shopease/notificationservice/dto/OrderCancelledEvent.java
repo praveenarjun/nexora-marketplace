@@ -14,5 +14,7 @@ import java.time.LocalDateTime;
 public class OrderCancelledEvent {
     private String orderNumber;
     private Long userId;
+    private String customerEmail;
+    private String customerName;
     private LocalDateTime timestamp;
 }

@@ -1,4 +1,4 @@
-package com.shopease.orderservice.event;
+package com.shopease.notificationservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderCancelledEvent {
-    private String orderNumber;
-    private Long userId;
-    private String customerEmail;
-    private String customerName;
+public class CartAbandonedEvent {
+    private String email;
+    private String firstName;
     private LocalDateTime timestamp;
 }
