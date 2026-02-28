@@ -18,7 +18,6 @@ spring:
               - OPTIONS
             allowedHeaders: "*"
       default-filters:
-        - name: RequestHeaderToRequestUri
         - name: PreserveHostHeader
       x-forwarded:
         enabled: true
