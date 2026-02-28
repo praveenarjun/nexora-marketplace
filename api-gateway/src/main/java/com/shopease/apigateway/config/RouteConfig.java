@@ -23,6 +23,12 @@ public class RouteConfig {
                                 .route("auth-service-public", r -> r
                                                 .path("/api/auth/**")
                                                 .uri("lb://user-service"))
+                                .route("oauth2-auth-public", r -> r
+                                                .path("/oauth2/**")
+                                                .uri("lb://user-service"))
+                                .route("oauth2-login-public", r -> r
+                                                .path("/login/oauth2/**")
+                                                .uri("lb://user-service"))
                                 .route("product-service-public-get", r -> r
                                                 .method(HttpMethod.GET)
                                                 .and()
