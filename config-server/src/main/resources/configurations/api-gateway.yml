@@ -70,7 +70,7 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: ${EUREKA_URL:http://eureka:password123@${EUREKA_HOST:localhost}:8763/eureka/}
+      defaultZone: ${EUREKA_URL:http://eureka:password123@${EUREKA_HOST:discovery-server}:8763/eureka/}
 
 jwt:
   secret: ${JWT_SECRET:my-very-long-and-secure-jwt-secret-key-that-is-at-least-512-bits-long-so-it-works-with-shopease-microservices}
