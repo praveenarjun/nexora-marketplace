@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
 import { ProtectedRoute, AdminRoute } from './components/ProtectedRoutes';
 import Navbar from './components/Navbar';
@@ -23,9 +23,13 @@ import AdminProducts from './pages/admin/AdminProducts';
 import AdminInventory from './pages/admin/AdminInventory';
 import AdminOrders from './pages/admin/AdminOrders';
 
-// Smart root: Landing for guests, Home for logged-in users
+// Smart root: Landing for guests, Home for logged-in users, OAuthCallback if token present
 function RootRoute() {
   const { isAuthenticated } = useContext(AuthContext);
+  const location = useLocation();
+  const hasToken = new URLSearchParams(location.search).has('token');
+
+  if (hasToken) return <OAuthCallback />;
   return isAuthenticated() ? <Navigate to="/home" replace /> : <Landing />;
 }
 
