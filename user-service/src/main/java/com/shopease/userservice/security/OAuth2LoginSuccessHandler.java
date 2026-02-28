@@ -72,6 +72,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                     .password(UUID.randomUUID().toString()) // Dummy complex password
                     .firstName(firstName)
                     .lastName(lastName)
+                    .address("Not Provided") // Default address for OAuth users
                     .role(Role.CUSTOMER)
                     .build();
             user = userRepository.save(user);
