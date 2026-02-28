@@ -12,8 +12,9 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     public static final String EXCHANGE = "shopease.exchange";
-    public static final String QUEUE = "notification.queue";
-    public static final String ROUTING_KEY = "order.*";
+    public static final String REGISTRATION_QUEUE = "registration.queue";
+    public static final String PASSWORD_RESET_QUEUE = "passwordreset.queue";
+    public static final String ORDER_QUEUE = "order.queue";
 
     @Bean
     public TopicExchange exchange() {
@@ -21,18 +22,33 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Queue notificationQueue() {
-        return new Queue(QUEUE, true); // durable = true
+    public Queue registrationQueue() {
+        return new Queue(REGISTRATION_QUEUE, true);
     }
 
     @Bean
-    public Binding binding(Queue notificationQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(notificationQueue).to(exchange).with(ROUTING_KEY);
+    public Queue passwordResetQueue() {
+        return new Queue(PASSWORD_RESET_QUEUE, true);
     }
 
     @Bean
-    public Binding userBinding(Queue notificationQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(notificationQueue).to(exchange).with("user.*");
+    public Queue orderQueue() {
+        return new Queue(ORDER_QUEUE, true);
+    }
+
+    @Bean
+    public Binding registrationBinding(Queue registrationQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(registrationQueue).to(exchange).with("user.registered");
+    }
+
+    @Bean
+    public Binding passwordResetBinding(Queue passwordResetQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(passwordResetQueue).to(exchange).with("user.passwordreset");
+    }
+
+    @Bean
+    public Binding orderBinding(Queue orderQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(orderQueue).to(exchange).with("order.*");
     }
 
     @Bean

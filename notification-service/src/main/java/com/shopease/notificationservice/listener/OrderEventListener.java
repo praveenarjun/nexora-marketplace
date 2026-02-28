@@ -16,23 +16,21 @@ public class OrderEventListener {
 
     private final EmailService emailService;
 
-    @RabbitListener(queues = RabbitMQConfig.QUEUE)
+    @RabbitListener(queues = RabbitMQConfig.ORDER_QUEUE)
     public void handleOrderCreated(OrderCreatedEvent event) {
         log.info("📧 Order confirmation for order #{}", event.getOrderNumber());
         emailService.sendOrderConfirmation(
                 event.getUserId(),
                 event.getOrderNumber(),
                 event.getTotalAmount(),
-                event.getShippingAddress()
-        );
+                event.getShippingAddress());
     }
 
-    @RabbitListener(queues = RabbitMQConfig.QUEUE)
+    @RabbitListener(queues = RabbitMQConfig.ORDER_QUEUE)
     public void handleOrderCancelled(OrderCancelledEvent event) {
         log.info("📧 Cancellation notice for order #{}", event.getOrderNumber());
         emailService.sendOrderCancellation(
                 event.getUserId(),
-                event.getOrderNumber()
-        );
+                event.getOrderNumber());
     }
 }

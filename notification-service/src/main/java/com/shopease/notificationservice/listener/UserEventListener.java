@@ -15,7 +15,7 @@ public class UserEventListener {
 
     private final EmailService emailService;
 
-    @RabbitListener(queues = RabbitMQConfig.QUEUE)
+    @RabbitListener(queues = RabbitMQConfig.REGISTRATION_QUEUE)
     public void handleUserRegistered(UserRegisteredEvent event) {
         log.info("📧 Welcome email triggered for user: {}", event.getEmail());
         emailService.sendWelcomeEmail(
@@ -23,7 +23,7 @@ public class UserEventListener {
                 event.getFirstName());
     }
 
-    @RabbitListener(queues = RabbitMQConfig.QUEUE)
+    @RabbitListener(queues = RabbitMQConfig.PASSWORD_RESET_QUEUE)
     public void handlePasswordReset(com.shopease.notificationservice.dto.PasswordResetEvent event) {
         log.info("🔑 Password reset OTP email triggered for user: {}", event.getEmail());
         emailService.sendPasswordResetOtpEmail(
