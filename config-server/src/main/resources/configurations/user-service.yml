@@ -21,12 +21,12 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
-            scope: email, profile
+            scope: email,profile
             redirect-uri: "${OAUTH2_REDIRECT_BASE_URL:https://shop-api.praveen-challa.tech}/login/oauth2/code/{registrationId}"
           github:
             client-id: ${GITHUB_CLIENT_ID}
             client-secret: ${GITHUB_CLIENT_SECRET}
-            scope: user:email, read:user
+            scope: user:email,read:user
             redirect-uri: "${OAUTH2_REDIRECT_BASE_URL:https://shop-api.praveen-challa.tech}/login/oauth2/code/{registrationId}"
         provider:
           google:
