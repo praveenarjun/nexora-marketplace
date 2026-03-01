@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import api from '../services/api';
@@ -12,6 +12,8 @@ export default function ProductDetail() {
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
     const [adding, setAdding] = useState(false);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const addingTimeoutRef = useRef(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,6 +37,10 @@ export default function ProductDetail() {
         };
         fetchData();
         window.scrollTo(0, 0);
+
+        return () => {
+            if (addingTimeoutRef.current) clearTimeout(addingTimeoutRef.current);
+        };
     }, [id]);
 
     const handleAddToCart = () => {
@@ -48,7 +54,7 @@ export default function ProductDetail() {
             quantity: quantity,
         });
         toast.success(`Added ${quantity} ${product.name} to cart`);
-        setTimeout(() => setAdding(false), 1000);
+        addingTimeoutRef.current = setTimeout(() => setAdding(false), 1000);
     };
 
     if (loading) return (
@@ -109,8 +115,8 @@ export default function ProductDetail() {
                         {/* Left: Image Showcase & Gallery */}
                         <div className="lg:col-span-7 space-y-6">
                             <div className="aspect-[4/5] bg-[#1c1d26] border border-white/5 rounded-[40px] overflow-hidden relative group shadow-2xl">
-                                {product.imageUrls?.[0] ? (
-                                    <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover" />
+                                {product.imageUrls?.[selectedImageIndex] ? (
+                                    <img src={product.imageUrls[selectedImageIndex]} alt={product.name} className="w-full h-full object-cover transition-all duration-700" />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center">
                                         <span className="material-symbols-outlined text-9xl text-white/5">inventory_2</span>
@@ -130,8 +136,12 @@ export default function ProductDetail() {
                             {product.imageUrls?.length > 1 && (
                                 <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                                     {product.imageUrls.map((url, idx) => (
-                                        <button key={idx} className="w-24 aspect-square rounded-2xl bg-[#1c1d26] border border-white/5 overflow-hidden flex-shrink-0 hover:border-primary-500/50 transition-all">
-                                            <img src={url} alt={`${product.name} ${idx}`} className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity" />
+                                        <button
+                                            key={idx}
+                                            onClick={() => setSelectedImageIndex(idx)}
+                                            className={`w-24 aspect-square rounded-2xl bg-[#1c1d26] border overflow-hidden flex-shrink-0 transition-all ${idx === selectedImageIndex ? 'border-primary-500 ring-2 ring-primary-500/20' : 'border-white/5 hover:border-white/20'}`}
+                                        >
+                                            <img src={url} alt={`${product.name} ${idx}`} className={`w-full h-full object-cover transition-opacity ${idx === selectedImageIndex ? 'opacity-100' : 'opacity-40 hover:opacity-100'}`} />
                                         </button>
                                     ))}
                                 </div>
@@ -166,7 +176,7 @@ export default function ProductDetail() {
                             </div>
 
                             <div className="flex items-baseline gap-4">
-                                <span className="text-5xl font-black text-primary-500 tracking-tighter">₹{product.price?.toLocaleString()}</span>
+                                <span className="text-5xl font-black text-primary-500 tracking-tighter">₹{(product.price ?? 0).toLocaleString()}</span>
                                 {product.compareAtPrice && (
                                     <span className="text-slate-500 line-through text-xl font-medium">₹{product.compareAtPrice.toLocaleString()}</span>
                                 )}
@@ -218,7 +228,7 @@ export default function ProductDetail() {
                                                 className="w-10 text-center bg-transparent border-none text-white font-bold text-sm focus:ring-0"
                                             />
                                             <button
-                                                onClick={() => setQuantity(q => q + 1)}
+                                                onClick={() => setQuantity(q => Math.min(q + 1, product.quantity || 99))}
                                                 className="w-10 h-full flex items-center justify-center hover:bg-white/5 rounded-lg text-slate-400 transition-all"
                                             >
                                                 <span className="material-symbols-outlined text-sm">add</span>

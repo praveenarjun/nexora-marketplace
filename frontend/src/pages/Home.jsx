@@ -8,6 +8,15 @@ export default function Home() {
     const [loadingProducts, setLoadingProducts] = useState(true);
     const [loadingCategories, setLoadingCategories] = useState(true);
 
+    // Helper for category images
+    const getCategoryImage = (name) => {
+        const lower = name.toLowerCase();
+        if (lower.includes('elect')) return 'https://images.unsplash.com/photo-1546868889-4e0ca25e2154?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('fashion')) return 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('home')) return 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800';
+        return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800';
+    };
+
     useEffect(() => {
         // Fetch Featured Products
         api.get('/api/products/featured')
@@ -33,15 +42,6 @@ export default function Home() {
             .catch(() => setCategories([]))
             .finally(() => setLoadingCategories(false));
     }, []);
-
-    // Helper for category images
-    const getCategoryImage = (name) => {
-        const lower = name.toLowerCase();
-        if (lower.includes('elect')) return 'https://images.unsplash.com/photo-1546868889-4e0ca25e2154?auto=format&fit=crop&q=80&w=800';
-        if (lower.includes('fashion')) return 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800';
-        if (lower.includes('home')) return 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800';
-        return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800';
-    };
 
     return (
         <div className="min-h-screen">
@@ -108,7 +108,7 @@ export default function Home() {
                         ))
                     ) : (
                         categories.map(cat => (
-                            <Link key={cat.name} to={`/products?category=${cat.name.toLowerCase()}`} className="group relative aspect-[4/5] rounded-3xl overflow-hidden bg-slate-900 shadow-2xl transition-all hover:-translate-y-2">
+                            <Link key={cat.name} to={`/products?category=${encodeURIComponent(cat.name)}`} className="group relative aspect-[4/5] rounded-3xl overflow-hidden bg-slate-900 shadow-2xl transition-all hover:-translate-y-2">
                                 <img src={cat.img} alt={cat.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-110 transition-all duration-700" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0b10] via-transparent to-transparent"></div>
                                 <div className="absolute bottom-6 left-6">

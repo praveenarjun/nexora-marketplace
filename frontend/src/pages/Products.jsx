@@ -11,7 +11,7 @@ export default function Products() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
-    const [selectedCategory, setSelectedCategory] = useState('ALL');
+    const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'ALL');
     const [sortBy, setSortBy] = useState('NEWEST');
     const [priceRange, setPriceRange] = useState(500000); // 5L max for electronics
     const [addedIds, setAddedIds] = useState(new Set());
@@ -61,9 +61,9 @@ export default function Products() {
         .filter(p => selectedCategory === 'ALL' || p.categoryName === selectedCategory)
         .filter(p => p.price <= priceRange)
         .sort((a, b) => {
-            if (sortBy === 'PRICE_ASC') return a.price - b.price;
-            if (sortBy === 'PRICE_DESC') return b.price - a.price;
-            if (sortBy === 'NAME') return a.name?.localeCompare(b.name);
+            if (sortBy === 'PRICE_ASC') return (a.price || 0) - (b.price || 0);
+            if (sortBy === 'PRICE_DESC') return (b.price || 0) - (a.price || 0);
+            if (sortBy === 'NAME') return (a.name || '').localeCompare(b.name || '');
             return b.id - a.id;
         });
 
@@ -225,7 +225,7 @@ export default function Products() {
                                         </div>
                                         <p className="text-xs text-slate-400 mb-6 line-clamp-2 leading-relaxed font-medium">{product.description}</p>
                                         <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
-                                            <span className="text-xl font-black text-white">₹{product.price?.toLocaleString()}</span>
+                                            <span className="text-xl font-black text-white">₹{(product.price ?? 0).toLocaleString()}</span>
                                             <button
                                                 disabled={!product.inStock || addedIds.has(product.id)}
                                                 onClick={(e) => handleAddToCart(e, product)}

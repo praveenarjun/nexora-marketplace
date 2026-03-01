@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart } from 'lucide-react';
 
 export default function ProductCard({ product, onAddToCart }) {
     if (!product) return null;
