@@ -4,10 +4,11 @@ services:
     container_name: discovery-server-prod
     restart: always
     ports:
-      - "8763:8761"
+      - "8763:8763"
     environment:
-      eureka.client.fetch-registry: "false"
-      eureka.client.register-with-eureka: "false"
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_CLIENT_FETCH_REGISTRY: "false"
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
 
   config-server:
     image: ghcr.io/praveenarjun/shopease-config-server:${IMAGE_TAG:-latest}
@@ -18,7 +19,9 @@ services:
     depends_on:
       - discovery-server
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
 
   api-gateway:
     image: ghcr.io/praveenarjun/shopease-api-gateway:${IMAGE_TAG:-latest}
@@ -30,7 +33,9 @@ services:
       - discovery-server
       - config-server
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       JWT_SECRET: ${JWT_SECRET}
 
@@ -44,7 +49,9 @@ services:
       - discovery-server
       - config-server
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       PRODUCT_DB_URL: ${NEON_PRODUCT_DB_URL}
       PRODUCT_DB_USER: ${NEON_DB_USER}
@@ -70,7 +77,9 @@ services:
       - discovery-server
       - config-server
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       USER_DB_URL: ${NEON_USER_DB_URL}
       USER_DB_USER: ${NEON_DB_USER}
@@ -98,7 +107,9 @@ services:
       - discovery-server
       - config-server
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       INVENTORY_DB_URL: ${NEON_INVENTORY_DB_URL}
       INVENTORY_DB_USER: ${NEON_DB_USER}
@@ -120,7 +131,9 @@ services:
       - discovery-server
       - config-server
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       ORDER_DB_URL: ${NEON_ORDER_DB_URL}
       ORDER_DB_USER: ${NEON_DB_USER}
@@ -142,7 +155,9 @@ services:
       - discovery-server
       - config-server
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       RABBITMQ_HOST: ${CLOUDAMQP_HOST}
       RABBITMQ_PORT: "5671"
