@@ -57,6 +57,18 @@ public class UpdateProductRequest {
     @Schema(description = "Mark as featured product", example = "true")
     private Boolean featured;
 
+    @Schema(description = "New promotional badge", example = "BEST SELLER")
+    private String badge;
+
+    @Schema(description = "Updated average rating", example = "4.7")
+    private Double rating;
+
+    @Schema(description = "Updated reviews count", example = "150")
+    private Integer reviewsCount;
+
+    @Schema(description = "Updated product highlights", example = "[\"Feature A\", \"Feature B\"]")
+    private Set<String> highlights;
+
     @Schema(description = "Searchable tags", example = "[\"smartphone\", \"apple\", \"pro-max\"]")
     private Set<String> tags;
 

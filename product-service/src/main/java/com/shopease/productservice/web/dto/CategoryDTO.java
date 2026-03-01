@@ -19,6 +19,7 @@ public class CategoryDTO {
     private String imageUrl;
     private boolean active;
     private Long parentId;
+    private Integer productCount;
     private List<CategoryDTO> subCategories;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -1,0 +1,286 @@
+<html class="dark"><head><meta charset="utf-8"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Ibm+Plex+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#576ee0", "background-light": "#f6f6f8", "background-dark": "#121420"}, fontFamily: {display: "Ibm Plex Sans"}, borderRadius: {DEFAULT: "0.5rem", lg: "1rem", xl: "1.5rem", full: "9999px"}}}};</script>
+</head><body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-10 py-3 bg-white dark:bg-slate-900">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-6">
+<span class="material-symbols-outlined text-3xl">api</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight">ShopEase</h2>
+</div>
+<nav class="flex items-center gap-9">
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Shop</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Categories</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Deals</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Enterprise</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<label class="flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-slate-500 flex border-none bg-slate-100 dark:bg-slate-800 items-center justify-center pl-4 rounded-l-lg" data-icon="MagnifyingGlass">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-slate-100 dark:bg-slate-800 focus:ring-0 h-full placeholder:text-slate-500 px-4 rounded-r-lg pl-2 text-base font-normal" placeholder="Search microservices..."/>
+</div>
+</label>
+<div class="flex gap-3">
+<button class="flex items-center justify-center rounded-lg h-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 w-10 hover:bg-primary/10 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">shopping_cart</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 w-10 hover:bg-primary/10 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">person</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="User profile avatar icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBks0600TayzCGR8KAmqpR8MjY3jZOrXtm3b-8KvU6NnfxLdBeudR_S3a4q5KUhdJndyMJLvj8LLz3JbU1GSMMe4XC8Im_bgkvI4MQZS1_3Ddh946BwAIQK_bf7MihLyt7sCXjes9hQmYGWH1_WeKyFEeJCmDEpvArf9rN1b2wRgfTlByY63qJ8ezZCeqyi-EFJpF1NB0ict1yk6M-Wh5ROKiR7FKAPdUb5vDGa_0YvW9KTNurRLnOud5KgNgH1t9gkeSkhoGtsUMQ");'></div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-8 w-full">
+<!-- Breadcrumbs -->
+<nav class="flex flex-wrap gap-2 mb-8">
+<a class="text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Home</a>
+<span class="text-slate-300 dark:text-slate-700 text-sm">/</span>
+<a class="text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Infrastructure</a>
+<span class="text-slate-300 dark:text-slate-700 text-sm">/</span>
+<span class="text-primary text-sm font-semibold">Microservice Controller</span>
+</nav>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left side: Image Gallery -->
+<div class="lg:col-span-7 flex flex-col gap-4">
+<div class="w-full aspect-[4/3] bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800">
+<div class="w-full h-full bg-center bg-no-repeat bg-cover flex items-center justify-center bg-gradient-to-br from-primary/10 to-slate-200 dark:to-slate-800" data-alt="Primary product view showing high-tech circuit board and server UI">
+<span class="material-symbols-outlined text-9xl text-primary/20">settings_input_component</span>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-4">
+<div class="aspect-square bg-white dark:bg-slate-900 rounded-lg overflow-hidden border-2 border-primary shadow-sm cursor-pointer">
+<div class="w-full h-full bg-center bg-no-repeat bg-cover bg-primary/5 flex items-center justify-center" data-alt="Side view of the microservice controller hardware">
+<span class="material-symbols-outlined text-primary/40">developer_board</span>
+</div>
+</div>
+<div class="aspect-square bg-white dark:bg-slate-900 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer hover:border-primary/50 transition-colors">
+<div class="w-full h-full bg-center bg-no-repeat bg-cover bg-slate-100 dark:bg-slate-800 flex items-center justify-center" data-alt="Interface dashboard preview for the service">
+<span class="material-symbols-outlined text-slate-400">dashboard</span>
+</div>
+</div>
+<div class="aspect-square bg-white dark:bg-slate-900 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer hover:border-primary/50 transition-colors">
+<div class="w-full h-full bg-center bg-no-repeat bg-cover bg-slate-100 dark:bg-slate-800 flex items-center justify-center" data-alt="Technical diagram of the backend architecture">
+<span class="material-symbols-outlined text-slate-400">schema</span>
+</div>
+</div>
+<div class="aspect-square bg-white dark:bg-slate-900 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer hover:border-primary/50 transition-colors">
+<div class="w-full h-full bg-center bg-no-repeat bg-cover bg-slate-100 dark:bg-slate-800 flex items-center justify-center" data-alt="Package contents showing cables and documentation">
+<span class="material-symbols-outlined text-slate-400">inventory_2</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right side: Product Details -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold uppercase tracking-wider rounded">In Stock</span>
+<span class="text-slate-400 text-sm font-medium">SKU: SE-MS-88291</span>
+</div>
+<h1 class="text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight leading-tight">Premium Microservice Controller Pro</h1>
+</div>
+<div class="flex items-baseline gap-4">
+<span class="text-4xl font-bold text-primary">$1,299.00</span>
+<span class="text-slate-400 line-through text-lg">$1,550.00</span>
+</div>
+<div class="border-y border-slate-200 dark:border-slate-800 py-6">
+<p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                The most advanced controller for distributed systems. Orchestrate your entire microservice architecture with ultra-low latency. Featuring AI-driven load balancing, auto-healing protocols, and real-time observability dashboards out of the box.
+              </p>
+<div class="flex flex-wrap gap-2 mt-4">
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold rounded-full border border-slate-200 dark:border-slate-700 transition-colors hover:bg-primary/5 hover:text-primary hover:border-primary/30 cursor-default">Cloud-Native</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold rounded-full border border-slate-200 dark:border-slate-700 transition-colors hover:bg-primary/5 hover:text-primary hover:border-primary/30 cursor-default">gRPC Support</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold rounded-full border border-slate-200 dark:border-slate-700 transition-colors hover:bg-primary/5 hover:text-primary hover:border-primary/30 cursor-default">Kubernetes Ready</span>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-6">
+<div class="flex flex-col gap-2">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">Quantity</span>
+<div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg p-1 border border-slate-200 dark:border-slate-700">
+<button class="w-10 h-10 flex items-center justify-center hover:bg-white dark:hover:bg-slate-700 rounded transition-colors">
+<span class="material-symbols-outlined text-lg">remove</span>
+</button>
+<input class="w-12 text-center bg-transparent border-none focus:ring-0 text-slate-900 dark:text-slate-100 font-bold" type="number" value="1"/>
+<button class="w-10 h-10 flex items-center justify-center hover:bg-white dark:hover:bg-slate-700 rounded transition-colors">
+<span class="material-symbols-outlined text-lg">add</span>
+</button>
+</div>
+</div>
+<div class="flex-1 pt-7">
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-white h-12 rounded-lg font-bold text-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">shopping_cart</span>
+                    Add to Cart
+                  </button>
+</div>
+</div>
+<button class="w-full flex items-center justify-center gap-2 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 h-12 rounded-lg font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined">favorite</span>
+                Add to Wishlist
+              </button>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-2">
+<div class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-100 dark:border-slate-800">
+<span class="material-symbols-outlined text-primary">local_shipping</span>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-slate-900 dark:text-slate-100">Free Express</span>
+<span class="text-xs text-slate-500">2-3 business days</span>
+</div>
+</div>
+<div class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-100 dark:border-slate-800">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-slate-900 dark:text-slate-100">3-Year Warranty</span>
+<span class="text-xs text-slate-500">Enterprise support</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Related Products Section -->
+<section class="mt-24">
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Related Solutions</h3>
+<a class="text-primary font-semibold flex items-center gap-1 hover:underline" href="#">
+              View All
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Product 1 -->
+<div class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:shadow-xl transition-all">
+<div class="aspect-square bg-slate-100 dark:bg-slate-800 flex items-center justify-center p-8 group-hover:scale-105 transition-transform">
+<div class="w-full h-full bg-primary/10 rounded-lg flex items-center justify-center" data-alt="Icon for basic load balancer microservice">
+<span class="material-symbols-outlined text-5xl text-primary/40">balance</span>
+</div>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-slate-900 dark:text-slate-100 mb-1">Standard Load Balancer</h4>
+<div class="flex items-center justify-between">
+<span class="text-primary font-bold">$499.00</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-500 text-sm fill-current">star</span>
+<span class="text-xs text-slate-500 font-medium">4.8</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:shadow-xl transition-all">
+<div class="aspect-square bg-slate-100 dark:bg-slate-800 flex items-center justify-center p-8 group-hover:scale-105 transition-transform">
+<div class="w-full h-full bg-primary/10 rounded-lg flex items-center justify-center" data-alt="Icon for security gateway module">
+<span class="material-symbols-outlined text-5xl text-primary/40">security</span>
+</div>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-slate-900 dark:text-slate-100 mb-1">Auth-Shield Gateway</h4>
+<div class="flex items-center justify-between">
+<span class="text-primary font-bold">$820.00</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-500 text-sm fill-current">star</span>
+<span class="text-xs text-slate-500 font-medium">4.9</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:shadow-xl transition-all">
+<div class="aspect-square bg-slate-100 dark:bg-slate-800 flex items-center justify-center p-8 group-hover:scale-105 transition-transform">
+<div class="w-full h-full bg-primary/10 rounded-lg flex items-center justify-center" data-alt="Icon for message queue broker">
+<span class="material-symbols-outlined text-5xl text-primary/40">hub</span>
+</div>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-slate-900 dark:text-slate-100 mb-1">Event-Sync Broker</h4>
+<div class="flex items-center justify-between">
+<span class="text-primary font-bold">$345.00</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-500 text-sm fill-current">star</span>
+<span class="text-xs text-slate-500 font-medium">4.7</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:shadow-xl transition-all">
+<div class="aspect-square bg-slate-100 dark:bg-slate-800 flex items-center justify-center p-8 group-hover:scale-105 transition-transform">
+<div class="w-full h-full bg-primary/10 rounded-lg flex items-center justify-center" data-alt="Icon for analytics monitoring agent">
+<span class="material-symbols-outlined text-5xl text-primary/40">monitoring</span>
+</div>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-slate-900 dark:text-slate-100 mb-1">InsightFlow Agent</h4>
+<div class="flex items-center justify-between">
+<span class="text-primary font-bold">$210.00</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-500 text-sm fill-current">star</span>
+<span class="text-xs text-slate-500 font-medium">4.5</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-12 px-10">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2 text-primary font-bold text-lg">
+<span class="material-symbols-outlined">api</span>
+              ShopEase
+            </div>
+<p class="text-slate-500 text-sm leading-relaxed">
+              Providing enterprise-grade microservice infrastructure components for the modern web. Built for developers, by developers.
+            </p>
+</div>
+<div>
+<h5 class="font-bold text-slate-900 dark:text-slate-100 mb-4">Platform</h5>
+<ul class="flex flex-col gap-2 text-sm text-slate-500 dark:text-slate-400">
+<li><a class="hover:text-primary transition-colors" href="#">Documentation</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API Status</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Integrations</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Partners</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-slate-900 dark:text-slate-100 mb-4">Company</h5>
+<ul class="flex flex-col gap-2 text-sm text-slate-500 dark:text-slate-400">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Press Kit</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Legal</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-slate-900 dark:text-slate-100 mb-4">Newsletter</h5>
+<div class="flex gap-2">
+<input class="bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm px-4 h-10 flex-1 focus:ring-primary" placeholder="Email address" type="email"/>
+<button class="bg-primary text-white h-10 px-4 rounded-lg text-sm font-bold">Join</button>
+</div>
+<p class="text-xs text-slate-400 mt-2 italic">Get weekly updates on microservice trends.</p>
+</div>
+</div>
+<div class="max-w-7xl mx-auto pt-12 mt-12 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs text-slate-400">
+<p>© 2024 ShopEase Infrastructure Inc. All rights reserved.</p>
+<div class="flex gap-4">
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

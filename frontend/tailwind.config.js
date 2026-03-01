@@ -8,24 +8,31 @@ export default {
     extend: {
       colors: {
         primary: {
-          50: '#eef2ff',
-          100: '#e0e7ff',
-          200: '#c7d2fe',
-          300: '#a5b4fc',
-          400: '#818cf8',
-          500: '#6366f1',
-          600: '#4f46e5',
-          700: '#4338ca',
-          800: '#3730a3',
-          900: '#312e81',
+          50: '#f0f2fb',
+          100: '#e1e5f7',
+          200: '#c3ccf0',
+          300: '#a5b2e9',
+          400: '#8799e2',
+          500: '#576ee0', // Stitch Primary
+          600: '#4658b3',
+          700: '#344286',
+          800: '#232c5a',
+          900: '#11162d',
         },
         dark: {
           950: '#000000',
-          900: '#0a0a0f',
-          800: '#111118',
-          700: '#1a1a2e',
-          600: '#16213e',
+          900: '#121420', // Stitch Dark Background
+          800: '#1a1c2e',
+          700: '#232640',
+          600: '#2c3052',
+        },
+        background: {
+          light: '#f6f6f8',
+          dark: '#121420',
         }
+      },
+      fontFamily: {
+        display: ['IBM Plex Sans', 'Inter', 'sans-serif'],
       },
       backdropBlur: {
         xs: '2px',

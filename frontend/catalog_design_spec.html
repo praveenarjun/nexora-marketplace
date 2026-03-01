@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Product Catalog &amp; Filters | ShopEase</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#576ee0",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#121420",
+                    },
+                    fontFamily: {
+                        "display": ["Ibm Plex Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 md:px-10 py-3">
+<div class="max-w-7xl mx-auto flex items-center justify-between gap-8">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<span class="material-symbols-outlined text-3xl font-bold">shopping_bag</span>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">ShopEase</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Home</a>
+<a class="text-primary text-sm font-semibold border-b-2 border-primary" href="#">Products</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Deals</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">About</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-4 items-center">
+<div class="hidden lg:flex w-full max-w-sm relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full h-10 pl-10 pr-4 rounded-lg border-none bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary placeholder:text-slate-400 text-sm" placeholder="Search components..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="relative p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
+</button>
+<button class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined">person</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 ml-2 overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="User avatar illustration" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH2AkG357jjQmSSWv7dGiHsum386P_1xykApPAo65QZoP6Qy6nNwAgEVBehF_SGeAYxBd4EoMJZjl8D9bxoeVJnSD4-bevmE4LuBmBl9PClonMbJcwxzp7NLtyEkPl-l34VpxiVcIWj7A7s8OGLDdSt97y_lTcZSVb4X3-m9BYdFbIIOG4AQ1MInvd1wGPXMKCGedGZ5H0SeLtr-F2uzqPLqnVLuUROa66HrE1Wj4rpvoYxa726dIIS1ddYkMfOhFtxzietcupaPU"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto w-full px-6 py-8 flex flex-col md:flex-row gap-8">
+<!-- Sidebar Filters -->
+<aside class="w-full md:w-64 flex-shrink-0 space-y-8">
+<div>
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">filter_list</span>
+                    Filters
+                </h3>
+<!-- Category Filter -->
+<div class="space-y-3 mb-6">
+<p class="text-sm font-semibold uppercase tracking-wider text-slate-400">Category</p>
+<div class="space-y-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-primary/10 text-primary font-medium">
+<span>Electronics</span>
+<span class="text-xs">42</span>
+</button>
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300">
+<span>Software</span>
+<span class="text-xs">18</span>
+</button>
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300">
+<span>IoT Modules</span>
+<span class="text-xs">24</span>
+</button>
+</div>
+</div>
+<!-- Price Range Filter -->
+<div class="space-y-3 mb-6">
+<p class="text-sm font-semibold uppercase tracking-wider text-slate-400">Price Range</p>
+<div class="px-2">
+<input class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary" type="range"/>
+<div class="flex justify-between mt-2 text-xs text-slate-500">
+<span>$0</span>
+<span>$5,000+</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 mt-2">
+<div class="relative">
+<span class="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 text-xs">$</span>
+<input class="w-full pl-5 pr-2 py-1 text-sm bg-slate-100 dark:bg-slate-800 border-none rounded focus:ring-1 focus:ring-primary" placeholder="Min" type="number"/>
+</div>
+<div class="relative">
+<span class="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 text-xs">$</span>
+<input class="w-full pl-5 pr-2 py-1 text-sm bg-slate-100 dark:bg-slate-800 border-none rounded focus:ring-1 focus:ring-primary" placeholder="Max" type="number"/>
+</div>
+</div>
+</div>
+<!-- Brand Filter -->
+<div class="space-y-3">
+<p class="text-sm font-semibold uppercase tracking-wider text-slate-400">Brand</p>
+<div class="space-y-2 max-h-48 overflow-y-auto pr-2">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="rounded text-primary focus:ring-primary bg-slate-100 dark:bg-slate-800 border-none h-4 w-4" type="checkbox"/>
+<span class="text-sm text-slate-600 dark:text-slate-300 group-hover:text-primary transition-colors">MicroCore</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="rounded text-primary focus:ring-primary bg-slate-100 dark:bg-slate-800 border-none h-4 w-4" type="checkbox"/>
+<span class="text-sm text-slate-600 dark:text-slate-300 group-hover:text-primary transition-colors">QuantumLink</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="rounded text-primary focus:ring-primary bg-slate-100 dark:bg-slate-800 border-none h-4 w-4" type="checkbox"/>
+<span class="text-sm text-slate-600 dark:text-slate-300 group-hover:text-primary transition-colors">NetPulse</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="rounded text-primary focus:ring-primary bg-slate-100 dark:bg-slate-800 border-none h-4 w-4" type="checkbox"/>
+<span class="text-sm text-slate-600 dark:text-slate-300 group-hover:text-primary transition-colors">CloudWare</span>
+</label>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<section class="flex-1">
+<!-- Header & Search -->
+<div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 text-slate-500 text-sm mb-2">
+<span>Home</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-primary font-medium">Electronics</span>
+</div>
+<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Electronics Catalog</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Premium hardware optimized for distributed systems.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-slate-400 whitespace-nowrap">Sort by:</span>
+<select class="text-sm bg-slate-100 dark:bg-slate-800 border-none rounded-lg focus:ring-primary py-2 pl-3 pr-8">
+<option>Recommended</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+<option>Newest First</option>
+</select>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Product Card 1 -->
+<div class="group bg-slate-50 dark:bg-slate-800/40 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all flex flex-col">
+<div class="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-800">
+<img alt="Core Micro-Controller" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="High-tech semiconductor circuit board macro" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYRXNsw434dEMUXgEDiM7ZB6SLY9ORzuiyYiG6MR-95Ccm1qw95d7xXsjudRSRRrPdCBl1oxsBdPmS0pHBD3YzHfOTOQvxiYMlEVetITOli9dYs0i802Hok_VKAc8-CNtROXP9Q3yohwPJUJDo3xJooSI1VcTNPNigmwqTSrY-IvV2WzdKNNieKbKY6bSO-kGnURjbU7gEOw68CNb8AhaB2BVBPVh-MbInyYOHiyOmI96fM1H3jm2rrX5iuTpvyhfG-dszFzqopQk"/>
+<div class="absolute top-3 right-3">
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">Bestseller</span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">Core-X1 Node</h3>
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-4">Industrial-grade microcontroller with native Kubernetes support and MQTT edge bridging.</p>
+<div class="mt-auto">
+<div class="flex items-baseline gap-2 mb-4">
+<span class="text-xl font-bold text-slate-900 dark:text-white">$299.00</span>
+<span class="text-sm text-slate-400 line-through">$349.00</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                Add to Cart
+                            </button>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="group bg-slate-50 dark:bg-slate-800/40 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all flex flex-col">
+<div class="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-800">
+<img alt="Server Unit" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Futuristic server unit with blue lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSzZr1Fh5e0gtqY-B12Bao6jElBOklyMpiXiQ5LsjC6388cBKqVPJM9tuSQn7h-VUULr9MyAV7LNboiuBaJ14a37PVnw-Zf95_SpK1kYa7lZHV79KpOD8rnoUME3HU2xzsdeeyckYH69qy6Ob1DCkjoZiBWC7VufPbp4kLlLjGFCq4eKkILklFjyUy3EU8B4iqp3CYpJwlKbVC0gkf8oL7__az5_07gG_4qoFWMch70rEh_Gnbdjmd3HSCwMyGWP-1BNrWpDD8zPs"/>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">EdgeMesh Gateway</h3>
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-4">Low-latency networking gateway for high-throughput microservices communication.</p>
+<div class="mt-auto">
+<div class="flex items-baseline gap-2 mb-4">
+<span class="text-xl font-bold text-slate-900 dark:text-white">$1,150.00</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                Add to Cart
+                            </button>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="group bg-slate-50 dark:bg-slate-800/40 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all flex flex-col">
+<div class="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-800">
+<img alt="Storage Module" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Network attached storage device components" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKFnJJ2K41kDQMoBvqcCgkVyt4d1ZHWnz_BeZvrZRBEcIJsxiJzE55CIWC8CbH3LJC6TmXX33LX__w4AfvgJO3Ey-8oZi_OZZz1DXWFy1Jhs8t2NvoTuzgxR3nly97Sozk1Clcq72iFTLr1afPXHUqTJkTHqP2n-g12qmgRqtdlNASxc0F7ucPL7VXoYjrAtPyPqCtRGN_kiRLVlmu_BHkCAiddfTj0PGcSWc3vV0bshxzTcCKpJOnu7S55GDeLzCl_ngmd0CP38I"/>
+<div class="absolute top-3 left-3">
+<span class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">Eco-Friendly</span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">PulseStore SSD 4TB</h3>
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-4">Redundant flash storage module with hardware-level encryption and data integrity checks.</p>
+<div class="mt-auto">
+<div class="flex items-baseline gap-2 mb-4">
+<span class="text-xl font-bold text-slate-900 dark:text-white">$450.00</span>
+<span class="text-sm text-slate-400 line-through">$599.00</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                Add to Cart
+                            </button>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="group bg-slate-50 dark:bg-slate-800/40 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all flex flex-col">
+<div class="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-800">
+<img alt="Power Supply" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Power distribution unit for data centers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5azVyHqqpZR3_Bch3Y_L-y8UucumRBb8Rt36FWsHXpGyEUJC-YOabkM9g9Ez0TBT9aMhaotjwXBxbutaA7OPOV6YKqbXh6bazyn6Mn8J5QpSjJFp99DQs_a1beA9b4TWmPbls1G4jhtlQw7TAMuFrQpwS8mWpkK8a3j9XmLvXamQtQu_bRrU90RYXV4CJf6jm_HErvr8YT-P6kAXnM0GaB6RsiACc9hht_vMU--25v-6HqUyO3V3toVZTZi7dq-Vl8ih_TjmuFaA"/>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">Titan PDU 800W</h3>
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-4">Highly efficient power distribution unit with real-time monitoring via Prometheus.</p>
+<div class="mt-auto">
+<div class="flex items-baseline gap-2 mb-4">
+<span class="text-xl font-bold text-slate-900 dark:text-white">$185.00</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                Add to Cart
+                            </button>
+</div>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="group bg-slate-50 dark:bg-slate-800/40 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all flex flex-col">
+<div class="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-800">
+<img alt="Sensor Kit" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Macro of electronic sensor components" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBu9jJ7JfYQZHm-o36MGTsO9ytXzU4_X158nJWqVU-KPhTef4_Hv7p5Mmqxes3muix_GB9bHjmmuzUNA2sQqafH6VQxJ9koXrmpmuVWrka6hG63sTMPdzqSZVcXsXJZTninU6AEAUIIYS6DV3oBbqvglMSBIdEnlku7ZHzr9c5nuF1qgKMV64BLI2h05-PUQkQK62bO3dOZ8PuSy7C9KHsRaf_CMBdGrUM2GalzekWykhLUylHzV9fEuMWtqXsEhL5510jBQQlWnUI"/>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">OmniSensor Array</h3>
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-4">Multi-environmental sensor array with Bluetooth LE and Zigbee connectivity options.</p>
+<div class="mt-auto">
+<div class="flex items-baseline gap-2 mb-4">
+<span class="text-xl font-bold text-slate-900 dark:text-white">$89.99</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                Add to Cart
+                            </button>
+</div>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="group bg-slate-50 dark:bg-slate-800/40 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all flex flex-col">
+<div class="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-800">
+<img alt="Robot Arm" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Industrial robot arm component detail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqgWnmMPZH2A8T_QGcrZ29fPnBpVlANlLvkdNUaiK4w-dPYpBT_e06YXdYKMIvC_Bptq6WL8RNMEWYANT07bIV4zWtLBXTNCfsoc6I2QFjZC0ESQJuk2Cf_E5k55-XWFVaU-ipLgzL4llzWh_dHsjZ5eI86pANVJV7gXJZW8K4eeRhUHXeA2FKaqGc7jAMUpGLKFMVi8HsQe5FUs2fxX8OGWA18pCuMJlWrDfR0zP44NpI3PYrXkSLdcJ-iL8rFCjZaiuGhU0rPao"/>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">ActuLink Controller</h3>
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-4">High-precision motion controller for industrial automation and micro-positioning.</p>
+<div class="mt-auto">
+<div class="flex items-baseline gap-2 mb-4">
+<span class="text-xl font-bold text-slate-900 dark:text-white">$1,240.00</span>
+<span class="text-sm text-slate-400 line-through">$1,500.00</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                Add to Cart
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+<p class="text-sm text-slate-500">Showing 1 to 6 of 42 products</p>
+<div class="flex items-center gap-1">
+<button class="h-10 w-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold">1</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">2</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">3</button>
+<span class="px-2 text-slate-400">...</span>
+<button class="h-10 w-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">7</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="mt-auto py-10 px-10 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2 text-primary/60">
+<span class="material-symbols-outlined">shopping_bag</span>
+<p class="text-sm font-medium">© 2024 ShopEase E-commerce. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

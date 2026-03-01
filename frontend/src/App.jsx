@@ -52,7 +52,7 @@ function App() {
 
         {/* ── App routes (dark navbar layout) ── */}
         <Route path="/*" element={
-          <div className="flex flex-col min-h-screen" style={{ background: '#000000' }}>
+          <div className="flex flex-col min-h-screen" style={{ background: '#121420' }}>
             <Navbar />
             <main className="flex-grow">
               <Routes>

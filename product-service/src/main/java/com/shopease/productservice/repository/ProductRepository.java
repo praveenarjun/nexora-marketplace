@@ -15,6 +15,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>,
 
     boolean existsBySku(String sku);
 
+    long countByCategoryId(Long categoryId);
+
     Page<Product> findByFeaturedTrue(Pageable pageable);
 
     @org.springframework.data.jpa.repository.Query("SELECT p FROM Product p WHERE p.quantity <= COALESCE(p.lowStockThreshold, 5)")

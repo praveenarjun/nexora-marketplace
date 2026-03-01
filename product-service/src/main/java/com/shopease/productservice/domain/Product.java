@@ -81,6 +81,21 @@ public class Product {
     @Builder.Default
     private boolean featured = false;
 
+    private String badge;
+
+    @Builder.Default
+    private Double rating = 0.0;
+
+    @Column(name = "reviews_count")
+    @Builder.Default
+    private Integer reviewsCount = 0;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "product_highlights", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "highlight")
+    @Builder.Default
+    private Set<String> highlights = new HashSet<>();
+
     @ElementCollection(fetch = FetchType.EAGER) // Eager for simplicity in search, can be Lazy
     @CollectionTable(name = "product_tags", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "tag")

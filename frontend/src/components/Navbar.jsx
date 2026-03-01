@@ -2,7 +2,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import useCart from '../hooks/useCart';
-import { ShoppingCart, User, LogOut, Menu, X, ShieldAlert, ShoppingBag } from 'lucide-react';
 
 export default function Navbar() {
     const { user, logout, isAdmin, isAuthenticated } = useContext(AuthContext);
@@ -17,109 +16,120 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="navbar-glass sticky top-0 z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16 items-center">
-                    {/* Logo */}
-                    <Link to="/home" className="flex items-center gap-2.5 flex-shrink-0">
-                        <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center">
-                            <ShoppingBag className="w-4 h-4 text-white" />
+        <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#0a0b10]/90 backdrop-blur-xl h-[72px] flex items-center px-6 lg:px-12">
+            <div className="w-full flex items-center justify-between gap-12">
+
+                {/* 1. Left: Brand Logo */}
+                <div className="flex-shrink-0">
+                    <Link to="/home" className="flex items-center gap-2 group">
+                        <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center shadow-lg shadow-primary-500/20 group-hover:scale-110 transition-transform">
+                            <span className="material-symbols-outlined text-white text-xl">shopping_bag</span>
                         </div>
-                        <span className="text-lg font-bold gradient-text">ShopEase</span>
+                        <h1 className="text-white text-xl font-black tracking-tighter uppercase leading-none">ShopEase</h1>
+                    </Link>
+                </div>
+
+                {/* 2. Center: Prominent Search (Authenticated Home Style) */}
+                <div className="hidden md:flex flex-1 max-w-2xl relative group">
+                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary-500 transition-colors">search</span>
+                    <input
+                        type="text"
+                        placeholder="Search for premium products..."
+                        className="w-full bg-[#1c1d26] border border-white/5 rounded-2xl pl-12 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-primary-500/50 transition-all"
+                    />
+                </div>
+
+                {/* 3. Right: Actions */}
+                <div className="flex items-center gap-6">
+                    {/* Notifications (Stitch Detail) */}
+                    {isAuthenticated() && (
+                        <button className="relative p-2 rounded-xl hover:bg-white/5 transition-colors text-slate-400 hover:text-white hidden sm:block">
+                            <span className="material-symbols-outlined">notifications</span>
+                            <span className="absolute top-2 right-2 w-2 h-2 bg-primary-500 rounded-full border border-[#0a0b10]"></span>
+                        </button>
+                    )}
+
+                    {/* Cart */}
+                    <Link to="/cart" className="relative p-2 rounded-xl hover:bg-white/5 transition-colors group">
+                        <span className="material-symbols-outlined text-slate-400 group-hover:text-primary-500">shopping_cart</span>
+                        {cart.getTotalItems() > 0 && (
+                            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary-500 text-[10px] font-black text-white shadow-xl">
+                                {cart.getTotalItems()}
+                            </span>
+                        )}
                     </Link>
 
-                    {/* Desktop nav links */}
-                    <div className="hidden sm:flex items-center gap-1">
-                        <Link to="/home" className="btn-ghost px-4 py-2">Home</Link>
-                        <Link to="/products" className="btn-ghost px-4 py-2">Products</Link>
-                        {isAuthenticated() && (
-                            <Link to="/orders" className="btn-ghost px-4 py-2">My Orders</Link>
-                        )}
-                        {isAdmin() && (
-                            <Link to="/admin/products" className="flex items-center gap-1.5 btn-ghost px-4 py-2 text-primary-400">
-                                <ShieldAlert className="w-3.5 h-3.5" /> Admin
+                    {/* User / Auth */}
+                    {isAuthenticated() ? (
+                        <div className="flex items-center gap-2 ml-2">
+                            <Link to="/profile" className="w-10 h-10 rounded-full border-2 border-white/10 hover:border-primary-500/50 transition-all overflow-hidden bg-slate-800 flex items-center justify-center">
+                                {user?.avatarUrl ? (
+                                    <img src={user.avatarUrl} alt="profile" className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="material-symbols-outlined text-slate-500">person</span>
+                                )}
                             </Link>
-                        )}
-                    </div>
+                            <button
+                                onClick={handleLogout}
+                                className="hidden lg:flex items-center justify-center w-10 h-10 rounded-xl hover:bg-red-500/10 text-slate-500 hover:text-red-400 transition-colors"
+                                title="Logout"
+                            >
+                                <span className="material-symbols-outlined">logout</span>
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-2">
+                            <Link to="/login" className="text-slate-400 hover:text-white font-bold text-xs uppercase tracking-widest px-4 py-2 transition-all">
+                                Log in
+                            </Link>
+                            <Link to="/register" className="bg-primary-500 hover:bg-primary-600 text-white text-[11px] font-black uppercase tracking-widest px-6 py-2.5 rounded-xl transition-all shadow-xl shadow-primary-500/20 active:scale-95">
+                                Join Now
+                            </Link>
+                        </div>
+                    )}
 
-                    {/* Right side */}
-                    <div className="hidden sm:flex items-center gap-3">
-                        {/* Cart */}
-                        <Link to="/cart" className="relative btn-ghost p-2 rounded-lg">
-                            <ShoppingCart className="h-5 w-5" />
-                            {cart.getTotalItems() > 0 && (
-                                <span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-xs font-bold text-white bg-primary-500 rounded-full">
-                                    {cart.getTotalItems()}
-                                </span>
-                            )}
-                        </Link>
-
-                        {isAuthenticated() ? (
-                            <div className="flex items-center gap-2">
-                                <Link to="/profile" className="flex items-center gap-2 btn-ghost px-3 py-1.5 rounded-lg">
-                                    <div className="w-7 h-7 rounded-full bg-primary-600/20 flex items-center justify-center border border-primary-500/30">
-                                        <User className="h-3.5 w-3.5 text-primary-400" />
-                                    </div>
-                                    <span className="text-sm font-medium text-slate-300">{user?.firstName}</span>
-                                </Link>
-                                <button
-                                    onClick={handleLogout}
-                                    className="btn-ghost px-3 py-1.5 text-red-400 hover:text-red-300 rounded-lg"
-                                >
-                                    <LogOut className="h-4 w-4" />
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="flex items-center gap-2">
-                                <Link to="/login" className="text-slate-300 hover:text-white font-medium text-sm px-4 py-2 transition-colors">
-                                    Log in
-                                </Link>
-                                <Link to="/register" className="btn-primary px-4 py-2 text-sm">
-                                    Sign up
-                                </Link>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Mobile hamburger */}
+                    {/* Mobile Toggle */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        aria-label={isOpen ? 'Close menu' : 'Open menu'}
-                        className="sm:hidden btn-ghost p-2 rounded-lg"
+                        className="md:hidden p-2 rounded-xl bg-white/5 text-slate-300 ml-2"
                     >
-                        {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                        <span className="material-symbols-outlined">{isOpen ? 'close' : 'menu'}</span>
                     </button>
                 </div>
             </div>
 
-            {/* Mobile menu */}
+            {/* Mobile Navigation Dropdown */}
             {isOpen && (
-                <div className="sm:hidden glass-card rounded-none border-x-0 border-b border-t-0 mx-0">
-                    <div className="px-4 py-3 space-y-1">
-                        <Link to="/" onClick={() => setIsOpen(false)} className="block py-2.5 text-sm text-slate-300 hover:text-white font-medium">Home</Link>
-                        <Link to="/products" onClick={() => setIsOpen(false)} className="block py-2.5 text-sm text-slate-300 hover:text-white font-medium">Products</Link>
-                        {isAuthenticated() && (
-                            <Link to="/orders" onClick={() => setIsOpen(false)} className="block py-2.5 text-sm text-slate-300 hover:text-white font-medium">My Orders</Link>
-                        )}
-                        {isAdmin() && (
-                            <Link to="/admin/products" onClick={() => setIsOpen(false)} className="block py-2.5 text-sm text-primary-400 font-medium">Admin Dashboard</Link>
-                        )}
+                <div className="absolute top-[72px] left-0 w-full bg-[#0a0b10] border-b border-white/10 p-6 md:hidden space-y-4 animate-in fade-in slide-in-from-top-4 duration-200">
+                    <div className="relative mb-6">
+                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">search</span>
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            className="w-full bg-[#1c1d26] border border-white/5 rounded-xl pl-10 pr-4 py-3 text-sm text-white"
+                        />
                     </div>
-                    <div className="px-4 py-3 border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+
+                    <nav className="grid grid-cols-1 gap-1">
+                        <Link to="/products?category=electronics" onClick={() => setIsOpen(false)} className="px-4 py-3 rounded-xl hover:bg-white/5 text-slate-400 font-bold uppercase tracking-widest text-xs">Electronics</Link>
+                        <Link to="/products?category=fashion" onClick={() => setIsOpen(false)} className="px-4 py-3 rounded-xl hover:bg-white/5 text-slate-400 font-bold uppercase tracking-widest text-xs">Fashion</Link>
+                        <Link to="/products?category=living" onClick={() => setIsOpen(false)} className="px-4 py-3 rounded-xl hover:bg-white/5 text-slate-400 font-bold uppercase tracking-widest text-xs">Living</Link>
+                    </nav>
+
+                    <div className="pt-6 border-t border-white/5 flex flex-col gap-3">
                         {isAuthenticated() ? (
-                            <div className="space-y-1">
-                                <Link to="/profile" onClick={() => setIsOpen(false)} className="block py-2.5 text-sm text-slate-300 hover:text-white font-medium">Profile</Link>
-                                <button onClick={handleLogout} className="block w-full text-left py-2.5 text-sm text-red-400 font-medium">Logout</button>
-                            </div>
+                            <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 bg-red-500/10 text-red-400 py-4 rounded-2xl font-black uppercase tracking-widest text-xs">
+                                <span className="material-symbols-outlined text-sm">logout</span> Sign Out
+                            </button>
                         ) : (
-                            <div className="flex gap-3">
-                                <Link to="/login" onClick={() => setIsOpen(false)} className="flex-1 text-center py-2.5 text-sm text-slate-300 font-medium">Log in</Link>
-                                <Link to="/register" onClick={() => setIsOpen(false)} className="flex-1 btn-primary py-2.5 text-sm text-center">Sign up</Link>
+                            <div className="grid grid-cols-2 gap-4">
+                                <Link to="/login" onClick={() => setIsOpen(false)} className="text-center py-4 text-slate-400 font-black uppercase tracking-widest text-xs">Log In</Link>
+                                <Link to="/register" onClick={() => setIsOpen(false)} className="text-center bg-primary-500 py-4 rounded-2xl text-white font-black uppercase tracking-widest text-xs">Join</Link>
                             </div>
                         )}
                     </div>
                 </div>
             )}
-        </nav>
+        </header>
     );
 }

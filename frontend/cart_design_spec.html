@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shopping Cart Summary - ShopEase</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Ibm+Plex+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#576ee0", "background-light": "#f6f6f8", "background-dark": "#121420"}, fontFamily: {display: "Ibm Plex Sans"}, borderRadius: {DEFAULT: "0.5rem", lg: "1rem", xl: "1.5rem", full: "9999px"}}}};</script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 lg:px-40 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">api</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">ShopEase</h2>
+</div>
+<label class="hidden md:flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full overflow-hidden border border-slate-200 dark:border-slate-700">
+<div class="text-slate-500 bg-slate-50 dark:bg-slate-800 flex items-center justify-center pl-3">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-slate-50 dark:bg-slate-800 focus:ring-0 text-sm" placeholder="Search components..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="hidden lg:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">Catalog</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">Solutions</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">Enterprise</a>
+</nav>
+<div class="flex gap-3">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-primary hover:text-white transition-all relative">
+<span class="material-symbols-outlined text-xl">shopping_cart</span>
+<span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">3</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center overflow-hidden">
+<img class="h-full w-full object-cover" data-alt="User profile avatar of a developer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrlmipKgBozCeFoDNbPYTgYXKx77az5RfSu32n4qVGMeI4VnDKtsZTPDeuZoFIzRP3QjOnrbdC7U840VPzPubMeDM9tGffE-Zwmh5MKTSOZkNzt2tH7IkHF_z0UVPaNYOirT7xcmFo5ls4VcLninhpoChM-G60T7l5obfgH1fMZxutEwHf06wJxwW7jcUsTfad-by5DJofsattr-Xta5jQlCyBNc6Qh7LJzU68r1eiZmQnNrU6m9eWLuw1VAlHtg20lZxNgC9h958"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 px-4 lg:px-40 py-8">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 mb-8 text-sm font-medium">
+<a class="text-slate-500 hover:text-primary" href="#">Home</a>
+<span class="material-symbols-outlined text-xs text-slate-400">chevron_right</span>
+<span class="text-slate-900 dark:text-white">Shopping Cart</span>
+</div>
+<div class="flex flex-col lg:flex-row gap-12">
+<!-- Cart Items Section -->
+<div class="flex-1">
+<div class="flex items-baseline justify-between mb-6">
+<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Your Cart</h1>
+<span class="text-slate-500 font-medium">3 items</span>
+</div>
+<div class="space-y-6">
+<!-- Item 1 -->
+<div class="flex flex-col sm:flex-row gap-6 p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-hover hover:shadow-md">
+<div class="bg-slate-100 dark:bg-slate-800 rounded-lg h-32 w-full sm:w-32 flex-shrink-0 overflow-hidden">
+<img class="h-full w-full object-cover" data-alt="Laptop displaying microservice architecture code" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLZfoCGyn1RTrYzQqt72Fys0167CJhzJ9aR4pCgJYVCPrxGz78nT3-rSb89ltnsJ1p2C7Bv7N072ZVwGc1b49iBZFPSE0wNoPbTCO4M2nZQVOQk8qi4Qsyyiv_WRYMDrrdP2ql1NUe3yisT1s3v7qbvxZKQtZiXitoMFw1fmRudQ4zqwOhCZ2Yz9wTRNGnOoSd-z07wzbL3N5811La2fVl5abWqExQhwFUIFlVa3I03gMc5VJ04tGA6IwB6oUO0NFc9jcsus78OiM"/>
+</div>
+<div class="flex flex-1 flex-col justify-between py-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Cloud Native Architecture</h3>
+<p class="text-sm text-slate-500 mt-1">Digital Edition • PDF + EPUB</p>
+</div>
+<p class="text-lg font-bold text-slate-900 dark:text-white">$45.00</p>
+</div>
+<div class="flex items-center justify-between mt-4">
+<div class="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-full px-3 py-1">
+<button class="text-slate-500 hover:text-primary flex items-center justify-center p-1">
+<span class="material-symbols-outlined text-lg">remove</span>
+</button>
+<span class="text-sm font-bold w-4 text-center">1</span>
+<button class="text-slate-500 hover:text-primary flex items-center justify-center p-1">
+<span class="material-symbols-outlined text-lg">add</span>
+</button>
+</div>
+<button class="flex items-center gap-1 text-slate-400 hover:text-red-500 transition-colors text-sm font-medium">
+<span class="material-symbols-outlined text-lg">delete</span>
+                                            Remove
+                                        </button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex flex-col sm:flex-row gap-6 p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-hover hover:shadow-md">
+<div class="bg-slate-100 dark:bg-slate-800 rounded-lg h-32 w-full sm:w-32 flex-shrink-0 overflow-hidden">
+<img class="h-full w-full object-cover" data-alt="Server hardware icon representation for hosting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeJ1euoGRw1tZCYym7itY6M9bIZ9dwfqddmxCwgYtfLUavTn7xEZdaXp-g1KqK54Psk65XrYqfekwrkHmRa2NaNOVoyHMXlPXUObNhhlOkBl97hcW1PKE0dqxdxtipRGJwlnRriVofXgV8k24QtQ-PRBgpthwt42VvpNLjcc37WF-izqeDkFWA09fODdDjVtp3c2z3X_bA2TfcLLVOB0eYryUfn1d0g4D1wNJY3ZuExg35rxXUIEr-c5bgtArUKAxAt9VhLs-ZA2A"/>
+</div>
+<div class="flex flex-1 flex-col justify-between py-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Redis Cache Cluster Pro</h3>
+<p class="text-sm text-slate-500 mt-1">Managed Instance • Monthly</p>
+</div>
+<p class="text-lg font-bold text-slate-900 dark:text-white">$89.00</p>
+</div>
+<div class="flex items-center justify-between mt-4">
+<div class="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-full px-3 py-1">
+<button class="text-slate-500 hover:text-primary flex items-center justify-center p-1">
+<span class="material-symbols-outlined text-lg">remove</span>
+</button>
+<span class="text-sm font-bold w-4 text-center">1</span>
+<button class="text-slate-500 hover:text-primary flex items-center justify-center p-1">
+<span class="material-symbols-outlined text-lg">add</span>
+</button>
+</div>
+<button class="flex items-center gap-1 text-slate-400 hover:text-red-500 transition-colors text-sm font-medium">
+<span class="material-symbols-outlined text-lg">delete</span>
+                                            Remove
+                                        </button>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex flex-col sm:flex-row gap-6 p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm transition-hover hover:shadow-md">
+<div class="bg-slate-100 dark:bg-slate-800 rounded-lg h-32 w-full sm:w-32 flex-shrink-0 overflow-hidden">
+<img class="h-full w-full object-cover" data-alt="API icon connection visual representation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzbCKxPVuXukBVFwTtitA0uhDgapeOaLZNSN_82NAT6P3kpstYiN_a0b_UZZYuqngIS84iOqA1hGJlgu3SSszlgmpzQVV_XkVyyrPZVX3hZ6xWhqVKfRm3BMayXQCOAQ575k4gCPYm6xIRsQeowG6LAcLrXHEEx8ND5AJO_tVTBRw9lMHdHygZVXsoqlaVfnVlQIgVd_gxEaWK7VL-dyIBv8FLp-ahOPskyM4elry3soMbRjNJq9IHvvYkB17-g6W7xWz0zexyM0w"/>
+</div>
+<div class="flex flex-1 flex-col justify-between py-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">API Gateway License</h3>
+<p class="text-sm text-slate-500 mt-1">Enterprise Token • Annual</p>
+</div>
+<p class="text-lg font-bold text-slate-900 dark:text-white">$120.00</p>
+</div>
+<div class="flex items-center justify-between mt-4">
+<div class="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-full px-3 py-1">
+<button class="text-slate-500 hover:text-primary flex items-center justify-center p-1">
+<span class="material-symbols-outlined text-lg">remove</span>
+</button>
+<span class="text-sm font-bold w-4 text-center">1</span>
+<button class="text-slate-500 hover:text-primary flex items-center justify-center p-1">
+<span class="material-symbols-outlined text-lg">add</span>
+</button>
+</div>
+<button class="flex items-center gap-1 text-slate-400 hover:text-red-500 transition-colors text-sm font-medium">
+<span class="material-symbols-outlined text-lg">delete</span>
+                                            Remove
+                                        </button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8">
+<a class="inline-flex items-center gap-2 text-primary font-semibold hover:underline" href="#">
+<span class="material-symbols-outlined">arrow_back</span>
+                                Continue Shopping
+                            </a>
+</div>
+</div>
+<!-- Summary Card -->
+<div class="lg:w-96">
+<div class="sticky top-24 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-xl overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Order Summary</h2>
+</div>
+<div class="p-6 space-y-4">
+<div class="flex justify-between text-slate-600 dark:text-slate-400">
+<span>Subtotal</span>
+<span class="font-medium text-slate-900 dark:text-white">$254.00</span>
+</div>
+<div class="flex justify-between text-slate-600 dark:text-slate-400">
+<span>Estimated Shipping</span>
+<span class="font-medium text-slate-900 dark:text-white">$0.00</span>
+</div>
+<div class="flex justify-between text-slate-600 dark:text-slate-400">
+<span>Tax</span>
+<span class="font-medium text-slate-900 dark:text-white">$21.35</span>
+</div>
+<div class="pt-4 border-t border-dashed border-slate-200 dark:border-slate-700 flex justify-between items-baseline">
+<span class="text-lg font-bold text-slate-900 dark:text-white">Total</span>
+<span class="text-2xl font-black text-primary">$275.35</span>
+</div>
+</div>
+<div class="p-6 bg-slate-50 dark:bg-slate-800/50 space-y-4">
+<button class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                                    Proceed to Checkout
+                                    <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<div class="flex flex-col gap-2 items-center text-xs text-slate-500">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-green-500 text-sm">verified_user</span>
+                                        Secure encrypted checkout
+                                    </div>
+<div class="flex gap-4 mt-2">
+<span class="material-symbols-outlined">credit_card</span>
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="material-symbols-outlined">payments</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden by default, shown when cart is empty) -->
+<div class="hidden flex-col items-center justify-center py-20 text-center">
+<div class="h-24 w-24 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mb-6">
+<span class="material-symbols-outlined text-5xl">shopping_cart_off</span>
+</div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Your cart is empty</h2>
+<p class="text-slate-500 max-w-xs mb-8">Looks like you haven't added any microservices to your architecture yet.</p>
+<button class="bg-primary text-white font-bold px-8 py-3 rounded-xl hover:bg-primary/90 transition-all">
+                        Browse Marketplace
+                    </button>
+</div>
+</main>
+<!-- Footer Small -->
+<footer class="mt-auto border-t border-slate-200 dark:border-slate-800 py-8 px-4 lg:px-40 bg-white dark:bg-slate-900">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-2 opacity-50">
+<span class="material-symbols-outlined text-sm">copyright</span>
+<span class="text-xs font-medium">2024 ShopEase Infrastructure. All rights reserved.</span>
+</div>
+<div class="flex gap-6 text-xs font-medium text-slate-500">
+<a class="hover:text-primary" href="#">Terms of Service</a>
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Help Center</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

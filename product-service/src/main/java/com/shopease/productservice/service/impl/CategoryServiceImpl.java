@@ -3,6 +3,7 @@ package com.shopease.productservice.service.impl;
 import com.shopease.productservice.domain.Category;
 import com.shopease.productservice.exception.ResourceNotFoundException;
 import com.shopease.productservice.repository.CategoryRepository;
+import com.shopease.productservice.repository.ProductRepository;
 import com.shopease.productservice.service.CategoryService;
 import com.shopease.productservice.web.dto.CategoryDTO;
 import com.shopease.productservice.web.mapper.CategoryMapper;
@@ -18,13 +19,18 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
     private final CategoryMapper categoryMapper;
 
     @Override
     @Transactional(readOnly = true)
     public List<CategoryDTO> getAllCategories() {
         return categoryRepository.findAll().stream()
-                .map(categoryMapper::toDTO)
+                .map(category -> {
+                    CategoryDTO dto = categoryMapper.toDTO(category);
+                    dto.setProductCount((int) productRepository.countByCategoryId(category.getId()));
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -32,7 +38,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(readOnly = true)
     public CategoryDTO getCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .map(categoryMapper::toDTO)
+                .map(category -> {
+                    CategoryDTO dto = categoryMapper.toDTO(category);
+                    dto.setProductCount((int) productRepository.countByCategoryId(category.getId()));
+                    return dto;
+                })
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
     }
 

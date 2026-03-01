@@ -33,6 +33,10 @@ public class ProductDTO implements Serializable {
     private Long categoryId;
     private String categoryName;
     private boolean featured;
+    private String badge;
+    private Double rating;
+    private Integer reviewsCount;
+    private Set<String> highlights;
     private Set<String> tags;
     // Renamed from 'images' to 'imageUrls' to match frontend type
     private List<String> imageUrls;

@@ -67,6 +67,18 @@ public class CreateProductRequest {
     @Schema(description = "Whether the product should appear in the featured section", example = "false")
     private boolean featured;
 
+    @Schema(description = "Promotional badge text", example = "NEW")
+    private String badge;
+
+    @Schema(description = "Average customer rating", example = "4.5")
+    private Double rating;
+
+    @Schema(description = "Total number of reviews", example = "120")
+    private Integer reviewsCount;
+
+    @Schema(description = "Key product feature highlights", example = "[\"Highlight 1\", \"Highlight 2\"]")
+    private Set<String> highlights;
+
     @Schema(description = "Set of searchable tags for the product", example = "[\"smartphone\", \"apple\", \"5g\"]")
     private Set<String> tags;
 
