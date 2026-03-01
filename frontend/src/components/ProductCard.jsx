@@ -2,62 +2,86 @@ import { Link } from 'react-router-dom';
 import { ShoppingCart } from 'lucide-react';
 
 export default function ProductCard({ product, onAddToCart }) {
-    // Gracefully handle missing product data
     if (!product) return null;
 
-    const isOutOfStock = !product.stockQuantity || product.stockQuantity <= 0;
+    const isOutOfStock = !product.inStock;
 
     return (
-        <div className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
-            {/* Image Container - Fixed height with placeholder */}
-            <div className="relative h-64 w-full bg-gray-100 overflow-hidden flex items-center justify-center p-6">
-                {/* We use a placeholder since the backend doesn't currently serve image URLs natively */}
-                <div className="w-full h-full bg-gradient-to-tr from-gray-200 to-gray-100 rounded-xl flex items-center justify-center transform group-hover:scale-105 transition-transform duration-500">
-                    {(product.name || 'NA').substring(0, 2).toUpperCase()}
+        <div className="group bg-[#1c1d26] rounded-[32px] border border-white/5 overflow-hidden hover:shadow-2xl hover:shadow-primary-500/10 transition-all duration-500 flex flex-col h-full relative">
+            {/* Badge Overlay */}
+            {product.badge && (
+                <div className="absolute top-4 left-4 z-20">
+                    <span className="bg-primary-500 text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.15em] shadow-xl">
+                        {product.badge}
+                    </span>
                 </div>
+            )}
 
-                {/* Out of Stock Badge */}
-                {isOutOfStock && (
-                    <div className="absolute top-4 right-4 bg-rose-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md z-10 animate-pulse">
-                        OUT OF STOCK
+            {/* Favorite Overlay */}
+            <button className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-[#0a0b10]/40 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary-500 transition-colors">
+                <span className="material-symbols-rounded text-xl">favorite</span>
+            </button>
+
+            {/* Image Container */}
+            <Link to={`/products/${product.id}`} className="relative aspect-[4/5] w-full bg-[#0a0b10] overflow-hidden flex items-center justify-center">
+                {product.imageUrls?.[0] ? (
+                    <img
+                        src={product.imageUrls[0]}
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-primary-500/5">
+                        <span className="material-symbols-outlined text-6xl text-primary-500/20">inventory_2</span>
                     </div>
                 )}
-            </div>
+
+                {isOutOfStock && (
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-10">
+                        <span className="text-white text-xs font-black uppercase tracking-[0.2em] px-6 py-2 border border-white/20 rounded-full">
+                            Sold Out
+                        </span>
+                    </div>
+                )}
+            </Link>
 
             {/* Content */}
             <div className="p-6 flex flex-col flex-grow">
-                <div className="flex justify-between items-start mb-2">
-                    <p className="text-xs font-semibold text-primary-600 tracking-wider uppercase">
-                        SKU: {product.skuCode}
+                <div className="flex items-center justify-between mb-3">
+                    <p className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase">
+                        {product.categoryName || 'General'}
                     </p>
+                    {product.rating > 0 && (
+                        <div className="flex items-center gap-1">
+                            <span className="material-symbols-rounded text-sm text-amber-400">star</span>
+                            <span className="text-[10px] font-bold text-slate-300">{product.rating}</span>
+                        </div>
+                    )}
                 </div>
 
-                <Link to={`/products/${product.id}`} className="block">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 hover:text-primary-600 transition-colors line-clamp-2">
+                <Link to={`/products/${product.id}`} className="block mb-2">
+                    <h3 className="text-lg font-bold text-white group-hover:text-primary-400 transition-colors line-clamp-1">
                         {product.name}
                     </h3>
                 </Link>
 
-                <p className="text-sm text-gray-500 mb-6 flex-grow line-clamp-3">
-                    {product.description}
-                </p>
-
-                {/* Footer actions */}
-                <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-100">
-                    <span className="text-2xl font-black text-gray-900">
-                        ${(product.price ?? 0).toFixed(2)}
-                    </span>
+                {/* Price and Action */}
+                <div className="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
+                    <div className="flex flex-col">
+                        <span className="text-xl font-black text-white">
+                            ₹{product.price?.toLocaleString()}
+                        </span>
+                    </div>
 
                     <button
                         onClick={() => onAddToCart?.(product)}
                         disabled={isOutOfStock}
-                        className={`flex items-center justify-center p-3 rounded-xl transition-all duration-200 ${isOutOfStock
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-primary-50 text-primary-700 hover:bg-primary-600 hover:text-white shadow-sm hover:shadow-md'
+                        className={`flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300 shadow-lg ${isOutOfStock
+                            ? 'bg-white/5 text-slate-600 cursor-not-allowed'
+                            : 'bg-primary-500 text-white hover:bg-primary-600 shadow-primary-500/20 active:scale-95'
                             }`}
-                        aria-label="Add to cart"
                     >
-                        <ShoppingCart className="w-5 h-5" />
+                        <span className="material-symbols-outlined text-xl">shopping_cart</span>
                     </button>
                 </div>
             </div>

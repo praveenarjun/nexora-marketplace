@@ -4,9 +4,12 @@ import api from '../services/api';
 
 export default function Home() {
     const [featuredProducts, setFeaturedProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loadingProducts, setLoadingProducts] = useState(true);
+    const [loadingCategories, setLoadingCategories] = useState(true);
 
     useEffect(() => {
+        // Fetch Featured Products
         api.get('/api/products/featured')
             .then(res => {
                 const data = res.data?.data?.content || res.data?.data || [];
@@ -14,7 +17,31 @@ export default function Home() {
             })
             .catch(() => setFeaturedProducts([]))
             .finally(() => setLoadingProducts(false));
+
+        // Fetch Categories with Dynamic Counts
+        api.get('/api/products/categories')
+            .then(res => {
+                const data = res.data?.data || res.data || [];
+                // Map to UI format and handle common categories
+                const mapped = Array.isArray(data) ? data.map(cat => ({
+                    name: cat.name,
+                    count: `${cat.productCount || 0} Products`,
+                    img: getCategoryImage(cat.name)
+                })) : [];
+                setCategories(mapped.slice(0, 4));
+            })
+            .catch(() => setCategories([]))
+            .finally(() => setLoadingCategories(false));
     }, []);
+
+    // Helper for category images
+    const getCategoryImage = (name) => {
+        const lower = name.toLowerCase();
+        if (lower.includes('elect')) return 'https://images.unsplash.com/photo-1546868889-4e0ca25e2154?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('fashion')) return 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('home')) return 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800';
+        return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800';
+    };
 
     return (
         <div className="min-h-screen">
@@ -75,21 +102,22 @@ export default function Home() {
                 </div>
 
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                    {[
-                        { name: 'Electronics', img: 'https://images.unsplash.com/photo-1546868889-4e0ca25e2154?auto=format&fit=crop&q=80&w=800', count: '1.2k+ Products' },
-                        { name: 'Fashion', img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800', count: '850+ Products' },
-                        { name: 'Home Decor', img: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800', count: '420+ Products' },
-                        { name: 'Gadgets', img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800', count: '600+ Products' }
-                    ].map(cat => (
-                        <Link key={cat.name} to={`/products?category=${cat.name.toLowerCase()}`} className="group relative aspect-[4/5] rounded-3xl overflow-hidden bg-slate-900 shadow-2xl transition-all hover:-translate-y-2">
-                            <img src={cat.img} alt={cat.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-110 transition-all duration-700" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0b10] via-transparent to-transparent"></div>
-                            <div className="absolute bottom-6 left-6">
-                                <h3 className="text-xl font-black text-white mb-1">{cat.name}</h3>
-                                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">{cat.count}</p>
-                            </div>
-                        </Link>
-                    ))}
+                    {loadingCategories ? (
+                        [1, 2, 3, 4].map(i => (
+                            <div key={i} className="aspect-[4/5] rounded-3xl bg-white/5 animate-pulse"></div>
+                        ))
+                    ) : (
+                        categories.map(cat => (
+                            <Link key={cat.name} to={`/products?category=${cat.name.toLowerCase()}`} className="group relative aspect-[4/5] rounded-3xl overflow-hidden bg-slate-900 shadow-2xl transition-all hover:-translate-y-2">
+                                <img src={cat.img} alt={cat.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-110 transition-all duration-700" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0b10] via-transparent to-transparent"></div>
+                                <div className="absolute bottom-6 left-6">
+                                    <h3 className="text-xl font-black text-white mb-1">{cat.name}</h3>
+                                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">{cat.count}</p>
+                                </div>
+                            </Link>
+                        ))
+                    )}
                 </div>
             </section>
 
@@ -110,8 +138,17 @@ export default function Home() {
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                             {featuredProducts.map(product => (
-                                <div key={product.id} className="group flex flex-col">
+                                <div key={product.id} className="group flex flex-col relative">
                                     <Link to={`/products/${product.id}`} className="relative aspect-[4/5] rounded-[32px] overflow-hidden bg-[#1c1d26] mb-6 shadow-2xl transition-all hover:shadow-primary-500/10 active:scale-95">
+                                        {/* Badge Overlay */}
+                                        {product.badge && (
+                                            <div className="absolute top-4 left-4 z-10">
+                                                <span className="bg-primary-500 text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.15em] shadow-xl">
+                                                    {product.badge}
+                                                </span>
+                                            </div>
+                                        )}
+
                                         {product.imageUrls?.[0] ? (
                                             <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                         ) : (
@@ -126,7 +163,15 @@ export default function Home() {
                                     </Link>
 
                                     <div className="px-2">
-                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2">{product.category || 'MICROSERVICE'}</p>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">{product.categoryName || 'COLLECTION'}</p>
+                                            {product.rating > 0 && (
+                                                <div className="flex items-center gap-1">
+                                                    <span className="material-symbols-rounded text-[14px] text-amber-400">star</span>
+                                                    <span className="text-[10px] font-bold text-slate-400">{product.rating}</span>
+                                                </div>
+                                            )}
+                                        </div>
                                         <div className="flex items-start justify-between">
                                             <Link to={`/products/${product.id}`} className="text-lg font-bold text-white hover:text-primary-400 transition-colors truncate pr-4">{product.name}</Link>
                                             <span className="text-lg font-black text-white">₹{product.price?.toLocaleString()}</span>

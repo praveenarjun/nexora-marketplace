@@ -87,8 +87,8 @@ export default function Products() {
                                         key={cat}
                                         onClick={() => setSelectedCategory(cat)}
                                         className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${selectedCategory === cat
-                                                ? 'bg-primary-500/10 text-primary-500 font-bold'
-                                                : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
+                                            ? 'bg-primary-500/10 text-primary-500 font-bold'
+                                            : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
                                             }`}
                                     >
                                         <span className="text-sm">{cat === 'ALL' ? 'All Products' : cat}</span>
@@ -184,50 +184,58 @@ export default function Products() {
                                 <Link
                                     key={product.id}
                                     to={`/products/${product.id}`}
-                                    className="group flex flex-col bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-primary-500/50 transition-all hover:shadow-2xl hover:shadow-primary-500/10"
+                                    className="group flex flex-col bg-[#1c1d26] border border-white/5 rounded-[32px] overflow-hidden hover:border-primary-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-500/10"
                                 >
-                                    <div className="aspect-square relative overflow-hidden bg-slate-800">
+                                    <div className="aspect-square relative overflow-hidden bg-[#0a0b10]">
+                                        {/* Badge Overlay */}
+                                        {product.badge && (
+                                            <div className="absolute top-4 left-4 z-10">
+                                                <span className="bg-primary-500 text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.15em] shadow-xl">
+                                                    {product.badge}
+                                                </span>
+                                            </div>
+                                        )}
+
                                         {product.imageUrls?.[0] ? (
-                                            <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                            <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center bg-primary-500/10">
                                                 <span className="material-symbols-outlined text-6xl text-primary-500/30">inventory_2</span>
                                             </div>
                                         )}
-                                        {product.featured && (
-                                            <div className="absolute top-3 right-3">
-                                                <span className="bg-primary-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-widest flex items-center gap-1">
-                                                    <span className="material-symbols-outlined text-[10px]">star_rate</span>
-                                                    Featured
-                                                </span>
-                                            </div>
-                                        )}
+
                                         {!product.inStock && (
-                                            <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center">
-                                                <span className="bg-red-500/20 border border-red-500/50 text-red-500 text-xs font-black px-4 py-2 rounded-full uppercase tracking-widest">Out of Stock</span>
+                                            <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center z-10">
+                                                <span className="bg-red-500/10 border border-red-500/30 text-red-500 text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest">Out of Stock</span>
                                             </div>
                                         )}
                                     </div>
                                     <div className="p-6 flex flex-col flex-1">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <h3 className="font-bold text-white group-hover:text-primary-400 transition-colors truncate">{product.name}</h3>
-                                            <button className="text-slate-500 hover:text-red-500 transition-colors">
-                                                <span className="material-symbols-outlined text-sm">favorite</span>
-                                            </button>
+                                        <div className="flex justify-between items-start mb-3">
+                                            <div className="flex flex-col gap-1">
+                                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{product.categoryName || 'GENERAL'}</p>
+                                                <h3 className="font-bold text-white group-hover:text-primary-400 transition-colors truncate pr-4">{product.name}</h3>
+                                            </div>
+                                            {product.rating > 0 && (
+                                                <div className="flex items-center gap-1 bg-white/5 px-2 py-1 rounded-lg">
+                                                    <span className="material-symbols-rounded text-sm text-amber-400">star</span>
+                                                    <span className="text-[10px] font-bold text-slate-300">{product.rating}</span>
+                                                </div>
+                                            )}
                                         </div>
-                                        <p className="text-xs text-slate-500 mb-4 line-clamp-2 leading-relaxed">{product.description}</p>
-                                        <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
+                                        <p className="text-xs text-slate-400 mb-6 line-clamp-2 leading-relaxed font-medium">{product.description}</p>
+                                        <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
                                             <span className="text-xl font-black text-white">₹{product.price?.toLocaleString()}</span>
                                             <button
                                                 disabled={!product.inStock || addedIds.has(product.id)}
                                                 onClick={(e) => handleAddToCart(e, product)}
-                                                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${addedIds.has(product.id)
-                                                        ? 'bg-green-500 text-white scale-110'
-                                                        : 'bg-primary-500/10 text-primary-500 hover:bg-primary-500 hover:text-white'
+                                                className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${addedIds.has(product.id)
+                                                    ? 'bg-green-500 text-white scale-110 shadow-lg shadow-green-500/20'
+                                                    : 'bg-primary-500 text-white hover:bg-primary-600 shadow-lg shadow-primary-500/20 active:scale-95'
                                                     }`}
                                             >
-                                                <span className="material-symbols-outlined text-sm">
-                                                    {addedIds.has(product.id) ? 'check' : 'add_shopping_cart'}
+                                                <span className="material-symbols-outlined text-xl">
+                                                    {addedIds.has(product.id) ? 'check' : 'shopping_cart'}
                                                 </span>
                                             </button>
                                         </div>

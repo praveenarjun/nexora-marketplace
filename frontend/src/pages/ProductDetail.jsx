@@ -106,51 +106,94 @@ export default function ProductDetail() {
                     </nav>
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                        {/* Left: Image Showcase */}
-                        <div className="lg:col-span-7 space-y-4">
-                            <div className="aspect-[4/3] bg-white/5 border border-white/10 rounded-3xl overflow-hidden relative group">
+                        {/* Left: Image Showcase & Gallery */}
+                        <div className="lg:col-span-7 space-y-6">
+                            <div className="aspect-[4/5] bg-[#1c1d26] border border-white/5 rounded-[40px] overflow-hidden relative group shadow-2xl">
                                 {product.imageUrls?.[0] ? (
                                     <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover" />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center">
-                                        <span className="material-symbols-outlined text-9xl text-slate-800">developer_board</span>
+                                        <span className="material-symbols-outlined text-9xl text-white/5">inventory_2</span>
                                     </div>
                                 )}
-                                {product.featured && (
-                                    <div className="absolute top-6 right-6">
-                                        <span className="bg-primary-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-xl">Bestseller</span>
+
+                                {product.badge && (
+                                    <div className="absolute top-8 left-8">
+                                        <span className="bg-primary-500 text-white text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-[0.2em] shadow-2xl">
+                                            {product.badge}
+                                        </span>
                                     </div>
                                 )}
                             </div>
+
+                            {/* Thumbnail Gallery */}
+                            {product.imageUrls?.length > 1 && (
+                                <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                                    {product.imageUrls.map((url, idx) => (
+                                        <button key={idx} className="w-24 aspect-square rounded-2xl bg-[#1c1d26] border border-white/5 overflow-hidden flex-shrink-0 hover:border-primary-500/50 transition-all">
+                                            <img src={url} alt={`${product.name} ${idx}`} className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity" />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         {/* Right: Info Area */}
-                        <div className="lg:col-span-5 flex flex-col gap-6">
+                        <div className="lg:col-span-5 flex flex-col gap-8">
                             <div>
-                                <div className="flex items-center gap-3 mb-3">
-                                    <span className={`px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest ${product.inStock
-                                            ? 'bg-green-500/20 text-green-500 border border-green-500/30'
-                                            : 'bg-red-500/20 text-red-500 border border-red-500/30'
+                                <div className="flex items-center gap-3 mb-4">
+                                    <span className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] ${product.inStock
+                                        ? 'bg-green-500/10 text-green-500 border border-green-500/20'
+                                        : 'bg-red-500/10 text-red-500 border border-red-500/20'
                                         }`}>
-                                        {product.inStock ? 'In Stock' : 'Out of Stock'}
+                                        {product.inStock ? 'Available Now' : 'Out of Stock'}
                                     </span>
-                                    <span className="text-slate-500 text-xs font-bold font-mono">SKU: {product.sku}</span>
+                                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">{product.categoryName || 'PREMIUM'}</p>
                                 </div>
-                                <h1 className="text-4xl font-black text-white tracking-tight leading-[1.1] mb-2">{product.name}</h1>
+                                <h1 className="text-5xl lg:text-6xl font-black text-white tracking-tighter leading-[1.05] mb-4">{product.name}</h1>
+
+                                {/* Rating & Reviews */}
+                                <div className="flex items-center gap-4">
+                                    <div className="flex items-center gap-1">
+                                        {[1, 2, 3, 4, 5].map(star => (
+                                            <span key={star} className={`material-symbols-rounded text-lg ${star <= Math.round(product.rating || 0) ? 'text-amber-400' : 'text-white/10'}`}>star</span>
+                                        ))}
+                                        <span className="text-sm font-black text-white ml-2">{product.rating || '0.0'}</span>
+                                    </div>
+                                    <div className="w-px h-4 bg-white/10"></div>
+                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{product.reviewsCount || 0} Customer Reviews</span>
+                                </div>
                             </div>
 
                             <div className="flex items-baseline gap-4">
-                                <span className="text-4xl font-black text-primary-500">₹{product.price?.toLocaleString()}</span>
-                                <span className="text-slate-500 line-through text-lg font-medium">₹{(product.price * 1.2).toLocaleString()}</span>
+                                <span className="text-5xl font-black text-primary-500 tracking-tighter">₹{product.price?.toLocaleString()}</span>
+                                {product.compareAtPrice && (
+                                    <span className="text-slate-500 line-through text-xl font-medium">₹{product.compareAtPrice.toLocaleString()}</span>
+                                )}
                             </div>
 
+                            {/* Feature Highlights */}
+                            {product.highlights?.length > 0 && (
+                                <div className="space-y-4">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Key Highlights</p>
+                                    <ul className="space-y-3">
+                                        {product.highlights.map((h, i) => (
+                                            <li key={i} className="flex items-center gap-3 text-slate-300">
+                                                <span className="material-symbols-outlined text-primary-500 text-lg">check_circle</span>
+                                                <span className="text-sm font-medium">{h}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
                             <div className="border-y border-white/5 py-8">
-                                <p className="text-slate-400 leading-relaxed font-light mb-6">
-                                    {product.description || 'Enterprise-grade microservice component optimized for high-throughput distributed systems. Featuring seamless gRPC integration and real-time monitoring support.'}
+                                <p className="text-slate-400 leading-relaxed font-medium mb-8">
+                                    {product.description || 'Experience the future of lifestyle technology with our meticulously crafted collection. Designed for the discerning individual who values performance, elegance, and quality.'}
                                 </p>
                                 <div className="flex flex-wrap gap-2">
-                                    {['Cloud-Native', 'Scalable', 'Optimized'].map(tag => (
-                                        <span key={tag} className="px-3 py-1 bg-white/5 border border-white/10 text-slate-500 text-[10px] font-bold uppercase rounded-full tracking-wider hover:border-primary-500/50 hover:text-primary-500 transition-all cursor-default">
+                                    {(product.tags || ['Premium', 'Innovation', 'Curated']).map(tag => (
+                                        <span key={tag} className="px-4 py-1.5 bg-white/5 border border-white/10 text-slate-400 text-[10px] font-black uppercase rounded-full tracking-widest hover:border-primary-500/50 hover:text-primary-500 transition-all cursor-default">
                                             {tag}
                                         </span>
                                     ))}
@@ -187,8 +230,8 @@ export default function ProductDetail() {
                                             onClick={handleAddToCart}
                                             disabled={!product.inStock || adding}
                                             className={`w-full h-12 flex items-center justify-center gap-3 rounded-xl font-bold transition-all shadow-lg ${adding
-                                                    ? 'bg-green-500 text-white scale-95'
-                                                    : 'bg-primary-500 text-white hover:bg-primary-600 shadow-primary-500/20 active:scale-95'
+                                                ? 'bg-green-500 text-white scale-95'
+                                                : 'bg-primary-500 text-white hover:bg-primary-600 shadow-primary-500/20 active:scale-95'
                                                 } ${!product.inStock ? 'opacity-30 cursor-not-allowed grayscale' : ''}`}
                                         >
                                             <span className="material-symbols-outlined text-sm">{adding ? 'check' : 'shopping_cart'}</span>
