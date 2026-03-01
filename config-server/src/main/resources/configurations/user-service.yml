@@ -51,7 +51,7 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: ${EUREKA_URL:http://eureka:password123@${EUREKA_HOST:discovery-server}:8763/eureka/}
+      defaultZone: ${EUREKA_URL:http://${EUREKA_USER:-eureka}:${EUREKA_PASSWORD}@${EUREKA_HOST:discovery-server}:8763/eureka/}
 
 management:
   tracing:

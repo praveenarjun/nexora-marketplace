@@ -10,7 +10,7 @@ services:
       EUREKA_CLIENT_FETCH_REGISTRY: "false"
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
     healthcheck:
-      test: [ "CMD", "wget", "-q", "--spider", "--user=eureka", "--password=password123", "http://localhost:8763/" ]
+      test: [ "CMD", "wget", "-q", "--spider", "--user=${EUREKA_USER:-eureka}", "--password=${EUREKA_PASSWORD}", "http://localhost:8763/" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -28,7 +28,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: native,prod
       EUREKA_HOST: discovery-server
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://${EUREKA_USER:-eureka}:${EUREKA_PASSWORD}@discovery-server:8763/eureka/
     healthcheck:
       test: [ "CMD", "wget", "-q", "--spider", "http://localhost:8888/api-gateway/prod" ]
       interval: 10s
@@ -50,7 +50,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://${EUREKA_USER:-eureka}:${EUREKA_PASSWORD}@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       JWT_SECRET: ${JWT_SECRET}
 
@@ -68,7 +68,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://${EUREKA_USER:-eureka}:${EUREKA_PASSWORD}@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       PRODUCT_DB_URL: ${NEON_PRODUCT_DB_URL}
       PRODUCT_DB_USER: ${NEON_DB_USER}
@@ -98,7 +98,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://${EUREKA_USER:-eureka}:${EUREKA_PASSWORD}@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       USER_DB_URL: ${NEON_USER_DB_URL}
       USER_DB_USER: ${NEON_DB_USER}
@@ -108,7 +108,7 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
-      FRONTEND_URL: ${FRONTEND_URL:-https://shop-api.praveen-challa.tech}
+      FRONTEND_URL: ${FRONTEND_URL:-https://shop.praveen-challa.tech}
       RABBITMQ_HOST: ${CLOUDAMQP_HOST}
       RABBITMQ_PORT: "5671"
       RABBITMQ_USER: ${CLOUDAMQP_USER}
@@ -130,7 +130,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://${EUREKA_USER:-eureka}:${EUREKA_PASSWORD}@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       INVENTORY_DB_URL: ${NEON_INVENTORY_DB_URL}
       INVENTORY_DB_USER: ${NEON_DB_USER}
@@ -156,7 +156,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://${EUREKA_USER:-eureka}:${EUREKA_PASSWORD}@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       ORDER_DB_URL: ${NEON_ORDER_DB_URL}
       ORDER_DB_USER: ${NEON_DB_USER}
@@ -182,7 +182,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://${EUREKA_USER:-eureka}:${EUREKA_PASSWORD}@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       RABBITMQ_HOST: ${CLOUDAMQP_HOST}
       RABBITMQ_PORT: "5671"
