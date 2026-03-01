@@ -10,7 +10,7 @@ services:
       EUREKA_CLIENT_FETCH_REGISTRY: "false"
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8763" ]
+      test: [ "CMD", "wget", "-q", "--spider", "http://localhost:8763/" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -30,7 +30,7 @@ services:
       EUREKA_HOST: discovery-server
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8888/api-gateway/prod" ]
+      test: [ "CMD", "wget", "-q", "--spider", "http://localhost:8888/api-gateway/prod" ]
       interval: 10s
       timeout: 5s
       retries: 5
