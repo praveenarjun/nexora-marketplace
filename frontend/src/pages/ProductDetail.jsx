@@ -16,6 +16,7 @@ export default function ProductDetail() {
     const addingTimeoutRef = useRef(null);
 
     useEffect(() => {
+        setSelectedImageIndex(0);
         const fetchData = async () => {
             try {
                 setLoading(true);

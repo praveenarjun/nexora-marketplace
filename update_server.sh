@@ -3,7 +3,7 @@ set -e
 set -o pipefail
 
 # Configuration - set these environment variables or use defaults
-SERVER_HOST="${DEPLOY_SERVER_HOST:-20.197.43.207}"
+SERVER_HOST="${DEPLOY_SERVER_HOST:?Error: DEPLOY_SERVER_HOST environment variable must be set}"
 SERVER_USER="${DEPLOY_SERVER_USER:-azureuser}"
 SSH_KEY="${DEPLOY_SSH_KEY:-$HOME/.ssh/shopease-key.pem}"
 
