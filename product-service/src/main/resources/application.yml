@@ -9,9 +9,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: ${SHOW_SQL:false}
   flyway:
     enabled: true
     baseline-on-migrate: true
-    baseline-version: 1
+    baseline-version: 0
     locations: classpath:db/migration
