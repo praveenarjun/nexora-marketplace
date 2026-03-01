@@ -26,7 +26,7 @@ services:
       discovery-server:
         condition: service_healthy
     environment:
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: native,prod
       EUREKA_HOST: discovery-server
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:password123@discovery-server:8763/eureka/
     healthcheck:
