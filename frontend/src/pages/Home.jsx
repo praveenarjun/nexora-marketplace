@@ -27,14 +27,13 @@ export default function Home() {
             .catch(() => setFeaturedProducts([]))
             .finally(() => setLoadingProducts(false));
 
-        // Fetch Categories with Dynamic Counts
-        api.get('/api/products/categories')
+        // Fetch Categories with Dynamic Counts (Using specialized endpoint if available, else generic)
+        api.get('/api/categories')
             .then(res => {
                 const data = res.data?.data || res.data || [];
-                // Map to UI format and handle common categories
                 const mapped = Array.isArray(data) ? data.map(cat => ({
                     name: cat.name,
-                    count: `${cat.productCount || 0} Products`,
+                    count: 'View Collection',
                     img: getCategoryImage(cat.name)
                 })) : [];
                 setCategories(mapped.slice(0, 4));

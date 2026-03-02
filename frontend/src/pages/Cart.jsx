@@ -6,10 +6,10 @@ export default function Cart() {
     const cart = useCart();
     const navigate = useNavigate();
 
-    const subtotal = cart.getTotalPrice();
-    const shipping = subtotal > 5000 ? 0 : 500;
-    const tax = subtotal * 0.18; // 18% GST
-    const total = subtotal + shipping + tax;
+    const subtotal = cart.getSubtotal();
+    const shipping = cart.getShipping();
+    const tax = cart.getTax();
+    const total = cart.getTotalAmount();
 
     if (cart.items.length === 0) {
         return (

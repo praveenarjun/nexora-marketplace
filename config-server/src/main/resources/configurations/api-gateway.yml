@@ -10,6 +10,7 @@ spring:
             allowedOrigins: 
               - "http://localhost:5173"
               - "https://shop.praveen-challa.tech"
+              - "https://shop-ai.praveen-challa.tech"
             allowedMethods:
               - GET
               - POST

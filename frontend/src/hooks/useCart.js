@@ -89,7 +89,28 @@ const useCart = create(
             // Utilities
             getTotalItems: () => get().items.reduce((total, item) => total + item.quantity, 0),
 
-            getTotalPrice: () => get().items.reduce((total, item) => total + (item.price * item.quantity), 0),
+            getSubtotal: () => get().items.reduce((total, item) => total + (item.price * item.quantity), 0),
+
+            getShipping: () => {
+                const subtotal = get().getSubtotal();
+                if (subtotal === 0) return 0;
+                return subtotal > 5000 ? 0 : 500;
+            },
+
+            getTax: () => {
+                const subtotal = get().getSubtotal();
+                return Math.round((subtotal * 0.18) * 100) / 100; // 18% GST rounded to 2 decimal places
+            },
+
+            getTotalAmount: () => {
+                const subtotal = get().getSubtotal();
+                const shipping = get().getShipping();
+                const tax = get().getTax();
+                return Math.round((subtotal + shipping + tax) * 100) / 100;
+            },
+
+            // Legacy support
+            getTotalPrice: () => get().getSubtotal(),
         }),
         {
             name: 'shopease-cart-storage', // key in localStorage

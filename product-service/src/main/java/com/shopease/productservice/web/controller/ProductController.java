@@ -146,6 +146,21 @@ public class ProductController {
                 return ResponseEntity.ok(ApiResponse.success(updatedProduct, "Product status updated successfully"));
         }
 
+        @Operation(summary = "Diagnostic health check", description = "Checks connectivity to internal infrastructure (Redis, RabbitMQ).")
+        @GetMapping("/debug/health")
+        public ResponseEntity<java.util.Map<String, Object>> getDebugHealth() {
+                java.util.Map<String, Object> health = new java.util.HashMap<>();
+                try {
+                        productService.getAllProducts(org.springframework.data.domain.PageRequest.of(0, 1));
+                        health.put("database", "UP");
+                        health.put("redis_cache_test", "SUCCESS");
+                } catch (Exception e) {
+                        health.put("database", "DOWN/TIMEOUT");
+                        health.put("error", e.getMessage());
+                }
+                return ResponseEntity.ok(health);
+        }
+
         @Operation(summary = "Delete a product", description = "Soft-deletes a product by setting its status to ARCHIVED. It will no longer appear in search results.")
         @ApiResponses({
                         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Product archived"),

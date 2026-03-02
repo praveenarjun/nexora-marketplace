@@ -28,8 +28,11 @@ export default function ProductDetail() {
                 const prodData = productRes.data?.data || productRes.data;
                 setProduct(prodData);
 
-                const all = allProductsRes.data?.data?.content || allProductsRes.data || [];
-                setRelatedProducts(all.filter(p => p.id !== parseInt(id)).slice(0, 4));
+                // Fetch Related Products by Category instead of the entire catalog
+                const categoryId = prodData.categoryId;
+                const relatedRes = await api.get(`/api/products/filter?categoryId=${categoryId}&size=5`);
+                const relatedData = relatedRes.data?.data?.content || [];
+                setRelatedProducts(relatedData.filter(p => p.id !== parseInt(id)).slice(0, 4));
             } catch (err) {
                 toast.error('Failed to load product details');
             } finally {
