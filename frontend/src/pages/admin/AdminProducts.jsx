@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { PackageSearch, Plus, Pencil, Trash2, Tag, Loader } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import api from '../../services/api';
+import AdminHeader from '../../components/AdminHeader';
 
 export default function AdminProducts() {
     const [products, setProducts] = useState([]);
@@ -15,7 +16,8 @@ export default function AdminProducts() {
         price: '',
         skuCode: '',
         categoryId: 1, // Defaulting to 1 to match backend mapping requirements
-        stockQuantity: '' // Used to automatically populate Inventory Service!
+        stockQuantity: '', // Used to automatically populate Inventory Service!
+        imageUrl: ''
     });
 
     useEffect(() => {
@@ -50,7 +52,8 @@ export default function AdminProducts() {
                 price: price,
                 sku: formData.skuCode,  // Backend expects 'sku' in format: XX-XX-XX (e.g. ELEC-PHN-001)
                 status: 'ACTIVE',       // Backend requires status: ACTIVE | DRAFT | INACTIVE | ARCHIVED
-                categoryId: window.parseInt(formData.categoryId)
+                categoryId: window.parseInt(formData.categoryId),
+                images: formData.imageUrl ? [formData.imageUrl] : []
             };
 
             const response = await api.post('/api/products', productPayload);
@@ -71,7 +74,7 @@ export default function AdminProducts() {
             }
 
             setIsCreating(false);
-            setFormData({ name: '', description: '', price: '', skuCode: '', categoryId: 1, stockQuantity: '' });
+            setFormData({ name: '', description: '', price: '', skuCode: '', categoryId: 1, stockQuantity: '', imageUrl: '' });
             fetchProducts(); // Refresh table
         } catch (err) {
             // Show validation error details if available
@@ -89,37 +92,19 @@ export default function AdminProducts() {
 
     return (
         <div className="max-w-7xl mx-auto py-8">
-            {/* Admin Navigation Tabs */}
-            <div className="mb-8 border-b border-gray-200">
-                <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-                    <a href="/admin/orders" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                        Orders Fulfillment
-                    </a>
-                    <a href="/admin/products" className="border-primary-500 text-primary-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                        Product Catalog
-                    </a>
-                    <a href="/admin/inventory" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                        Inventory Levels
-                    </a>
-                </nav>
-            </div>
+            <AdminHeader
+                title="Product Management"
+                subtitle="Control the global catalog mapping directly to your Postgres database. Supported by Redis caching."
+                activeTab="products"
+            />
 
-            <div className="md:flex md:items-center md:justify-between mb-8">
-                <div className="flex-1 min-w-0">
-                    <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate flex items-center">
-                        <PackageSearch className="w-8 h-8 mr-3 text-primary-600" />
-                        Product Management
-                    </h2>
-                    <p className="mt-1 text-sm text-gray-500">
-                        Control the global catalog mapping directly to your Postgres database.
-                    </p>
-                </div>
+            <div className="md:flex md:items-center md:justify-end mb-8 -mt-16">
                 <div className="mt-4 flex md:mt-0 md:ml-4">
                     <button
                         onClick={() => setIsCreating(!isCreating)}
-                        className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700"
+                        className="inline-flex items-center px-6 py-3 border border-transparent rounded-[20px] shadow-sm text-xs font-black uppercase tracking-widest text-white bg-primary-600 hover:bg-primary-700 transition-all hover:shadow-primary-500/20 active:scale-95"
                     >
-                        {isCreating ? 'Cancel' : <><Plus className="w-4 h-4 mr-2" /> Add Product</>}
+                        {isCreating ? 'Cancel' : <><Plus className="w-4 h-4 mr-2" /> New Product</>}
                     </button>
                 </div>
             </div>
@@ -154,6 +139,10 @@ export default function AdminProducts() {
                                 <label className="block text-sm font-medium text-gray-700">Initial Stock (Inventory Service)</label>
                                 <input type="number" placeholder="e.g. 50" value={formData.stockQuantity} onChange={(e) => setFormData({ ...formData, stockQuantity: e.target.value })} className="mt-1 block w-full border border-rose-200 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-rose-500 focus:border-rose-500 bg-rose-50 sm:text-sm placeholder-rose-300" />
                                 <p className="mt-1 text-xs text-rose-500">Auto-registers with Warehouse</p>
+                            </div>
+                            <div className="sm:col-span-6">
+                                <label className="block text-sm font-medium text-gray-700">Product Image URL</label>
+                                <input type="url" placeholder="https://images.unsplash.com/photo-1523275335684-37898b6baf30" value={formData.imageUrl} onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" />
                             </div>
 
                             <div className="sm:col-span-6 flex justify-end">
@@ -190,8 +179,12 @@ export default function AdminProducts() {
                                             <tr key={product.id} className="hover:bg-gray-50">
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <div className="flex items-center">
-                                                        <div className="flex-shrink-0 h-10 w-10 bg-gray-100 rounded-md flex items-center justify-center font-bold text-gray-400 text-xs">
-                                                            {(product.name || 'NA').substring(0, 2).toUpperCase()}
+                                                        <div className="flex-shrink-0 h-10 w-10 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
+                                                            {product.imageUrls?.[0] ? (
+                                                                <img src={product.imageUrls[0]} alt="" className="w-full h-full object-cover" />
+                                                            ) : (
+                                                                <span className="font-bold text-gray-400 text-xs">{(product.name || 'NA').substring(0, 2).toUpperCase()}</span>
+                                                            )}
                                                         </div>
                                                         <div className="ml-4">
                                                             <div className="text-sm font-bold text-gray-900">{product.name}</div>

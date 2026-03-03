@@ -9,18 +9,19 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_CLIENT_FETCH_REGISTRY: "false"
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+      JAVA_OPTS: "-XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=50.0"
     deploy:
       resources:
         limits:
-          memory: 512M
-        reservations:
           memory: 256M
+        reservations:
+          memory: 128M
     healthcheck:
       test: [ "CMD", "wget", "-q", "--spider", "--user=${EUREKA_USER:-eureka}", "--password=${EUREKA_PASSWORD:-password123}", "http://localhost:8763/" ]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 30s
+      start_period: 600s
 
   config-server:
     image: ghcr.io/praveenarjun/shopease-config-server:${IMAGE_TAG:-latest}
@@ -29,24 +30,24 @@ services:
     ports:
       - "8888:8888"
     depends_on:
-      discovery-server:
-        condition: service_healthy
+      - discovery-server
     environment:
       SPRING_PROFILES_ACTIVE: native,prod
       EUREKA_HOST: discovery-server
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://${EUREKA_USER:-eureka}:${EUREKA_PASSWORD:-password123}@discovery-server:8763/eureka/
+      JAVA_OPTS: "-XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=50.0"
     deploy:
       resources:
         limits:
-          memory: 512M
-        reservations:
           memory: 256M
+        reservations:
+          memory: 128M
     healthcheck:
       test: [ "CMD", "wget", "-q", "--spider", "http://localhost:8888/api-gateway/prod" ]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 30s
+      start_period: 600s
 
   api-gateway:
     image: ghcr.io/praveenarjun/shopease-api-gateway:${IMAGE_TAG:-latest}
@@ -55,34 +56,31 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      discovery-server:
-        condition: service_healthy
-      config-server:
-        condition: service_healthy
+      - discovery-server
+      - config-server
     environment:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://${EUREKA_USER:-eureka}:${EUREKA_PASSWORD:-password123}@discovery-server:8763/eureka/
       CONFIG_SERVER_URL: http://config-server:8888
       JWT_SECRET: ${JWT_SECRET}
+      JAVA_OPTS: "-XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=50.0"
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 384M
         reservations:
           memory: 256M
 
   product-service:
-    image: ghcr.io/praveenarjun/shopease-product-service:${IMAGE_TAG:-latest}
+    image: ghcr.io/praveenarjun/shopease-product-service:custom
     container_name: product-service-prod
     restart: always
     ports:
       - "8081:8081"
     depends_on:
-      discovery-server:
-        condition: service_healthy
-      config-server:
-        condition: service_healthy
+      - discovery-server
+      - config-server
     environment:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
@@ -101,12 +99,19 @@ services:
       RABBITMQ_PASSWORD: ${CLOUDAMQP_PASSWORD}
       RABBITMQ_VHOST: ${CLOUDAMQP_VHOST}
       RABBITMQ_SSL: "true"
+      JAVA_OPTS: "-XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=50.0 -Dspring.cache.type=none"
     deploy:
       resources:
         limits:
-          memory: 768M
+          memory: 640M
         reservations:
-          memory: 512M
+          memory: 384M
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-O", "-", "http://localhost:8081/actuator/health" ]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 120s
 
   user-service:
     image: ghcr.io/praveenarjun/shopease-user-service:${IMAGE_TAG:-latest}
@@ -115,10 +120,8 @@ services:
     ports:
       - "8083:8083"
     depends_on:
-      discovery-server:
-        condition: service_healthy
-      config-server:
-        condition: service_healthy
+      - discovery-server
+      - config-server
     environment:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
@@ -139,12 +142,13 @@ services:
       RABBITMQ_PASSWORD: ${CLOUDAMQP_PASSWORD}
       RABBITMQ_VHOST: ${CLOUDAMQP_VHOST}
       RABBITMQ_SSL: "true"
+      JAVA_OPTS: "-XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=50.0"
     deploy:
       resources:
         limits:
-          memory: 768M
+          memory: 448M
         reservations:
-          memory: 512M
+          memory: 256M
 
   inventory-service:
     image: ghcr.io/praveenarjun/shopease-inventory-service:${IMAGE_TAG:-latest}
@@ -153,10 +157,8 @@ services:
     ports:
       - "8084:8084"
     depends_on:
-      discovery-server:
-        condition: service_healthy
-      config-server:
-        condition: service_healthy
+      - discovery-server
+      - config-server
     environment:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
@@ -171,12 +173,13 @@ services:
       RABBITMQ_PASSWORD: ${CLOUDAMQP_PASSWORD}
       RABBITMQ_VHOST: ${CLOUDAMQP_VHOST}
       RABBITMQ_SSL: "true"
+      JAVA_OPTS: "-XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=50.0"
     deploy:
       resources:
         limits:
-          memory: 768M
+          memory: 384M
         reservations:
-          memory: 512M
+          memory: 256M
 
   order-service:
     image: ghcr.io/praveenarjun/shopease-order-service:${IMAGE_TAG:-latest}
@@ -185,10 +188,8 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      discovery-server:
-        condition: service_healthy
-      config-server:
-        condition: service_healthy
+      - discovery-server
+      - config-server
     environment:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
@@ -203,12 +204,13 @@ services:
       RABBITMQ_PASSWORD: ${CLOUDAMQP_PASSWORD}
       RABBITMQ_VHOST: ${CLOUDAMQP_VHOST}
       RABBITMQ_SSL: "true"
+      JAVA_OPTS: "-XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=50.0"
     deploy:
       resources:
         limits:
-          memory: 768M
+          memory: 448M
         reservations:
-          memory: 512M
+          memory: 256M
 
   notification-service:
     image: ghcr.io/praveenarjun/shopease-notification-service:${IMAGE_TAG:-latest}
@@ -217,10 +219,8 @@ services:
     ports:
       - "8085:8085"
     depends_on:
-      discovery-server:
-        condition: service_healthy
-      config-server:
-        condition: service_healthy
+      - discovery-server
+      - config-server
     environment:
       SPRING_PROFILES_ACTIVE: prod
       EUREKA_HOST: discovery-server
@@ -236,9 +236,10 @@ services:
       SMTP_PORT: ${PROD_SMTP_PORT}
       SMTP_USERNAME: ${PROD_SMTP_USERNAME}
       SMTP_PASSWORD: ${PROD_SMTP_PASSWORD}
+      JAVA_OPTS: "-XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=50.0"
     deploy:
       resources:
         limits:
-          memory: 512M
-        reservations:
           memory: 256M
+        reservations:
+          memory: 128M

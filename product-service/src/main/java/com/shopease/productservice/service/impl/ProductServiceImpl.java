@@ -29,7 +29,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku", "productCatalog" }, allEntries = true)
+    @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku",
+            "productCatalog" }, allEntries = true)
     public ProductDTO createProduct(CreateProductRequest request) {
         if (productRepository.existsBySku(request.getSku())) {
             throw new DuplicateResourceException("Product with SKU " + request.getSku() + " already exists");
@@ -56,7 +57,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku", "productCatalog" }, allEntries = true)
+    @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku",
+            "productCatalog" }, allEntries = true)
     public ProductDTO updateProduct(Long id, UpdateProductRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
@@ -113,7 +115,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    @org.springframework.cache.annotation.Cacheable(value = "productCatalog")
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(productMapper::toDTO);
@@ -121,7 +122,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    @org.springframework.cache.annotation.Cacheable(value = "productCatalog")
     public Page<ProductDTO> searchProducts(String search, Long categoryId, String brand, java.math.BigDecimal minPrice,
             java.math.BigDecimal maxPrice, String status, Boolean inStock, Boolean featured, Pageable pageable) {
         org.springframework.data.jpa.domain.Specification<Product> spec = com.shopease.productservice.repository.spec.ProductSpecification
@@ -132,7 +132,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku", "productCatalog" }, allEntries = true)
+    @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku",
+            "productCatalog" }, allEntries = true)
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
@@ -161,7 +162,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku", "productCatalog" }, allEntries = true)
+    @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku",
+            "productCatalog" }, allEntries = true)
     public ProductDTO updateProductStatus(Long id, String status) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));

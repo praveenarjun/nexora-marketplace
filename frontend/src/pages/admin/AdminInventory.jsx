@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ClipboardList, AlertTriangle, ArrowUpCircle, CheckCircle } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import api from '../../services/api';
+import AdminHeader from '../../components/AdminHeader';
 
 export default function AdminInventory() {
     const [inventory, setInventory] = useState([]);
@@ -86,32 +87,11 @@ export default function AdminInventory() {
 
     return (
         <div className="max-w-7xl mx-auto py-8">
-            {/* Admin Navigation Tabs */}
-            <div className="mb-8 border-b border-gray-200">
-                <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-                    <a href="/admin/orders" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                        Orders Fulfillment
-                    </a>
-                    <a href="/admin/products" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                        Product Catalog
-                    </a>
-                    <a href="/admin/inventory" className="border-primary-500 text-primary-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                        Inventory Levels
-                    </a>
-                </nav>
-            </div>
-
-            <div className="flex items-center justify-between mb-8">
-                <div>
-                    <h2 className="text-2xl font-bold text-gray-900 flex items-center">
-                        <ClipboardList className="w-8 h-8 mr-3 text-primary-600" />
-                        Inventory Control
-                    </h2>
-                    <p className="mt-1 text-sm text-gray-500">
-                        Monitor stock levels and process warehouse restock shipments.
-                    </p>
-                </div>
-            </div>
+            <AdminHeader
+                title="Inventory Control"
+                subtitle="Monitor stock levels and process warehouse restock shipments."
+                activeTab="inventory"
+            />
 
             {/* Restock Action Card */}
             <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-6 mb-8 flex flex-col md:flex-row md:items-end gap-6">

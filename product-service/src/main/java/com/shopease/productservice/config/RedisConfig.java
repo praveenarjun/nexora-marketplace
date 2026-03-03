@@ -17,18 +17,34 @@ import java.time.Duration;
 @EnableCaching
 public class RedisConfig {
 
-    @Bean
-    public RedisCacheConfiguration cacheConfiguration() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        // Required for polymorphic type handling (e.g. PageImpl)
-        mapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL,
-                JsonTypeInfo.As.PROPERTY);
+        @Bean
+        public RedisCacheConfiguration cacheConfiguration() {
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
 
-        return RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofHours(1))
-                .disableCachingNullValues()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(new GenericJackson2JsonRedisSerializer(mapper)));
-    }
+                // Add support for Spring Data Page serialization
+                mapper.addMixIn(org.springframework.data.domain.PageImpl.class, PageImplMixin.class);
+
+                // Required for polymorphic type handling (e.g. PageImpl)
+                mapper.activateDefaultTyping(
+                                com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator.instance,
+                                ObjectMapper.DefaultTyping.NON_FINAL,
+                                com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY);
+
+                return RedisCacheConfiguration.defaultCacheConfig()
+                                .entryTtl(Duration.ofHours(1))
+                                .disableCachingNullValues()
+                                .serializeValuesWith(RedisSerializationContext.SerializationPair
+                                                .fromSerializer(new GenericJackson2JsonRedisSerializer(mapper)));
+        }
+
+        @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
+        abstract static class PageImplMixin<T> {
+                @com.fasterxml.jackson.annotation.JsonCreator
+                PageImplMixin(@com.fasterxml.jackson.annotation.JsonProperty("content") java.util.List<T> content,
+                                @com.fasterxml.jackson.annotation.JsonProperty("number") int number,
+                                @com.fasterxml.jackson.annotation.JsonProperty("size") int size,
+                                @com.fasterxml.jackson.annotation.JsonProperty("totalElements") long totalElements) {
+                }
+        }
 }
