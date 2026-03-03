@@ -46,7 +46,10 @@ export default function Home() {
         <div className="min-h-screen">
             {/* ── Hero card section from Stitch ── */}
             <section className="px-6 lg:px-12 pt-8 pb-12">
-                <div className="max-w-7xl mx-auto relative rounded-[40px] overflow-hidden bg-gradient-to-br from-[#1c1d26] to-[#0a0b10] border border-white/5 min-h-[600px] flex items-center px-12 lg:px-20 shadow-2xl">
+                <div
+                    className="max-w-7xl mx-auto relative rounded-[40px] overflow-hidden bg-[#0a0b10] border border-white/5 min-h-[600px] flex items-center px-12 lg:px-20 shadow-2xl bg-cover bg-center"
+                    style={{ backgroundImage: 'linear-gradient(to bottom right, rgba(10, 11, 16, 0.9), rgba(10, 11, 16, 0.8)), url("/images/hero_bg.png")' }}
+                >
                     {/* Visual ambient glows inside the card */}
                     <div className="absolute inset-0 z-0 opacity-30">
                         <div className="absolute -top-20 -left-20 w-96 h-96 bg-[#576ee0]/20 rounded-full blur-[120px]"></div>
@@ -78,10 +81,16 @@ export default function Home() {
                         </div>
                     </div>
 
-                    {/* Decorative floating element (Stitch style) */}
-                    <div className="hidden lg:block absolute right-20 bottom-0 w-1/3 h-4/5">
-                        <div className="w-full h-full bg-gradient-to-t from-black/40 to-transparent rounded-t-[40px] border-x border-t border-white/5 backdrop-blur-sm relative overflow-hidden">
-                            <div className="absolute inset-0 bg-primary-500/5"></div>
+                    {/* Premium Product Image Showcase */}
+                    <div className="hidden lg:block absolute right-10 bottom-0 w-[450px] pointer-events-none">
+                        <div className="relative animate-float transition-all duration-1000">
+                            <img
+                                src="/images/hero_product.png"
+                                alt="Hero Showcase"
+                                className="w-full drop-shadow-[0_35px_35px_rgba(87,110,224,0.3)] filter brightness-110 contrast-125"
+                            />
+                            {/* Ambient Glow behind image */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary-500/20 blur-[100px] -z-10 rounded-full"></div>
                         </div>
                     </div>
                 </div>

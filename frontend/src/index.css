@@ -251,3 +251,21 @@
     @apply w-6 h-6 border-2 border-slate-600 border-t-primary-500 rounded-full animate-spin;
   }
 }
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+}
