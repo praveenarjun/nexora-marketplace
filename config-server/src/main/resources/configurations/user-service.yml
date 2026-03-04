@@ -3,7 +3,7 @@ server:
   forward-headers-strategy: framework
 
 frontend:
-  url: ${FRONTEND_URL:http://localhost:5173}
+  url: ${FRONTEND_URL:https://shopease-frontend.pages.dev}
 
 spring:
   datasource:

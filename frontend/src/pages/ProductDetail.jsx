@@ -20,7 +20,8 @@ export default function ProductDetail() {
         const lower = name?.toLowerCase() || '';
         if (lower.includes('elect')) return 'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80&w=800';
         if (lower.includes('fashion')) return 'https://images.unsplash.com/photo-1445205170230-053b83e26dd7?auto=format&fit=crop&q=80&w=800';
-        if (lower.includes('home')) return 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('home') || lower.includes('living')) return 'https://images.unsplash.com/photo-1484101403633-562f891dc89a?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('fit') || lower.includes('outdoor')) return 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800';
         return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800';
     };
 
@@ -37,11 +38,13 @@ export default function ProductDetail() {
                 const prodData = productRes.data?.data || productRes.data;
                 setProduct(prodData);
 
-                // Fetch Related Products by Category instead of the entire catalog
+                // Fetch Related Products by Category
                 const categoryId = prodData.categoryId;
-                if (categoryId && categoryId !== 'null') {
-                    const relatedRes = await api.get(`/api/products/filter?categoryId=${categoryId}&size=5`);
-                    const relatedData = relatedRes.data?.data?.content || [];
+                if (categoryId && categoryId !== 'null' && categoryId !== 0) {
+                    const relatedRes = await api.get('/api/products/filter', {
+                        params: { categoryId, size: 5 }
+                    });
+                    const relatedData = relatedRes.data?.data?.content || relatedRes.data?.content || [];
                     setRelatedProducts(relatedData.filter(p => p.id !== parseInt(id)).slice(0, 4));
                 }
             } catch (err) {
@@ -133,7 +136,7 @@ export default function ProductDetail() {
                                 {product.imageUrls?.[selectedImageIndex] ? (
                                     <img src={product.imageUrls[selectedImageIndex]} alt={product.name} className="w-full h-full object-cover transition-all duration-700" />
                                 ) : (
-                                    <img src={getCategoryImage(product.categoryName)} alt={product.name} className="w-full h-full object-cover opacity-40 transition-opacity" />
+                                    <img src={product.categoryImageUrl || getCategoryImage(product.categoryName)} alt={product.name} className="w-full h-full object-cover opacity-40 transition-opacity" />
                                 )}
 
                                 {product.badge && (
@@ -304,7 +307,7 @@ export default function ProductDetail() {
                                         {p.imageUrls?.[0] ? (
                                             <img src={p.imageUrls[0]} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                                         ) : (
-                                            <img src={getCategoryImage(p.categoryName)} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-110 opacity-50" />
+                                            <img src={p.categoryImageUrl || getCategoryImage(p.categoryName)} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-110 opacity-50" />
                                         )}
                                     </div>
                                     <div className="p-4">

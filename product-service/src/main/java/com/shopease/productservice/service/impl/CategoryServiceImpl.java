@@ -24,6 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
+    @org.springframework.cache.annotation.Cacheable(value = "categories", key = "'all'")
     public List<CategoryDTO> getAllCategories() {
         return categoryRepository.findAll().stream()
                 .map(category -> {
@@ -36,6 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
+    @org.springframework.cache.annotation.Cacheable(value = "categories", key = "#id")
     public CategoryDTO getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .map(category -> {
@@ -48,6 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @org.springframework.cache.annotation.CacheEvict(value = "categories", allEntries = true)
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
         Category category = categoryMapper.toEntity(categoryDTO);
         if (categoryDTO.getParentId() != null) {
@@ -62,6 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @org.springframework.cache.annotation.CacheEvict(value = "categories", allEntries = true)
     public CategoryDTO updateCategory(Long id, CategoryDTO categoryDTO) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
@@ -86,6 +90,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @org.springframework.cache.annotation.CacheEvict(value = "categories", allEntries = true)
     public void deleteCategory(Long id) {
         if (!categoryRepository.existsById(id)) {
             throw new ResourceNotFoundException("Category not found with id: " + id);

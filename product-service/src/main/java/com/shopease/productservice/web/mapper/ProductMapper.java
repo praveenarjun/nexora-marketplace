@@ -16,6 +16,7 @@ public interface ProductMapper {
 
     @Mapping(target = "categoryId", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(target = "categoryImageUrl", source = "category.imageUrl")
     // Map entity's 'images' Set to DTO's 'imageUrls' List
     @Mapping(target = "imageUrls", source = "images")
     // Compute inStock: true if quantity > 0

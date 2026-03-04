@@ -21,7 +21,8 @@ export default function Products() {
         const lower = name?.toLowerCase() || '';
         if (lower.includes('elect')) return 'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80&w=800';
         if (lower.includes('fashion')) return 'https://images.unsplash.com/photo-1445205170230-053b83e26dd7?auto=format&fit=crop&q=80&w=800';
-        if (lower.includes('home')) return 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('home') || lower.includes('living')) return 'https://images.unsplash.com/photo-1484101403633-562f891dc89a?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('fit') || lower.includes('outdoor')) return 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800';
         return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800';
     };
 
@@ -33,7 +34,17 @@ export default function Products() {
         try {
             setLoading(true);
             setError(null);
-            const response = await api.get('/api/products');
+
+            // Build params object dynamically to avoid sending "null" strings
+            const params = {};
+            if (searchTerm) params.search = searchTerm;
+            if (selectedCategory && selectedCategory !== 'ALL') {
+                // If we had category IDs, we would use them here. 
+                // For now, the existing frontend logic filters locally, 
+                // but let's ensure the API call is clean.
+            }
+
+            const response = await api.get('/api/products', { params });
             const content = Array.isArray(response.data)
                 ? response.data
                 : response.data?.data?.content || response.data?.content || [];
@@ -209,7 +220,7 @@ export default function Products() {
                                         {product.imageUrls?.[0] ? (
                                             <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                         ) : (
-                                            <img src={getCategoryImage(product.categoryName)} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60" />
+                                            <img src={product.categoryImageUrl || getCategoryImage(product.categoryName)} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60" />
                                         )}
 
                                         {!product.inStock && (

@@ -32,6 +32,7 @@ public class ProductDTO implements Serializable {
     private Double weightGrams;
     private Long categoryId;
     private String categoryName;
+    private String categoryImageUrl;
     private boolean featured;
     private String badge;
     private Double rating;
