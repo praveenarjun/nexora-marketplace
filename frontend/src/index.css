@@ -4,6 +4,28 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-primary: #121420;
+  --bg-secondary: #1c1d26;
+  --bg-glass: rgba(255, 255, 255, 0.04);
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --border-primary: rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(12px);
+  --primary-color: #576ee0;
+  --primary-hover: #4658b3;
+}
+
+.light {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-glass: rgba(0, 0, 0, 0.02);
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --border-primary: rgba(0, 0, 0, 0.08);
+  --glass-blur: blur(8px);
+}
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -15,14 +37,23 @@
 
   body {
     font-family: 'IBM Plex Sans', sans-serif;
-    background-color: #121420;
-    color: #ffffff;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
     background-image:
       radial-gradient(ellipse at 20% 50%, rgba(87, 110, 224, 0.08) 0%, transparent 50%),
       radial-gradient(ellipse at 80% 20%, rgba(87, 110, 224, 0.06) 0%, transparent 50%);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .text-adaptive {
+    color: var(--text-primary);
+  }
+
+  .text-adaptive-secondary {
+    color: var(--text-secondary);
   }
 }
 
@@ -31,10 +62,10 @@
   /* ── Glassmorphism Card ── */
   .glass-card {
     @apply rounded-2xl border;
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--bg-glass);
+    border-color: var(--border-primary);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
   }
 
   .glass-card-hover {
@@ -93,9 +124,10 @@
 
   /* ── Inputs ── */
   .input-dark {
-    @apply w-full px-4 py-3 rounded-xl text-sm text-white placeholder-slate-500 outline-none transition-all duration-200;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    @apply w-full px-4 py-3 rounded-xl text-sm transition-all duration-200;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-primary);
+    color: var(--text-primary);
   }
 
   .input-dark:focus {

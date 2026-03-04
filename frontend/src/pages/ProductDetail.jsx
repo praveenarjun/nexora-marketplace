@@ -123,7 +123,7 @@ export default function ProductDetail() {
                         <span className="material-symbols-outlined text-[10px]">chevron_right</span>
                         <Link to="/products" className="hover:text-primary-500 transition-colors">Catalog</Link>
                         <span className="material-symbols-outlined text-[10px]">chevron_right</span>
-                        <span className="text-primary-500">{product.categoryName || 'Electronics'}</span>
+                        <span className="text-primary-500 font-black">{product.categoryName || 'Electronics'}</span>
                     </nav>
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -133,7 +133,7 @@ export default function ProductDetail() {
                                 {product.imageUrls?.[selectedImageIndex] ? (
                                     <img src={product.imageUrls[selectedImageIndex]} alt={product.name} className="w-full h-full object-cover transition-all duration-700" />
                                 ) : (
-                                    <img src={getCategoryImage(product.categoryName)} alt={product.name} className="w-full h-full object-cover opacity-40" />
+                                    <img src={getCategoryImage(product.categoryName)} alt={product.name} className="w-full h-full object-cover opacity-40 transition-opacity" />
                                 )}
 
                                 {product.badge && (
@@ -173,7 +173,7 @@ export default function ProductDetail() {
                                     </span>
                                     <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">{product.categoryName || 'PREMIUM'}</p>
                                 </div>
-                                <h1 className="text-5xl lg:text-6xl font-black text-white tracking-tighter leading-[1.05] mb-4">{product.name}</h1>
+                                <h1 className="text-5xl lg:text-6xl font-black text-adaptive tracking-tighter leading-[1.05] mb-4">{product.name}</h1>
 
                                 {/* Rating & Reviews */}
                                 <div className="flex items-center gap-4">
@@ -210,13 +210,13 @@ export default function ProductDetail() {
                                 </div>
                             )}
 
-                            <div className="border-y border-white/5 py-8">
-                                <p className="text-slate-400 leading-relaxed font-medium mb-8">
+                            <div className="border-y border-[var(--border-primary)] py-8">
+                                <p className="text-slate-500 leading-relaxed font-medium mb-8">
                                     {product.description || 'Experience the future of lifestyle technology with our meticulously crafted collection. Designed for the discerning individual who values performance, elegance, and quality.'}
                                 </p>
                                 <div className="flex flex-wrap gap-2">
                                     {(product.tags || ['Premium', 'Innovation', 'Curated']).map(tag => (
-                                        <span key={tag} className="px-4 py-1.5 bg-white/5 border border-white/10 text-slate-400 text-[10px] font-black uppercase rounded-full tracking-widest hover:border-primary-500/50 hover:text-primary-500 transition-all cursor-default">
+                                        <span key={tag} className="px-4 py-1.5 bg-[var(--bg-glass)] border border-[var(--border-primary)] text-slate-500 text-[10px] font-black uppercase rounded-full tracking-widest hover:border-primary-500/50 hover:text-primary-500 transition-all cursor-default">
                                             {tag}
                                         </span>
                                     ))}

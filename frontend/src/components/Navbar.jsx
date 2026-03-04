@@ -1,10 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import useCart from '../hooks/useCart';
 
 export default function Navbar() {
     const { user, logout, isAdmin, isAuthenticated } = useContext(AuthContext);
+    const { theme, toggleTheme } = useTheme();
     const cart = useCart();
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function Navbar() {
     };
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#0a0b10]/90 backdrop-blur-xl h-[72px] flex items-center px-6 lg:px-12">
+        <header className="sticky top-0 z-50 w-full border-b border-[var(--border-primary)] bg-[var(--bg-primary)] h-[72px] flex items-center px-6 lg:px-12 backdrop-blur-xl bg-opacity-90">
             <div className="w-full flex items-center justify-between gap-12">
 
                 {/* 1. Left: Brand Logo */}
@@ -25,7 +26,7 @@ export default function Navbar() {
                         <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center shadow-lg shadow-primary-500/20 group-hover:scale-110 transition-transform">
                             <span className="material-symbols-outlined text-white text-xl">shopping_bag</span>
                         </div>
-                        <h1 className="text-white text-xl font-black tracking-tighter uppercase leading-none">ShopEase</h1>
+                        <h1 className="text-adaptive text-xl font-black tracking-tighter uppercase leading-none">ShopEase</h1>
                     </Link>
                 </div>
 
@@ -35,7 +36,7 @@ export default function Navbar() {
                     <input
                         type="text"
                         placeholder="Search for premium products..."
-                        className="w-full bg-[#1c1d26] border border-white/5 rounded-2xl pl-12 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-primary-500/50 transition-all"
+                        className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-2xl pl-12 pr-4 py-2.5 text-sm text-adaptive placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-primary-500/50 transition-all"
                     />
                 </div>
 
@@ -45,9 +46,20 @@ export default function Navbar() {
                     {isAuthenticated() && (
                         <button className="relative p-2 rounded-xl hover:bg-white/5 transition-colors text-slate-400 hover:text-white hidden sm:block">
                             <span className="material-symbols-outlined">notifications</span>
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-primary-500 rounded-full border border-[#0a0b10]"></span>
+                            <span className="absolute top-2 right-2 w-2 h-2 bg-primary-500 rounded-full border border-primary-500/50"></span>
                         </button>
                     )}
+
+                    {/* Theme Toggle */}
+                    <button
+                        onClick={toggleTheme}
+                        className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-primary-500 transition-all hover:scale-110 active:scale-95 flex items-center justify-center group"
+                        title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                    >
+                        <span className="material-symbols-outlined text-[20px]">
+                            {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+                        </span>
+                    </button>
 
                     {/* Cart */}
                     <Link to="/cart" className="relative p-2 rounded-xl hover:bg-white/5 transition-colors group">
@@ -116,7 +128,17 @@ export default function Navbar() {
                         <Link to="/products?category=living" onClick={() => setIsOpen(false)} className="px-4 py-3 rounded-xl hover:bg-white/5 text-slate-400 font-bold uppercase tracking-widest text-xs">Living</Link>
                     </nav>
 
-                    <div className="pt-6 border-t border-white/5 flex flex-col gap-3">
+                    <div className="pt-6 border-t border-[var(--border-primary)] flex flex-col gap-3">
+                        <button
+                            onClick={toggleTheme}
+                            className="w-full flex items-center justify-center gap-3 bg-[var(--bg-secondary)] border border-[var(--border-primary)] py-4 rounded-2xl font-black uppercase tracking-widest text-xs text-adaptive"
+                        >
+                            <span className="material-symbols-outlined text-sm">
+                                {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+                            </span>
+                            {theme === 'dark' ? 'Light Appearance' : 'Dark Appearance'}
+                        </button>
+
                         {isAuthenticated() ? (
                             <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 bg-red-500/10 text-red-400 py-4 rounded-2xl font-black uppercase tracking-widest text-xs">
                                 <span className="material-symbols-outlined text-sm">logout</span> Sign Out

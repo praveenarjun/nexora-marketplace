@@ -50,9 +50,9 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/login/oauth2-success" element={<OAuthCallback />} />
 
-        {/* ── App routes (dark navbar layout) ── */}
+        {/* ── App routes (Adaptive theme layout) ── */}
         <Route path="/*" element={
-          <div className="flex flex-col min-h-screen" style={{ background: '#121420' }}>
+          <div className="flex flex-col min-h-screen">
             <Navbar />
             <main className="flex-grow">
               <Routes>

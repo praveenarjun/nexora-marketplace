@@ -88,25 +88,26 @@ export default function Products() {
                         </h3>
 
                         {/* Category Filter */}
-                        <div className="space-y-4 mb-8">
+                        <div className="flex items-center justify-between mb-8">
+                            <h3 className="text-xl font-black text-adaptive tracking-tight">Luxury Filter</h3>
                             <p className="text-xs font-bold uppercase tracking-widest text-slate-500">Category</p>
-                            <div className="space-y-1">
-                                {categories.map(cat => (
-                                    <button
-                                        key={cat}
-                                        onClick={() => setSelectedCategory(cat)}
-                                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${selectedCategory === cat
-                                            ? 'bg-primary-500/10 text-primary-500 font-bold'
-                                            : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
-                                            }`}
-                                    >
-                                        <span className="text-sm">{cat === 'ALL' ? 'All Products' : cat}</span>
-                                        <span className="text-[10px] font-bold opacity-50">
-                                            {cat === 'ALL' ? products.length : products.filter(p => p.categoryName === cat).length}
-                                        </span>
-                                    </button>
-                                ))}
-                            </div>
+                        </div>
+                        <div className="space-y-1">
+                            {categories.map(cat => (
+                                <button
+                                    key={cat}
+                                    onClick={() => setSelectedCategory(cat)}
+                                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${selectedCategory === cat
+                                        ? 'bg-primary-500/10 text-primary-500 font-bold'
+                                        : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
+                                        }`}
+                                >
+                                    <span className="text-sm">{cat === 'ALL' ? 'All Products' : cat}</span>
+                                    <span className="text-[10px] font-bold opacity-50">
+                                        {cat === 'ALL' ? products.length : products.filter(p => p.categoryName === cat).length}
+                                    </span>
+                                </button>
+                            ))}
                         </div>
 
                         {/* Price Range Filter */}
@@ -141,8 +142,8 @@ export default function Products() {
                                 <span className="material-symbols-outlined text-[10px]">chevron_right</span>
                                 <span className="text-primary-500">Marketplace</span>
                             </div>
-                            <h1 className="text-4xl font-black text-white tracking-tight">Catalog</h1>
-                            <p className="text-slate-500 text-sm mt-1">Premium hardware optimized for distributed systems.</p>
+                            <h1 className="text-4xl font-black text-adaptive tracking-tight">Catalog</h1>
+                            <p className="text-slate-500 text-sm mt-1 font-medium">Premium hardware optimized for luxury living.</p>
                         </div>
 
                         <div className="flex flex-col sm:flex-row items-center gap-3">
@@ -153,13 +154,13 @@ export default function Products() {
                                     placeholder="Search catalog..."
                                     value={searchTerm}
                                     onChange={e => setSearchTerm(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
+                                    className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-xl pl-10 pr-4 py-2 text-sm text-adaptive focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all placeholder:text-slate-500"
                                 />
                             </div>
                             <select
                                 value={sortBy}
                                 onChange={e => setSortBy(e.target.value)}
-                                className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 cursor-pointer"
+                                className="bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-xl px-4 py-2 text-sm text-adaptive focus:outline-none focus:ring-2 focus:ring-primary-500/50 cursor-pointer shadow-sm shadow-black/5"
                             >
                                 <option value="NEWEST" className="bg-[#121420]">Sort: Newest</option>
                                 <option value="PRICE_ASC" className="bg-[#121420]">Price: Low to High</option>
@@ -193,7 +194,7 @@ export default function Products() {
                                 <Link
                                     key={product.id}
                                     to={`/products/${product.id}`}
-                                    className="group flex flex-col bg-[#1c1d26] border border-white/5 rounded-[32px] overflow-hidden hover:border-primary-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-500/10"
+                                    className="group flex flex-col bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-[32px] overflow-hidden hover:border-primary-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-500/10 shadow-sm shadow-black/5"
                                 >
                                     <div className="aspect-square relative overflow-hidden bg-[#0a0b10]">
                                         {/* Badge Overlay */}
@@ -221,7 +222,7 @@ export default function Products() {
                                         <div className="flex justify-between items-start mb-3">
                                             <div className="flex flex-col gap-1">
                                                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{product.categoryName || 'GENERAL'}</p>
-                                                <h3 className="font-bold text-white group-hover:text-primary-400 transition-colors truncate pr-4">{product.name}</h3>
+                                                <h3 className="font-bold text-adaptive group-hover:text-primary-400 transition-colors truncate pr-4">{product.name}</h3>
                                             </div>
                                             {product.rating > 0 && (
                                                 <div className="flex items-center gap-1 bg-white/5 px-2 py-1 rounded-lg">
@@ -230,9 +231,9 @@ export default function Products() {
                                                 </div>
                                             )}
                                         </div>
-                                        <p className="text-xs text-slate-400 mb-6 line-clamp-2 leading-relaxed font-medium">{product.description}</p>
-                                        <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
-                                            <span className="text-xl font-black text-white">₹{(product.price ?? 0).toLocaleString()}</span>
+                                        <p className="text-xs text-slate-500 mb-6 line-clamp-2 leading-relaxed font-medium">{product.description}</p>
+                                        <div className="mt-auto pt-6 border-t border-[var(--border-primary)] flex items-center justify-between">
+                                            <span className="text-xl font-black text-adaptive">₹{(product.price ?? 0).toLocaleString()}</span>
                                             <button
                                                 disabled={!product.inStock || addedIds.has(product.id)}
                                                 onClick={(e) => handleAddToCart(e, product)}

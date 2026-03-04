@@ -15,7 +15,7 @@ export default function ProductCard({ product, addedIds, onAddToCart }) {
     const isOutOfStock = !product.inStock;
 
     return (
-        <div className="group bg-[#1c1d26] rounded-[32px] border border-white/5 overflow-hidden hover:shadow-2xl hover:shadow-primary-500/10 transition-all duration-500 flex flex-col h-full relative">
+        <div className="group bg-[var(--bg-secondary)] rounded-[32px] border border-[var(--border-primary)] overflow-hidden hover:shadow-2xl hover:shadow-primary-500/10 transition-all duration-500 flex flex-col h-full relative">
             {/* Badge Overlay */}
             {product.badge && (
                 <div className="absolute top-4 left-4 z-20">
@@ -31,7 +31,7 @@ export default function ProductCard({ product, addedIds, onAddToCart }) {
             </button>
 
             {/* Image Container */}
-            <Link to={`/products/${product.id}`} className="relative aspect-[4/5] w-full bg-[#0a0b10] overflow-hidden flex items-center justify-center">
+            <Link to={`/products/${product.id}`} className="relative aspect-[4/5] w-full bg-[var(--bg-primary)] overflow-hidden flex items-center justify-center">
                 {product.imageUrls?.[0] ? (
                     <img
                         src={product.imageUrls[0]}
@@ -70,15 +70,15 @@ export default function ProductCard({ product, addedIds, onAddToCart }) {
                 </div>
 
                 <Link to={`/products/${product.id}`} className="block mb-2">
-                    <h3 className="text-lg font-bold text-white group-hover:text-primary-400 transition-colors line-clamp-1">
+                    <h3 className="text-lg font-bold text-adaptive group-hover:text-primary-400 transition-colors line-clamp-1">
                         {product.name}
                     </h3>
                 </Link>
 
                 {/* Price and Action */}
-                <div className="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
+                <div className="mt-auto flex items-center justify-between pt-4 border-t border-[var(--border-primary)]">
                     <div className="flex flex-col">
-                        <span className="text-xl font-black text-white">
+                        <span className="text-xl font-black text-adaptive">
                             ₹{product.price?.toLocaleString()}
                         </span>
                     </div>

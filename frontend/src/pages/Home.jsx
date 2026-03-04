@@ -62,8 +62,9 @@ export default function Home() {
                             New Collection 2024
                         </div>
 
-                        <h1 className="text-6xl lg:text-8xl font-black mb-8 leading-[1.1] tracking-tighter text-white font-serif italic">
-                            Elevate Your <span className="text-primary-400 not-italic">Lifestyle.</span>
+                        <h1 className="text-6xl lg:text-8xl font-black mb-8 leading-[1.1] tracking-tighter text-adaptive font-serif italic">
+                            Elevate Your <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-indigo-500">Lifestyle.</span>
                         </h1>
 
                         <p className="text-slate-400 text-lg lg:text-xl mb-10 max-w-xl leading-relaxed font-medium">
@@ -75,8 +76,8 @@ export default function Home() {
                             <Link to="/products" className="w-full sm:w-auto bg-primary-500 px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs text-white hover:bg-primary-600 transition-all shadow-xl shadow-primary-500/20 active:scale-95">
                                 Shop Collection
                             </Link>
-                            <button className="w-full sm:w-auto bg-white/5 border border-white/10 px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs text-white hover:bg-white/10 transition-all backdrop-blur-md">
-                                View Lookbook
+                            <button className="w-full sm:w-auto bg-white/5 border border-[var(--border-primary)] px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs text-adaptive hover:bg-white/10 transition-all backdrop-blur-md">
+                                Discover More
                             </button>
                         </div>
                     </div>
@@ -130,11 +131,11 @@ export default function Home() {
             </section>
 
             {/* ── Featured Products (Stitch Style) ── */}
-            <section className="py-24 bg-[#0d0e14]">
+            <section className="py-24 bg-[var(--bg-primary)]">
                 <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl font-black text-white tracking-tighter mb-4">Featured Products</h2>
-                        <div className="w-20 h-1 bg-primary-500 mx-auto rounded-full"></div>
+                    <div className="flex flex-col mb-12">
+                        <h2 className="text-4xl font-black text-adaptive tracking-tighter mb-2">Featured Products</h2>
+                        <div className="w-20 h-1.5 bg-primary-500 rounded-full"></div>
                     </div>
 
                     {loadingProducts ? (
