@@ -22,154 +22,163 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
-    private final ProductMapper productMapper;
-    private final ProductEventPublisher eventPublisher;
+        private final ProductRepository productRepository;
+        private final CategoryRepository categoryRepository;
+        private final ProductMapper productMapper;
+        private final ProductEventPublisher eventPublisher;
 
-    @Override
-    @Transactional
-    @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku",
-            "productCatalog" }, allEntries = true)
-    public ProductDTO createProduct(CreateProductRequest request) {
-        if (productRepository.existsBySku(request.getSku())) {
-            throw new DuplicateResourceException("Product with SKU " + request.getSku() + " already exists");
+        @Override
+        @Transactional
+        @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku",
+                        "productCatalog" }, allEntries = true)
+        public ProductDTO createProduct(CreateProductRequest request) {
+                if (productRepository.existsBySku(request.getSku())) {
+                        throw new DuplicateResourceException(
+                                        "Product with SKU " + request.getSku() + " already exists");
+                }
+
+                Product product = productMapper.toEntity(request);
+
+                // Apply default lowStockThreshold if not provided
+                if (product.getLowStockThreshold() == null) {
+                        product.setLowStockThreshold(5);
+                }
+
+                if (request.getCategoryId() != null) {
+                        Category category = categoryRepository.findById(request.getCategoryId())
+                                        .orElseThrow(() -> new ResourceNotFoundException(
+                                                        "Category not found with id: " + request.getCategoryId()));
+                        product.setCategory(category);
+                }
+
+                Product savedProduct = productRepository.save(product);
+                eventPublisher.publishProductCreated(savedProduct.getId(), savedProduct.getName(),
+                                savedProduct.getPrice());
+                return productMapper.toDTO(savedProduct);
         }
 
-        Product product = productMapper.toEntity(request);
+        @Override
+        @Transactional
+        @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku",
+                        "productCatalog" }, allEntries = true)
+        public ProductDTO updateProduct(Long id, UpdateProductRequest request) {
+                Product product = productRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
 
-        // Apply default lowStockThreshold if not provided
-        if (product.getLowStockThreshold() == null) {
-            product.setLowStockThreshold(5);
+                // Update fields
+                productMapper.updateProductFromRequest(request, product);
+
+                if (request.getCategoryId() != null) {
+                        Category category = categoryRepository.findById(request.getCategoryId())
+                                        .orElseThrow(() -> new ResourceNotFoundException(
+                                                        "Category not found with id: " + request.getCategoryId()));
+                        product.setCategory(category);
+                }
+
+                Product updatedProduct = productRepository.save(product);
+                eventPublisher.publishProductUpdated(updatedProduct.getId(), updatedProduct.getName(),
+                                updatedProduct.getPrice());
+                return productMapper.toDTO(updatedProduct);
         }
 
-        if (request.getCategoryId() != null) {
-            Category category = categoryRepository.findById(request.getCategoryId())
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "Category not found with id: " + request.getCategoryId()));
-            product.setCategory(category);
+        @Override
+        @Transactional(readOnly = true)
+        @org.springframework.cache.annotation.Cacheable(value = "products", key = "#id")
+        @io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "getProductByIdFallback")
+        public ProductDTO getProductById(Long id) {
+                return productRepository.findById(id)
+                                .map(productMapper::toDTO)
+                                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
         }
 
-        Product savedProduct = productRepository.save(product);
-        eventPublisher.publishProductCreated(savedProduct.getId(), savedProduct.getName(), savedProduct.getPrice());
-        return productMapper.toDTO(savedProduct);
-    }
-
-    @Override
-    @Transactional
-    @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku",
-            "productCatalog" }, allEntries = true)
-    public ProductDTO updateProduct(Long id, UpdateProductRequest request) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
-
-        // Update fields
-        productMapper.updateProductFromRequest(request, product);
-
-        if (request.getCategoryId() != null) {
-            Category category = categoryRepository.findById(request.getCategoryId())
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "Category not found with id: " + request.getCategoryId()));
-            product.setCategory(category);
+        public ProductDTO getProductByIdFallback(Long id, Throwable t) {
+                // Fallback method when Redis is down
+                return productRepository.findById(id)
+                                .map(productMapper::toDTO)
+                                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
         }
 
-        Product updatedProduct = productRepository.save(product);
-        eventPublisher.publishProductUpdated(updatedProduct.getId(), updatedProduct.getName(),
-                updatedProduct.getPrice());
-        return productMapper.toDTO(updatedProduct);
-    }
+        @Override
+        @Transactional(readOnly = true)
+        @org.springframework.cache.annotation.Cacheable(value = "productBySku", key = "#sku")
+        @io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "getProductBySkuFallback")
+        public ProductDTO getProductBySku(String sku) {
+                return productRepository.findBySku(sku)
+                                .map(productMapper::toDTO)
+                                .orElseThrow(() -> new ResourceNotFoundException("Product not found with SKU: " + sku));
+        }
 
-    @Override
-    @Transactional(readOnly = true)
-    @org.springframework.cache.annotation.Cacheable(value = "products", key = "#id")
-    @io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "getProductByIdFallback")
-    public ProductDTO getProductById(Long id) {
-        return productRepository.findById(id)
-                .map(productMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
-    }
+        public ProductDTO getProductBySkuFallback(String sku, Throwable t) {
+                // Fallback method when Redis is down
+                return productRepository.findBySku(sku)
+                                .map(productMapper::toDTO)
+                                .orElseThrow(() -> new ResourceNotFoundException("Product not found with SKU: " + sku));
+        }
 
-    public ProductDTO getProductByIdFallback(Long id, Throwable t) {
-        // Fallback method when Redis is down
-        return productRepository.findById(id)
-                .map(productMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
-    }
+        @Override
+        @Transactional(readOnly = true)
+        @org.springframework.cache.annotation.Cacheable(value = "products", key = "#pageable.pageNumber + '_' + #pageable.pageSize")
+        public Page<ProductDTO> getAllProducts(Pageable pageable) {
+                return productRepository.findAll(pageable)
+                                .map(productMapper::toDTO);
+        }
 
-    @Override
-    @Transactional(readOnly = true)
-    @org.springframework.cache.annotation.Cacheable(value = "productBySku", key = "#sku")
-    @io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "getProductBySkuFallback")
-    public ProductDTO getProductBySku(String sku) {
-        return productRepository.findBySku(sku)
-                .map(productMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with SKU: " + sku));
-    }
+        @Override
+        @Transactional(readOnly = true)
+        @org.springframework.cache.annotation.Cacheable(value = "products", key = "T(java.util.Objects).hash(#search, #categoryId, #brand, #minPrice, #maxPrice, #status, #inStock, #featured, #pageable.pageNumber, #pageable.pageSize)")
+        public Page<ProductDTO> searchProducts(String search, Long categoryId, String brand,
+                        java.math.BigDecimal minPrice,
+                        java.math.BigDecimal maxPrice, String status, Boolean inStock, Boolean featured,
+                        Pageable pageable) {
+                org.springframework.data.jpa.domain.Specification<Product> spec = com.shopease.productservice.repository.spec.ProductSpecification
+                                .filterProducts(search, categoryId, brand, minPrice, maxPrice, status, inStock,
+                                                featured);
+                return productRepository.findAll(spec, pageable)
+                                .map(productMapper::toDTO);
+        }
 
-    public ProductDTO getProductBySkuFallback(String sku, Throwable t) {
-        // Fallback method when Redis is down
-        return productRepository.findBySku(sku)
-                .map(productMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with SKU: " + sku));
-    }
+        @Override
+        @Transactional
+        @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku",
+                        "productCatalog" }, allEntries = true)
+        public void deleteProduct(Long id) {
+                Product product = productRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
 
-    @Override
-    @Transactional(readOnly = true)
-    public Page<ProductDTO> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable)
-                .map(productMapper::toDTO);
-    }
+                // Soft-delete: set status to ARCHIVED so it is excluded from all filter
+                // queries.
+                // ProductSpecification already filters out ARCHIVED and DELETED products.
+                product.setStatus("ARCHIVED");
+                productRepository.save(product);
+                eventPublisher.publishProductDeleted(id);
+        }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Page<ProductDTO> searchProducts(String search, Long categoryId, String brand, java.math.BigDecimal minPrice,
-            java.math.BigDecimal maxPrice, String status, Boolean inStock, Boolean featured, Pageable pageable) {
-        org.springframework.data.jpa.domain.Specification<Product> spec = com.shopease.productservice.repository.spec.ProductSpecification
-                .filterProducts(search, categoryId, brand, minPrice, maxPrice, status, inStock, featured);
-        return productRepository.findAll(spec, pageable)
-                .map(productMapper::toDTO);
-    }
+        @Override
+        @Transactional(readOnly = true)
+        @org.springframework.cache.annotation.Cacheable(value = "products", key = "'featured_' + #pageable.pageNumber")
+        public Page<ProductDTO> getFeaturedProducts(Pageable pageable) {
+                return productRepository.findByFeaturedTrue(pageable)
+                                .map(productMapper::toDTO);
+        }
 
-    @Override
-    @Transactional
-    @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku",
-            "productCatalog" }, allEntries = true)
-    public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+        @Override
+        @Transactional(readOnly = true)
+        @org.springframework.cache.annotation.Cacheable(value = "products", key = "'lowstock_' + #pageable.pageNumber")
+        public Page<ProductDTO> getLowStockProducts(Pageable pageable) {
+                return productRepository.findLowStockProducts(pageable)
+                                .map(productMapper::toDTO);
+        }
 
-        // Soft-delete: set status to ARCHIVED so it is excluded from all filter
-        // queries.
-        // ProductSpecification already filters out ARCHIVED and DELETED products.
-        product.setStatus("ARCHIVED");
-        productRepository.save(product);
-        eventPublisher.publishProductDeleted(id);
-    }
+        @Override
+        @Transactional
+        @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku",
+                        "productCatalog" }, allEntries = true)
+        public ProductDTO updateProductStatus(Long id, String status) {
+                Product product = productRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
 
-    @Override
-    @Transactional(readOnly = true)
-    public Page<ProductDTO> getFeaturedProducts(Pageable pageable) {
-        return productRepository.findByFeaturedTrue(pageable)
-                .map(productMapper::toDTO);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<ProductDTO> getLowStockProducts(Pageable pageable) {
-        return productRepository.findLowStockProducts(pageable)
-                .map(productMapper::toDTO);
-    }
-
-    @Override
-    @Transactional
-    @org.springframework.cache.annotation.CacheEvict(value = { "products", "productBySku",
-            "productCatalog" }, allEntries = true)
-    public ProductDTO updateProductStatus(Long id, String status) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
-
-        product.setStatus(status);
-        Product savedProduct = productRepository.save(product);
-        return productMapper.toDTO(savedProduct);
-    }
+                product.setStatus(status);
+                Product savedProduct = productRepository.save(product);
+                return productMapper.toDTO(savedProduct);
+        }
 }

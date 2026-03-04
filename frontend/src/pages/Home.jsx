@@ -11,8 +11,8 @@ export default function Home() {
     // Helper for category images
     const getCategoryImage = (name) => {
         const lower = name.toLowerCase();
-        if (lower.includes('elect')) return 'https://images.unsplash.com/photo-1546868889-4e0ca25e2154?auto=format&fit=crop&q=80&w=800';
-        if (lower.includes('fashion')) return 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('elect')) return 'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('fashion')) return 'https://images.unsplash.com/photo-1445205170230-053b83e26dd7?auto=format&fit=crop&q=80&w=800';
         if (lower.includes('home')) return 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800';
         return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800';
     };

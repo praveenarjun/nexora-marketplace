@@ -140,6 +140,45 @@ export default function AdminProducts() {
                                 <input type="number" placeholder="e.g. 50" value={formData.stockQuantity} onChange={(e) => setFormData({ ...formData, stockQuantity: e.target.value })} className="mt-1 block w-full border border-rose-200 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-rose-500 focus:border-rose-500 bg-rose-50 sm:text-sm placeholder-rose-300" />
                                 <p className="mt-1 text-xs text-rose-500">Auto-registers with Warehouse</p>
                             </div>
+                            {/* Premium Image Presets Helper */}
+                            <div className="sm:col-span-6 p-4 bg-primary-500/5 border border-primary-500/10 rounded-2xl mb-2">
+                                <h4 className="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                    <span className="material-symbols-rounded text-base">verified</span>
+                                    Premium Asset Presets
+                                </h4>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setFormData({ ...formData, imageUrl: '/images/macbook.png' })}
+                                        className="flex items-center gap-3 p-2 bg-[#0a0b10] rounded-xl border border-white/5 hover:border-primary-500/30 transition-all text-left group"
+                                    >
+                                        <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center overflow-hidden border border-white/5">
+                                            <img src="/images/macbook.png" alt="MB" className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
+                                        </div>
+                                        <div>
+                                            <div className="text-[10px] font-bold text-white">MacBook Pro 16"</div>
+                                            <div className="text-[8px] text-slate-500">Official Space Black Asset</div>
+                                        </div>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setFormData({ ...formData, imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800' })}
+                                        className="flex items-center gap-3 p-2 bg-[#0a0b10] rounded-xl border border-white/5 hover:border-primary-500/30 transition-all text-left group"
+                                    >
+                                        <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center overflow-hidden border border-white/5">
+                                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800" alt="Nike" className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
+                                        </div>
+                                        <div>
+                                            <div className="text-[10px] font-bold text-white">Premium Sneakers</div>
+                                            <div className="text-[8px] text-slate-500">Vibrant Red Studio Shot</div>
+                                        </div>
+                                    </button>
+                                </div>
+                                <p className="mt-3 text-[9px] text-slate-500 italic">
+                                    Click a preset to auto-fill the URL for the perfect high-end presentation.
+                                </p>
+                            </div>
+
                             <div className="sm:col-span-6">
                                 <label className="block text-sm font-medium text-gray-700">Product Image URL</label>
                                 <input type="url" placeholder="https://images.unsplash.com/photo-1523275335684-37898b6baf30" value={formData.imageUrl} onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" />
