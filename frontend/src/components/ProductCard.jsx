@@ -1,6 +1,15 @@
 import { Link } from 'react-router-dom';
 
-export default function ProductCard({ product, onAddToCart }) {
+export default function ProductCard({ product, addedIds, onAddToCart }) {
+    // Standardized Category Imagery Fallback
+    const getCategoryImage = (name) => {
+        const lower = name?.toLowerCase() || '';
+        if (lower.includes('elect')) return 'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('fashion')) return 'https://images.unsplash.com/photo-1445205170230-053b83e26dd7?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('home')) return 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800';
+        return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800';
+    };
+
     if (!product) return null;
 
     const isOutOfStock = !product.inStock;
@@ -30,9 +39,11 @@ export default function ProductCard({ product, onAddToCart }) {
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-primary-500/5">
-                        <span className="material-symbols-outlined text-6xl text-primary-500/20">inventory_2</span>
-                    </div>
+                    <img
+                        src={getCategoryImage(product.categoryName)}
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60"
+                    />
                 )}
 
                 {isOutOfStock && (

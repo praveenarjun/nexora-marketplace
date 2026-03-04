@@ -15,6 +15,15 @@ export default function ProductDetail() {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const addingTimeoutRef = useRef(null);
 
+    // Standardized Category Imagery Fallback
+    const getCategoryImage = (name) => {
+        const lower = name?.toLowerCase() || '';
+        if (lower.includes('elect')) return 'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('fashion')) return 'https://images.unsplash.com/photo-1445205170230-053b83e26dd7?auto=format&fit=crop&q=80&w=800';
+        if (lower.includes('home')) return 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800';
+        return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800';
+    };
+
     useEffect(() => {
         setSelectedImageIndex(0);
         const fetchData = async () => {
@@ -124,9 +133,7 @@ export default function ProductDetail() {
                                 {product.imageUrls?.[selectedImageIndex] ? (
                                     <img src={product.imageUrls[selectedImageIndex]} alt={product.name} className="w-full h-full object-cover transition-all duration-700" />
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center">
-                                        <span className="material-symbols-outlined text-9xl text-white/5">inventory_2</span>
-                                    </div>
+                                    <img src={getCategoryImage(product.categoryName)} alt={product.name} className="w-full h-full object-cover opacity-40" />
                                 )}
 
                                 {product.badge && (
@@ -297,9 +304,7 @@ export default function ProductDetail() {
                                         {p.imageUrls?.[0] ? (
                                             <img src={p.imageUrls[0]} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center">
-                                                <span className="material-symbols-outlined text-4xl text-slate-700">inventory_2</span>
-                                            </div>
+                                            <img src={getCategoryImage(p.categoryName)} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-110 opacity-50" />
                                         )}
                                     </div>
                                     <div className="p-4">

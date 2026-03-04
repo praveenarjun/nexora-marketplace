@@ -208,9 +208,7 @@ export default function Products() {
                                         {product.imageUrls?.[0] ? (
                                             <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-primary-500/10">
-                                                <span className="material-symbols-outlined text-6xl text-primary-500/30">inventory_2</span>
-                                            </div>
+                                            <img src={getCategoryImage(product.categoryName)} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60" />
                                         )}
 
                                         {!product.inStock && (
