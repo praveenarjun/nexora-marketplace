@@ -10,7 +10,7 @@ export default function Home() {
 
     // Helper for category images
     const getCategoryImage = (name) => {
-        const lower = name.toLowerCase();
+        const lower = name?.toLowerCase() || '';
         if (lower.includes('elect')) return 'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80&w=800';
         if (lower.includes('fashion')) return 'https://images.unsplash.com/photo-1445205170230-053b83e26dd7?auto=format&fit=crop&q=80&w=800';
         if (lower.includes('home')) return 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800';

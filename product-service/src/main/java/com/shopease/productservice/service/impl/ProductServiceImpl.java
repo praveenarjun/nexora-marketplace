@@ -125,7 +125,7 @@ public class ProductServiceImpl implements ProductService {
 
         @Override
         @Transactional(readOnly = true)
-        @org.springframework.cache.annotation.Cacheable(value = "products", key = "T(java.util.Objects).hash(#search, #categoryId, #brand, #minPrice, #maxPrice, #status, #inStock, #featured, #pageable.pageNumber, #pageable.pageSize)")
+        @org.springframework.cache.annotation.Cacheable(value = "products", key = "'search_' + T(java.util.Objects).hash(#search, #categoryId, #brand, #minPrice, #maxPrice, #status, #inStock, #featured, #pageable.pageNumber, #pageable.pageSize)")
         public Page<ProductDTO> searchProducts(String search, Long categoryId, String brand,
                         java.math.BigDecimal minPrice,
                         java.math.BigDecimal maxPrice, String status, Boolean inStock, Boolean featured,
