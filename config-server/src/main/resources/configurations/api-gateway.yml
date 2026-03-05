@@ -7,11 +7,7 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins: 
-              - "http://localhost:5173"
-              - "https://shop.praveen-challa.tech"
-              - "https://shop-api.praveen-challa.tech"
-              - "https://shopease-frontend.pages.dev"
+            allowedOrigins: "*"
             allowedMethods:
               - GET
               - POST

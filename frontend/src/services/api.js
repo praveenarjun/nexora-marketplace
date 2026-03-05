@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || '',
+    baseURL: import.meta.env.VITE_API_URL || 'https://shop-api.praveen-challa.tech',
     timeout: 300000, // 5 minute timeout for Render cold starts
 });
 
