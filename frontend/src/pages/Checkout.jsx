@@ -72,12 +72,12 @@ export default function Checkout() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto w-full px-6 py-12">
+        <div className="max-w-7xl mx-auto w-full px-6 py-12 bg-[var(--bg-primary)]">
             <div className="flex items-center gap-4 mb-12">
-                <Link to="/cart" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all">
+                <Link to="/cart" className="w-10 h-10 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] transition-all">
                     <span className="material-symbols-outlined text-sm">arrow_back</span>
                 </Link>
-                <h1 className="text-5xl font-black text-white tracking-tighter">Checkout</h1>
+                <h1 className="text-5xl font-black text-[var(--text-primary)] tracking-tighter">Checkout</h1>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -85,21 +85,21 @@ export default function Checkout() {
                 <div className="lg:col-span-7 space-y-8">
                     <form onSubmit={handlePlaceOrder} className="space-y-6">
                         {/* Contact Information */}
-                        <div className="bg-white/5 border border-white/10 rounded-[32px] p-8 backdrop-blur-md">
-                            <h2 className="text-xl font-black text-white mb-6 flex items-center gap-3">
-                                <span className="material-symbols-outlined text-primary-500">person</span>
+                        <div className="bg-[var(--bg-tertiary)] border border-[var(--border-primary)] rounded-[32px] p-8 backdrop-blur-md shadow-xl">
+                            <h2 className="text-xl font-black text-[var(--text-primary)] mb-6 flex items-center gap-3">
+                                <span className="material-symbols-outlined text-[var(--primary-color)]">person</span>
                                 Contact Information
                             </h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Full Name</label>
-                                    <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-bold">
+                                    <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest block mb-2">Full Name</label>
+                                    <div className="bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-xl px-4 py-3 text-[var(--text-primary)] font-bold">
                                         {user?.firstName} {user?.lastName}
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Email Address</label>
-                                    <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-bold truncate">
+                                    <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest block mb-2">Email Address</label>
+                                    <div className="bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-xl px-4 py-3 text-[var(--text-primary)] font-bold truncate">
                                         {user?.email}
                                     </div>
                                 </div>
@@ -107,13 +107,13 @@ export default function Checkout() {
                         </div>
 
                         {/* Shipping Address */}
-                        <div className="bg-white/5 border border-white/10 rounded-[32px] p-8 backdrop-blur-md">
-                            <h2 className="text-xl font-black text-white mb-6 flex items-center gap-3">
-                                <span className="material-symbols-outlined text-primary-500">local_shipping</span>
+                        <div className="bg-[var(--bg-tertiary)] border border-[var(--border-primary)] rounded-[32px] p-8 backdrop-blur-md shadow-xl">
+                            <h2 className="text-xl font-black text-[var(--text-primary)] mb-6 flex items-center gap-3">
+                                <span className="material-symbols-outlined text-[var(--primary-color)]">local_shipping</span>
                                 Delivery Details
                             </h2>
                             <div>
-                                <label htmlFor="address" className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">
+                                <label htmlFor="address" className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest block mb-2">
                                     Shipping Address
                                 </label>
                                 <textarea
@@ -122,22 +122,22 @@ export default function Checkout() {
                                     rows={3}
                                     value={shippingAddress}
                                     onChange={(e) => setShippingAddress(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all placeholder:text-slate-600"
+                                    className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]/50 transition-all placeholder:text-[var(--text-muted)]"
                                     placeholder="Enter your full delivery address..."
                                 />
                             </div>
                         </div>
 
                         {/* Payment Information */}
-                        <div className="bg-white/5 border border-white/10 rounded-[32px] p-8 backdrop-blur-md">
-                            <h2 className="text-xl font-black text-white mb-6 flex items-center gap-3">
-                                <span className="material-symbols-outlined text-primary-500">shield</span>
+                        <div className="bg-[var(--bg-tertiary)] border border-[var(--border-primary)] rounded-[32px] p-8 backdrop-blur-md shadow-xl">
+                            <h2 className="text-xl font-black text-[var(--text-primary)] mb-6 flex items-center gap-3">
+                                <span className="material-symbols-outlined text-[var(--primary-color)]">shield</span>
                                 Secure Payment
                             </h2>
-                            <div className="bg-primary-500/10 border border-primary-500/20 rounded-2xl p-6 flex gap-4">
-                                <span className="material-symbols-outlined text-primary-500">info</span>
-                                <p className="text-sm text-slate-300 font-medium leading-relaxed">
-                                    This is a demonstration environment. <span className="text-white font-bold">No real payment is required.</span> Confirming this order will simulate a production transaction flow.
+                            <div className="bg-[var(--primary-color)]/10 border border-[var(--primary-color)]/20 rounded-2xl p-6 flex gap-4">
+                                <span className="material-symbols-outlined text-[var(--primary-color)]">info</span>
+                                <p className="text-sm text-[var(--text-secondary)] font-medium leading-relaxed">
+                                    This is a demonstration environment. <span className="text-[var(--text-primary)] font-bold">No real payment is required.</span> Confirming this order will simulate a production transaction flow.
                                 </p>
                             </div>
                         </div>
@@ -145,7 +145,7 @@ export default function Checkout() {
                         <button
                             type="submit"
                             disabled={isProcessing}
-                            className={`w-full bg-primary-500 py-5 rounded-2xl font-black text-white text-xl tracking-tight hover:bg-primary-600 transition-all shadow-2xl shadow-primary-500/20 active:scale-95 flex items-center justify-center gap-3 ${isProcessing ? 'opacity-70 cursor-wait' : ''}`}
+                            className={`w-full bg-[var(--primary-color)] py-5 rounded-2xl font-black text-white text-xl tracking-tight hover:bg-[var(--primary-hover)] transition-all shadow-2xl shadow-[var(--primary-color)]/20 active:scale-95 flex items-center justify-center gap-3 ${isProcessing ? 'opacity-70 cursor-wait' : ''}`}
                         >
                             {isProcessing ? 'PROCESSING TRANSACTION...' : 'CONFIRM ORDER & PAY'}
                             <span className="material-symbols-outlined">lock</span>
@@ -155,25 +155,25 @@ export default function Checkout() {
 
                 {/* Order Summary Sidebar */}
                 <aside className="lg:col-span-5">
-                    <div className="bg-white/5 border border-white/10 rounded-[32px] p-8 sticky top-28 backdrop-blur-md">
-                        <h2 className="text-2xl font-black text-white mb-8 tracking-tight border-b border-white/5 pb-4">Order Summary</h2>
+                    <div className="bg-[var(--bg-tertiary)] border border-[var(--border-primary)] rounded-[32px] p-8 sticky top-28 backdrop-blur-md shadow-xl">
+                        <h2 className="text-2xl font-black text-[var(--text-primary)] mb-8 tracking-tight border-b border-[var(--border-primary)] pb-4">Order Summary</h2>
 
                         <div className="max-h-[40vh] overflow-y-auto pr-2 space-y-4 mb-8 custom-scrollbar">
                             {cart.items.map((item) => (
-                                <div key={item.productId} className="flex gap-4 p-3 bg-white/5 rounded-2xl border border-white/5">
-                                    <div className="w-16 h-16 bg-slate-800 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center font-black text-slate-600 text-xs">
+                                <div key={item.productId} className="flex gap-4 p-3 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-primary)] shadow-sm">
+                                    <div className="w-16 h-16 bg-[var(--bg-tertiary)] rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center font-black text-[var(--text-muted)] text-xs border border-[var(--border-primary)]">
                                         {item.product?.imageUrls?.[0] ? (
                                             <img src={item.product.imageUrls[0]} alt={item.name} className="w-full h-full object-cover" />
                                         ) : item.name.substring(0, 2).toUpperCase()}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between items-start mb-1">
-                                            <h3 className="font-bold text-white text-sm truncate pr-2">{item.name}</h3>
-                                            <p className="font-bold text-white text-sm">₹{(item.price * item.quantity).toLocaleString()}</p>
+                                            <h3 className="font-bold text-[var(--text-primary)] text-sm truncate pr-2">{item.name}</h3>
+                                            <p className="font-bold text-[var(--text-primary)] text-sm">₹{(item.price * item.quantity).toLocaleString()}</p>
                                         </div>
-                                        <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                        <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">
                                             <span>Qty {item.quantity}</span>
-                                            <span className="text-primary-500/50">{item.skuCode}</span>
+                                            <span className="text-[var(--primary-color)] opacity-70">{item.skuCode}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -182,24 +182,24 @@ export default function Checkout() {
 
                         <div className="space-y-4 pt-4">
                             <div className="flex justify-between items-center text-sm">
-                                <span className="text-slate-500 font-bold uppercase tracking-widest">Subtotal</span>
-                                <span className="text-white font-bold">₹{subtotal.toLocaleString()}</span>
+                                <span className="text-[var(--text-muted)] font-bold uppercase tracking-widest">Subtotal</span>
+                                <span className="text-[var(--text-primary)] font-bold">₹{subtotal.toLocaleString()}</span>
                             </div>
                             <div className="flex justify-between items-center text-sm">
-                                <span className="text-slate-500 font-bold uppercase tracking-widest">Shipping</span>
-                                <span className="text-green-400 font-bold uppercase tracking-widest">{shipping === 0 ? 'FREE' : `₹${shipping}`}</span>
+                                <span className="text-[var(--text-muted)] font-bold uppercase tracking-widest">Shipping</span>
+                                <span className="text-emerald-500 font-bold uppercase tracking-widest">{shipping === 0 ? 'FREE' : `₹${shipping}`}</span>
                             </div>
-                            <div className="flex justify-between items-center text-sm pb-6 border-b border-white/5">
-                                <span className="text-slate-500 font-bold uppercase tracking-widest">Tax (GST)</span>
-                                <span className="text-white font-bold">₹{tax.toLocaleString()}</span>
+                            <div className="flex justify-between items-center text-sm pb-6 border-b border-[var(--border-primary)]">
+                                <span className="text-[var(--text-muted)] font-bold uppercase tracking-widest">Tax (GST)</span>
+                                <span className="text-[var(--text-primary)] font-bold">₹{tax.toLocaleString()}</span>
                             </div>
                             <div className="flex justify-between items-end pt-4">
-                                <span className="text-xs text-slate-400 font-black uppercase tracking-[0.2em]">Total</span>
-                                <span className="text-4xl font-black text-white tracking-tighter">₹{total.toLocaleString()}</span>
+                                <span className="text-xs text-[var(--text-muted)] font-black uppercase tracking-[0.2em]">Total</span>
+                                <span className="text-4xl font-black text-[var(--text-primary)] tracking-tighter">₹{total.toLocaleString()}</span>
                             </div>
                         </div>
 
-                        <div className="mt-8 flex items-center gap-3 justify-center text-slate-600">
+                        <div className="mt-8 flex items-center gap-3 justify-center text-[var(--text-muted)]">
                             <span className="material-symbols-outlined text-lg">verified_user</span>
                             <span className="text-[10px] font-black uppercase tracking-widest">Encrypted & Secure</span>
                         </div>

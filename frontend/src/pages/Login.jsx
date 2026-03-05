@@ -32,12 +32,8 @@ export default function Login() {
         }
     };
 
-    const handleSocialLogin = (provider) => {
-        toast(`${provider} sign-in coming soon!`, { icon: '🔒' });
-    };
-
     return (
-        <div className="min-h-screen flex animate-fade-in" style={{ background: '#000000' }}>
+        <div className="min-h-screen flex animate-fade-in bg-[var(--bg-primary)]">
             {/* ── Left: Brand Panel ── */}
             <div className="hidden lg:flex lg:w-1/2 auth-brand-panel flex-col justify-between p-12 relative">
                 <div className="relative z-10">
@@ -95,8 +91,8 @@ export default function Login() {
 
                 <div className="w-full max-w-md animate-slide-up">
                     <div className="mb-8">
-                        <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-                        <p className="text-slate-400 text-sm">Please enter your credentials to access your account.</p>
+                        <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Welcome Back</h2>
+                        <p className="text-[var(--text-muted)] text-sm">Please enter your credentials to access your account.</p>
                     </div>
 
                     {/* Social Auth */}
@@ -126,18 +122,18 @@ export default function Login() {
 
                     {/* Divider */}
                     <div className="flex items-center gap-3 mb-6">
-                        <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.08)' }}></div>
-                        <span className="text-slate-500 text-xs">or continue with email</span>
-                        <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.08)' }}></div>
+                        <div className="flex-1 h-px bg-[var(--border-primary)]"></div>
+                        <span className="text-[var(--text-muted)] text-xs">or continue with email</span>
+                        <div className="flex-1 h-px bg-[var(--border-primary)]"></div>
                     </div>
 
                     {/* Form */}
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Email */}
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1.5">Email address</label>
+                            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Email address</label>
                             <div className="relative">
-                                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                                 <input
                                     name="email"
                                     type="email"
@@ -153,11 +149,11 @@ export default function Login() {
                         {/* Password */}
                         <div>
                             <div className="flex items-center justify-between mb-1.5">
-                                <label className="text-sm font-medium text-slate-300">Password</label>
-                                <Link to="/forgot-password" className="text-xs text-primary-400 hover:text-primary-300">Forgot Password?</Link>
+                                <label className="text-sm font-medium text-[var(--text-secondary)]">Password</label>
+                                <Link to="/forgot-password" size="sm" className="text-xs text-[var(--primary-color)] hover:text-[var(--primary-hover)]">Forgot Password?</Link>
                             </div>
                             <div className="relative">
-                                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                                 <input
                                     name="password"
                                     type={showPassword ? 'text' : 'password'}
@@ -170,7 +166,7 @@ export default function Login() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                                 >
                                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
@@ -190,16 +186,16 @@ export default function Login() {
                         </button>
                     </form>
 
-                    <p className="text-center text-slate-500 text-xs mt-6">
+                    <p className="text-center text-[var(--text-muted)] text-xs mt-6">
                         By signing in, you agree to our{' '}
-                        <a href="#" className="text-primary-400 hover:underline">Terms</a>
+                        <a href="#" className="text-[var(--primary-color)] hover:underline">Terms</a>
                         {' '}and{' '}
-                        <a href="#" className="text-primary-400 hover:underline">Privacy Policy</a>
+                        <a href="#" className="text-[var(--primary-color)] hover:underline">Privacy Policy</a>
                     </p>
 
-                    <p className="text-center text-slate-400 text-sm mt-6">
+                    <p className="text-center text-[var(--text-secondary)] text-sm mt-6">
                         Don't have an account?{' '}
-                        <Link to="/register" className="text-primary-400 font-semibold hover:text-primary-300">
+                        <Link to="/register" className="text-[var(--primary-color)] font-semibold hover:text-[var(--primary-hover)]">
                             Create one
                         </Link>
                     </p>

@@ -24,10 +24,10 @@ export default function Navbar() {
                 {/* 1. Left: Brand Logo */}
                 <div className="flex-shrink-0">
                     <Link to="/home" className="flex items-center gap-2 group">
-                        <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center shadow-lg shadow-primary-500/20 group-hover:scale-110 transition-transform">
+                        <div className="w-8 h-8 rounded-lg bg-[var(--primary-color)] flex items-center justify-center shadow-lg shadow-primary-500/20 group-hover:scale-110 transition-transform">
                             <span className="material-symbols-outlined text-white text-xl">shopping_bag</span>
                         </div>
-                        <h1 className="text-adaptive text-xl font-black tracking-tighter uppercase leading-none">ShopEase</h1>
+                        <h1 className="text-[var(--text-primary)] text-xl font-black tracking-tighter uppercase leading-none">ShopEase</h1>
                     </Link>
                 </div>
 
@@ -37,7 +37,7 @@ export default function Navbar() {
                     <input
                         type="text"
                         placeholder="Search for premium products..."
-                        className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-2xl pl-12 pr-4 py-2.5 text-sm text-adaptive placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-primary-500/50 transition-all"
+                        className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-2xl pl-12 pr-4 py-2.5 text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)] transition-all"
                     />
                 </div>
 
@@ -54,7 +54,7 @@ export default function Navbar() {
                     {/* Theme Toggle */}
                     <button
                         onClick={toggleTheme}
-                        className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-primary-500 transition-all hover:scale-110 active:scale-95 flex items-center justify-center group"
+                        className="p-2 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--primary-color)] transition-all hover:scale-110 active:scale-95 flex items-center justify-center group"
                         title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
                     >
                         <span className="material-symbols-outlined text-[20px]">
@@ -63,10 +63,10 @@ export default function Navbar() {
                     </button>
 
                     {/* Cart */}
-                    <Link to="/cart" className="relative p-2 rounded-xl hover:bg-white/5 transition-colors group">
-                        <span className="material-symbols-outlined text-slate-400 group-hover:text-primary-500">shopping_cart</span>
+                    <Link to="/cart" className="relative p-2 rounded-xl hover:bg-[var(--bg-glass)] transition-colors group">
+                        <span className="material-symbols-outlined text-[var(--text-muted)] group-hover:text-[var(--primary-color)]">shopping_cart</span>
                         {cart.getTotalItems() > 0 && (
-                            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary-500 text-[10px] font-black text-white shadow-xl">
+                            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--primary-color)] text-[10px] font-black text-white shadow-xl">
                                 {cart.getTotalItems()}
                             </span>
                         )}
@@ -92,10 +92,10 @@ export default function Navbar() {
                         </div>
                     ) : (
                         <div className="flex items-center gap-2">
-                            <Link to="/login" className="text-slate-400 hover:text-white font-bold text-xs uppercase tracking-widest px-4 py-2 transition-all">
+                            <Link to="/login" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] font-bold text-xs uppercase tracking-widest px-4 py-2 transition-all">
                                 Log in
                             </Link>
-                            <Link to="/register" className="bg-primary-500 hover:bg-primary-600 text-white text-[11px] font-black uppercase tracking-widest px-6 py-2.5 rounded-xl transition-all shadow-xl shadow-primary-500/20 active:scale-95">
+                            <Link to="/register" className="bg-[var(--primary-color)] hover:bg-[var(--primary-hover)] text-white text-[11px] font-black uppercase tracking-widest px-6 py-2.5 rounded-xl transition-all shadow-xl shadow-primary-500/20 active:scale-95">
                                 Join Now
                             </Link>
                         </div>

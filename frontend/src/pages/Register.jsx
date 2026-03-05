@@ -55,7 +55,7 @@ export default function Register() {
     ];
 
     return (
-        <div className="min-h-screen flex animate-fade-in" style={{ background: '#000000' }}>
+        <div className="min-h-screen flex animate-fade-in bg-[var(--bg-primary)]">
             {/* ── Left: Brand Panel ── */}
             <div className="hidden lg:flex lg:w-5/12 auth-brand-panel flex-col justify-between p-12 relative">
                 <div className="relative z-10">
@@ -101,8 +101,8 @@ export default function Register() {
 
                 <div className="w-full max-w-lg animate-slide-up">
                     <div className="mb-7">
-                        <h2 className="text-3xl font-bold text-white mb-2">Create your account</h2>
-                        <p className="text-slate-400 text-sm">Fill in your details to get started.</p>
+                        <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Create your account</h2>
+                        <p className="text-[var(--text-muted)] text-sm">Fill in your details to get started.</p>
                     </div>
 
                     {/* Social Auth */}
@@ -125,18 +125,18 @@ export default function Register() {
                     </div>
 
                     <div className="flex items-center gap-3 mb-6">
-                        <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.08)' }}></div>
-                        <span className="text-slate-500 text-xs">or register with email</span>
-                        <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.08)' }}></div>
+                        <div className="flex-1 h-px bg-[var(--border-primary)]"></div>
+                        <span className="text-[var(--text-muted)] text-xs">or register with email</span>
+                        <div className="flex-1 h-px bg-[var(--border-primary)]"></div>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Name row */}
                         <div className="grid grid-cols-2 gap-3">
                             <div>
-                                <label className="block text-sm font-medium text-slate-300 mb-1.5">First name</label>
+                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">First name</label>
                                 <div className="relative">
-                                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                                     <input
                                         name="firstName"
                                         type="text"
@@ -149,9 +149,9 @@ export default function Register() {
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-300 mb-1.5">Last name</label>
+                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Last name</label>
                                 <div className="relative">
-                                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                                     <input
                                         name="lastName"
                                         type="text"
@@ -167,9 +167,9 @@ export default function Register() {
 
                         {/* Email */}
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1.5">Email address</label>
+                            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Email address</label>
                             <div className="relative">
-                                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                                 <input
                                     name="email"
                                     type="email"
@@ -184,9 +184,9 @@ export default function Register() {
 
                         {/* Password */}
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
+                            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Password</label>
                             <div className="relative">
-                                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                                 <input
                                     name="password"
                                     type={showPassword ? 'text' : 'password'}
@@ -200,7 +200,7 @@ export default function Register() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                                 >
                                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
@@ -209,9 +209,9 @@ export default function Register() {
 
                         {/* Address */}
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1.5">Shipping address</label>
+                            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Shipping address</label>
                             <div className="relative">
-                                <MapPin className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-500" />
+                                <MapPin className="absolute left-3.5 top-3.5 w-4 h-4 text-[var(--text-muted)]" />
                                 <textarea
                                     name="address"
                                     required

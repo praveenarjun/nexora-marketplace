@@ -7,6 +7,9 @@ SERVER_HOST="${DEPLOY_SERVER_HOST:?Error: DEPLOY_SERVER_HOST environment variabl
 SERVER_USER="${DEPLOY_SERVER_USER:-azureuser}"
 SSH_KEY="${DEPLOY_SSH_KEY:-$HOME/.ssh/shopease-key.pem}"
 
+echo "Syncing configuration files to Azure Server..."
+scp -o StrictHostKeyChecking=accept-new -i "$SSH_KEY" docker-compose.prod.yml "${SERVER_USER}@${SERVER_HOST}:~/shopease/"
+
 echo "Connecting to Azure Server to update backend services..."
 ssh -o StrictHostKeyChecking=accept-new -i "$SSH_KEY" "${SERVER_USER}@${SERVER_HOST}" "cd ~/shopease && \
   docker compose -f docker-compose.prod.yml pull discovery-server config-server api-gateway product-service user-service inventory-service order-service notification-service && \

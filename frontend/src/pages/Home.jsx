@@ -48,8 +48,8 @@ export default function Home() {
             {/* ── Hero card section from Stitch ── */}
             <section className="px-6 lg:px-12 pt-8 pb-12">
                 <div
-                    className="max-w-7xl mx-auto relative rounded-[40px] overflow-hidden bg-[#0a0b10] border border-white/5 min-h-[600px] flex items-center px-12 lg:px-20 shadow-2xl bg-cover bg-center"
-                    style={{ backgroundImage: 'linear-gradient(to bottom right, rgba(10, 11, 16, 0.9), rgba(10, 11, 16, 0.8)), url("/images/hero_bg.png")' }}
+                    className="max-w-7xl mx-auto relative rounded-[40px] overflow-hidden bg-[var(--bg-tertiary)] border border-[var(--border-primary)] min-h-[600px] flex items-center px-12 lg:px-20 shadow-2xl bg-cover bg-center"
+                    style={{ backgroundImage: 'linear-gradient(to bottom right, var(--bg-glass), var(--bg-glass)), url("/images/hero_bg.png")' }}
                 >
                     {/* Visual ambient glows inside the card */}
                     <div className="absolute inset-0 z-0 opacity-30">
@@ -58,8 +58,8 @@ export default function Home() {
                     </div>
 
                     <div className="relative z-10 max-w-2xl">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black tracking-[0.2em] uppercase mb-8 text-primary-400">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse"></span>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--bg-glass)] border border-[var(--border-primary)] text-[10px] font-black tracking-[0.2em] uppercase mb-8 text-[var(--primary-color)]">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary-color)] animate-pulse"></span>
                             New Collection 2024
                         </div>
 
@@ -68,7 +68,7 @@ export default function Home() {
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-indigo-500">Lifestyle.</span>
                         </h1>
 
-                        <p className="text-slate-400 text-lg lg:text-xl mb-10 max-w-xl leading-relaxed font-medium">
+                        <p className="text-[var(--text-secondary)] text-lg lg:text-xl mb-10 max-w-xl leading-relaxed font-medium">
                             Discover our meticulously curated collection of premium electronics,
                             designer goods, and smart living essentials.
                         </p>
@@ -102,10 +102,10 @@ export default function Home() {
             <section className="py-20 px-6 max-w-7xl mx-auto">
                 <div className="flex items-end justify-between mb-10">
                     <div>
-                        <h2 className="text-4xl font-black text-white tracking-tighter mb-2">Shop by Category</h2>
-                        <p className="text-slate-500 font-medium">Find exactly what you need from our curated collections.</p>
+                        <h2 className="text-4xl font-black text-[var(--text-primary)] tracking-tighter mb-2">Shop by Category</h2>
+                        <p className="text-[var(--text-muted)] font-medium">Find exactly what you need from our curated collections.</p>
                     </div>
-                    <Link to="/products" className="text-primary-400 font-bold hover:text-primary-300 transition-colors flex items-center gap-1 group">
+                    <Link to="/products" className="text-[var(--primary-color)] font-bold hover:text-[var(--primary-hover)] transition-colors flex items-center gap-1 group">
                         View All
                         <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
                     </Link>
@@ -114,16 +114,16 @@ export default function Home() {
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                     {loadingCategories ? (
                         [1, 2, 3, 4].map(i => (
-                            <div key={i} className="aspect-[4/5] rounded-3xl bg-white/5 animate-pulse"></div>
+                            <div key={i} className="aspect-[4/5] rounded-3xl bg-[var(--bg-secondary)] animate-pulse"></div>
                         ))
                     ) : (
                         categories.map(cat => (
-                            <Link key={cat.name} to={`/products?category=${encodeURIComponent(cat.name)}`} className="group relative aspect-[4/5] rounded-3xl overflow-hidden bg-slate-900 shadow-2xl transition-all hover:-translate-y-2">
+                            <Link key={cat.name} to={`/products?category=${encodeURIComponent(cat.name)}`} className="group relative aspect-[4/5] rounded-3xl overflow-hidden bg-[var(--bg-tertiary)] shadow-2xl transition-all hover:-translate-y-2 border border-[var(--border-primary)]">
                                 <img src={cat.img} alt={cat.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-110 transition-all duration-700" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0b10] via-transparent to-transparent"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-transparent"></div>
                                 <div className="absolute bottom-6 left-6">
-                                    <h3 className="text-xl font-black text-white mb-1">{cat.name}</h3>
-                                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">{cat.count}</p>
+                                    <h3 className="text-xl font-black text-[var(--text-primary)] mb-1">{cat.name}</h3>
+                                    <p className="text-[var(--text-muted)] text-xs font-bold uppercase tracking-widest">{cat.count}</p>
                                 </div>
                             </Link>
                         ))
@@ -135,21 +135,21 @@ export default function Home() {
             <section className="py-24 bg-[var(--bg-primary)]">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex flex-col mb-12">
-                        <h2 className="text-4xl font-black text-adaptive tracking-tighter mb-2">Featured Products</h2>
-                        <div className="w-20 h-1.5 bg-primary-500 rounded-full"></div>
+                        <h2 className="text-4xl font-black text-[var(--text-primary)] tracking-tighter mb-2">Featured Products</h2>
+                        <div className="w-20 h-1.5 bg-[var(--primary-color)] rounded-full"></div>
                     </div>
 
                     {loadingProducts ? (
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
                             {[1, 2, 3, 4].map(i => (
-                                <div key={i} className="h-[450px] rounded-3xl bg-white/5 animate-pulse"></div>
+                                <div key={i} className="h-[450px] rounded-3xl bg-[var(--bg-secondary)] animate-pulse"></div>
                             ))}
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                             {featuredProducts.map(product => (
                                 <div key={product.id} className="group flex flex-col relative">
-                                    <Link to={`/products/${product.id}`} className="relative aspect-[4/5] rounded-[32px] overflow-hidden bg-[#1c1d26] mb-6 shadow-2xl transition-all hover:shadow-primary-500/10 active:scale-95">
+                                    <Link to={`/products/${product.id}`} className="relative aspect-[4/5] rounded-[32px] overflow-hidden bg-[var(--bg-tertiary)] mb-6 shadow-2xl transition-all hover:shadow-[var(--primary-color)]/10 active:scale-95 border border-[var(--border-primary)]">
                                         {/* Badge Overlay */}
                                         {product.badge && (
                                             <div className="absolute top-4 left-4 z-10">
@@ -162,12 +162,12 @@ export default function Home() {
                                         {product.imageUrls?.[0] ? (
                                             <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-primary-500/10">
-                                                <span className="material-symbols-outlined text-6xl text-primary-500/20">inventory_2</span>
+                                            <div className="w-full h-full flex items-center justify-center bg-[var(--primary-color)]/10">
+                                                <span className="material-symbols-outlined text-6xl text-[var(--primary-color)]/20">inventory_2</span>
                                             </div>
                                         )}
                                         {/* Favorite Overlay */}
-                                        <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#0a0b10]/40 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary-500 transition-colors">
+                                        <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[var(--bg-glass)] backdrop-blur-md flex items-center justify-center text-[var(--text-primary)] hover:bg-[var(--primary-color)] hover:text-white transition-colors">
                                             <span className="material-symbols-rounded text-xl">favorite</span>
                                         </button>
                                     </Link>
@@ -183,8 +183,8 @@ export default function Home() {
                                             )}
                                         </div>
                                         <div className="flex items-start justify-between">
-                                            <Link to={`/products/${product.id}`} className="text-lg font-bold text-white hover:text-primary-400 transition-colors truncate pr-4">{product.name}</Link>
-                                            <span className="text-lg font-black text-white">₹{product.price?.toLocaleString()}</span>
+                                            <Link to={`/products/${product.id}`} className="text-lg font-bold text-[var(--text-primary)] hover:text-[var(--primary-color)] transition-colors truncate pr-4">{product.name}</Link>
+                                            <span className="text-lg font-black text-[var(--text-primary)]">₹{product.price?.toLocaleString()}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -196,18 +196,18 @@ export default function Home() {
 
             {/* ── Newsletter CTA (Stitch Detail) ── */}
             <section className="py-24 px-6">
-                <div className="max-w-5xl mx-auto bg-gradient-to-br from-[#1c1d26] to-[#0a0b10] rounded-[48px] p-12 lg:p-20 text-center border border-white/5 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full blur-[100px]"></div>
+                <div className="max-w-5xl mx-auto bg-gradient-to-br from-[var(--bg-tertiary)] to-[var(--bg-primary)] rounded-[48px] p-12 lg:p-20 text-center border border-[var(--border-primary)] relative overflow-hidden shadow-2xl">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--primary-color)]/10 rounded-full blur-[100px]"></div>
                     <div className="relative z-10">
-                        <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tighter mb-6 leading-tight">Join the ShopEase Circle</h2>
-                        <p className="text-slate-400 text-lg mb-10 max-w-xl mx-auto">Get early access to drops, exclusive discounts, and lifestyle tips.</p>
+                        <h2 className="text-4xl lg:text-5xl font-black text-[var(--text-primary)] tracking-tighter mb-6 leading-tight">Join the ShopEase Circle</h2>
+                        <p className="text-[var(--text-muted)] text-lg mb-10 max-w-xl mx-auto">Get early access to drops, exclusive discounts, and lifestyle tips.</p>
                         <form className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto" onSubmit={(e) => e.preventDefault()}>
                             <input
                                 type="email"
                                 placeholder="Enter your email"
-                                className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+                                className="flex-1 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-2xl px-6 py-4 text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]/50 placeholder:text-[var(--text-muted)]"
                             />
-                            <button className="bg-primary-500 hover:bg-primary-600 text-white font-black uppercase tracking-widest px-10 py-4 rounded-2xl transition-all shadow-xl shadow-primary-500/30 active:scale-95">
+                            <button className="bg-[var(--primary-color)] hover:bg-[var(--primary-hover)] text-white font-black uppercase tracking-widest px-10 py-4 rounded-2xl transition-all shadow-xl shadow-[var(--primary-color)]/30 active:scale-95">
                                 Subscribe
                             </button>
                         </form>
