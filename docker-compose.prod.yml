@@ -73,7 +73,7 @@ services:
           memory: 256M
 
   product-service:
-    image: ghcr.io/praveenarjun/shopease-product-service:custom
+    image: ghcr.io/praveenarjun/shopease-product-service:${IMAGE_TAG:-latest}
     container_name: product-service-prod
     restart: always
     ports:
