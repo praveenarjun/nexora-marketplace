@@ -34,25 +34,34 @@ export default function Products() {
         try {
             setLoading(true);
             setError(null);
+            console.log('📡 Fetching products from:', api.defaults.baseURL || 'relative', 'with search:', searchTerm);
 
             // Build params object dynamically to avoid sending "null" strings
             const params = {};
             if (searchTerm) params.search = searchTerm;
-            if (selectedCategory && selectedCategory !== 'ALL') {
-                // If we had category IDs, we would use them here. 
-                // For now, the existing frontend logic filters locally, 
-                // but let's ensure the API call is clean.
-            }
 
             const response = await api.get('/api/products', { params });
-            const content = Array.isArray(response.data)
-                ? response.data
-                : response.data?.data?.content || response.data?.content || [];
+            console.log('✅ API Response received:', response.status);
+
+            // Ultra-robust parsing logic
+            let content = [];
+            if (Array.isArray(response.data)) {
+                content = response.data;
+            } else if (response.data?.data?.content && Array.isArray(response.data.data.content)) {
+                content = response.data.data.content;
+            } else if (response.data?.content && Array.isArray(response.data.content)) {
+                content = response.data.content;
+            } else if (response.data?.data && Array.isArray(response.data.data)) {
+                content = response.data.data;
+            }
+
+            console.log('📦 Parsed products count:', content.length);
             setProducts(content);
         } catch (err) {
+            console.error('❌ Fetch failed:', err);
             setError(err.response?.status === 503
                 ? 'The catalog service is warming up. Please refresh in 60 seconds.'
-                : 'Failed to load products. Please try again.');
+                : 'Failed to load products. Please check your connection.');
             toast.error('Could not load products');
         } finally {
             setLoading(false);
