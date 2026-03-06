@@ -77,7 +77,7 @@ export default function Home() {
                             <Link to="/products" className="w-full sm:w-auto bg-primary-500 px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs text-white hover:bg-primary-600 transition-all shadow-xl shadow-primary-500/20 active:scale-95">
                                 Shop Collection
                             </Link>
-                            <button className="w-full sm:w-auto bg-white/5 border border-[var(--border-primary)] px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs text-adaptive hover:bg-white/10 transition-all backdrop-blur-md">
+                            <button className="w-full sm:w-auto bg-[var(--bg-glass)] border border-[var(--border-primary)] px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs text-adaptive hover:bg-[var(--bg-secondary)] transition-all backdrop-blur-md">
                                 Discover More
                             </button>
                         </div>
@@ -174,11 +174,11 @@ export default function Home() {
 
                                     <div className="px-2">
                                         <div className="flex items-center justify-between mb-2">
-                                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">{product.categoryName || 'COLLECTION'}</p>
+                                            <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em]">{product.categoryName || 'COLLECTION'}</p>
                                             {product.rating > 0 && (
                                                 <div className="flex items-center gap-1">
-                                                    <span className="material-symbols-rounded text-[14px] text-amber-400">star</span>
-                                                    <span className="text-[10px] font-bold text-slate-400">{product.rating}</span>
+                                                    <span className="material-symbols-rounded text-[14px] text-amber-500">star</span>
+                                                    <span className="text-[10px] font-bold text-[var(--text-muted)]">{product.rating}</span>
                                                 </div>
                                             )}
                                         </div>

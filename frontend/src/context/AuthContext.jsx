@@ -39,6 +39,9 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setUser(null);
+        // Clear local cart storage safely
+        localStorage.removeItem('shopease-cart-storage');
+        // If we want to be reactive, we'd need to import useCart here or handle it in a listener
     }, []);
 
     const isAdmin = useCallback(() => {

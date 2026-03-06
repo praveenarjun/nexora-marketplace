@@ -12,6 +12,11 @@ export default function CartSync() {
 
     // 1. Initial Sync from Backend on Login
     useEffect(() => {
+        if (!isAuthenticated()) {
+            isInitialSync.current = true;
+            return;
+        }
+
         if (isAuthenticated() && isInitialSync.current) {
             console.log('📡 Syncing cart from backend for user:', user.email);
             api.get('/api/users/profile/cart')
@@ -37,7 +42,7 @@ export default function CartSync() {
                     lastPushedCart.current = JSON.stringify(cart.items);
                 });
         }
-    }, [user, isAuthenticated, cart.setItems]);
+    }, [user?.id, isAuthenticated, cart.mergeItems]);
 
     // 2. Push Local Changes to Backend
     useEffect(() => {

@@ -19,23 +19,27 @@
   --primary-hover: #4658b3;
   --accent-color: #a5b2e9;
   --shadow-primary: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --bg-glow: radial-gradient(ellipse at 20% 50%, rgba(87, 110, 224, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(87, 110, 224, 0.06) 0%, transparent 50%);
 }
 
 .light {
   --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
-  --bg-glass: rgba(255, 255, 255, 0.7);
-  --text-primary: #111827;
-  --text-secondary: #374151;
-  --text-muted: #6b7280;
-  --border-primary: #e5e7eb;
-  --border-secondary: #f3f4f6;
-  --glass-blur: blur(8px);
+  --bg-secondary: #f3f4f6;
+  --bg-tertiary: #e5e7eb;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --text-primary: #0f172a;
+  --text-secondary: #1e293b;
+  --text-muted: #475569;
+  --border-primary: #e2e8f0;
+  --border-secondary: #f1f5f9;
+  --glass-blur: blur(12px);
   --primary-color: #4f46e5;
   --primary-hover: #4338ca;
   --accent-color: #818cf8;
   --shadow-primary: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --bg-glow: radial-gradient(ellipse at 20% 50%, rgba(79, 70, 229, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(79, 70, 229, 0.03) 0%, transparent 50%);
 }
 
 @layer base {
@@ -54,9 +58,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
-    background-image:
-      radial-gradient(ellipse at 20% 50%, rgba(87, 110, 224, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(87, 110, 224, 0.06) 0%, transparent 50%);
+    background-image: var(--bg-glow);
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
@@ -157,45 +159,45 @@
 
   .badge-blue {
     @apply badge;
-    background: rgba(87, 110, 224, 0.2);
-    color: #a5b2e9;
-    border: 1px solid rgba(87, 110, 224, 0.3);
+    background: rgba(87, 110, 224, 0.15);
+    color: var(--primary-color);
+    border: 1px solid rgba(87, 110, 224, 0.2);
   }
 
   .badge-green {
     @apply badge;
-    background: rgba(16, 185, 129, 0.15);
-    color: #6ee7b7;
-    border: 1px solid rgba(16, 185, 129, 0.25);
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.2);
   }
 
   .badge-yellow {
     @apply badge;
-    background: rgba(245, 158, 11, 0.15);
-    color: #fcd34d;
-    border: 1px solid rgba(245, 158, 11, 0.25);
+    background: rgba(245, 158, 11, 0.12);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.2);
   }
 
   .badge-red {
     @apply badge;
-    background: rgba(239, 68, 68, 0.15);
-    color: #fca5a5;
-    border: 1px solid rgba(239, 68, 68, 0.25);
+    background: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.2);
   }
 
   .badge-purple {
     @apply badge;
-    background: rgba(168, 85, 247, 0.15);
-    color: #d8b4fe;
-    border: 1px solid rgba(168, 85, 247, 0.25);
+    background: rgba(168, 85, 247, 0.12);
+    color: #9333ea;
+    border: 1px solid rgba(168, 85, 247, 0.2);
   }
 
   /* ── Navbar ── */
   .navbar-glass {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    background: rgba(0, 0, 0, 0.7);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--bg-glass);
+    border-bottom: 1px solid var(--border-primary);
   }
 
   /* ── Section ── */

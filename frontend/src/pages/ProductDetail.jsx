@@ -64,13 +64,7 @@ export default function ProductDetail() {
     const handleAddToCart = () => {
         if (!product) return;
         setAdding(true);
-        cart.addItem({
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            sku: product.sku,
-            quantity: quantity,
-        });
+        cart.addItem(product, quantity);
         toast.success(`Added ${quantity} ${product.name} to cart`);
         addingTimeoutRef.current = setTimeout(() => setAdding(false), 1000);
     };
@@ -78,12 +72,12 @@ export default function ProductDetail() {
     if (loading) return (
         <div className="max-w-7xl mx-auto px-6 py-20">
             <div className="animate-pulse flex flex-col md:flex-row gap-12">
-                <div className="w-full md:w-1/2 aspect-square bg-white/5 rounded-3xl"></div>
+                <div className="w-full md:w-1/2 aspect-square bg-[var(--bg-glass)] rounded-3xl border border-[var(--border-primary)]"></div>
                 <div className="flex-1 space-y-6 pt-10">
-                    <div className="h-10 bg-white/5 rounded w-3/4"></div>
-                    <div className="h-6 bg-white/5 rounded w-1/4"></div>
-                    <div className="h-32 bg-white/5 rounded"></div>
-                    <div className="h-12 bg-white/5 rounded w-full"></div>
+                    <div className="h-10 bg-[var(--bg-glass)] rounded w-3/4"></div>
+                    <div className="h-6 bg-[var(--bg-glass)] rounded w-1/4"></div>
+                    <div className="h-32 bg-[var(--bg-glass)] rounded"></div>
+                    <div className="h-12 bg-[var(--bg-glass)] rounded w-full"></div>
                 </div>
             </div>
         </div>
@@ -91,8 +85,8 @@ export default function ProductDetail() {
 
     if (!product) return (
         <div className="max-w-7xl mx-auto px-6 py-20 text-center">
-            <h2 className="text-2xl font-bold text-white mb-4">Product not found</h2>
-            <Link to="/products" className="bg-primary-500 px-8 py-3 rounded-xl font-bold text-white">Back to Catalog</Link>
+            <h2 className="text-2xl font-bold text-adaptive mb-4">Product not found</h2>
+            <Link to="/products" className="bg-primary-500 px-8 py-3 rounded-xl font-bold text-white shadow-lg shadow-primary-500/20 hover:bg-primary-600 transition-all">Back to Catalog</Link>
         </div>
     );
 
@@ -102,16 +96,16 @@ export default function ProductDetail() {
                 {/* Reusable Sidebar (Simplified for Detail View) */}
                 <aside className="hidden lg:block w-64 flex-shrink-0 space-y-8">
                     <div>
-                        <h3 className="text-xl font-black text-white mb-6 flex items-center gap-2">
+                        <h3 className="text-xl font-black text-adaptive mb-6 flex items-center gap-2">
                             <span className="material-symbols-outlined text-primary-500">category</span>
                             Browse
                         </h3>
                         <div className="space-y-1">
-                            <Link to="/products" className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all">
+                            <Link to="/products" className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[var(--text-secondary)] hover:bg-[var(--bg-glass)] hover:text-[var(--text-primary)] transition-all">
                                 <span className="material-symbols-outlined text-sm">arrow_back</span>
                                 <span className="text-sm font-bold">Back to Catalog</span>
                             </Link>
-                            <Link to="/products?category=electronics" className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-primary-500/10 text-primary-500 font-bold">
+                            <Link to="/products?category=electronics" className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-primary-500/10 text-primary-500 font-bold border border-primary-500/20">
                                 <span className="text-sm">Active Category</span>
                             </Link>
                         </div>
@@ -121,18 +115,18 @@ export default function ProductDetail() {
                 {/* Main Content Area */}
                 <section className="flex-1">
                     {/* Breadcrumbs */}
-                    <nav className="flex items-center gap-2 text-slate-500 text-xs font-bold uppercase tracking-wider mb-8">
+                    <nav className="flex items-center gap-2 text-[var(--text-muted)] text-xs font-bold uppercase tracking-wider mb-8">
                         <Link to="/home" className="hover:text-primary-500 transition-colors">Home</Link>
                         <span className="material-symbols-outlined text-[10px]">chevron_right</span>
                         <Link to="/products" className="hover:text-primary-500 transition-colors">Catalog</Link>
                         <span className="material-symbols-outlined text-[10px]">chevron_right</span>
-                        <span className="text-primary-500 font-black">{product.categoryName || 'Electronics'}</span>
+                        <span className="text-primary-500 font-black tracking-widest">{product.categoryName || 'Electronics'}</span>
                     </nav>
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                         {/* Left: Image Showcase & Gallery */}
                         <div className="lg:col-span-7 space-y-6">
-                            <div className="aspect-[4/5] bg-[#1c1d26] border border-white/5 rounded-[40px] overflow-hidden relative group shadow-2xl">
+                            <div className="aspect-[4/5] bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-[40px] overflow-hidden relative group shadow-2xl">
                                 {product.imageUrls?.[selectedImageIndex] ? (
                                     <img src={product.imageUrls[selectedImageIndex]} alt={product.name} className="w-full h-full object-cover transition-all duration-700" />
                                 ) : (
@@ -155,7 +149,7 @@ export default function ProductDetail() {
                                         <button
                                             key={idx}
                                             onClick={() => setSelectedImageIndex(idx)}
-                                            className={`w-24 aspect-square rounded-2xl bg-[#1c1d26] border overflow-hidden flex-shrink-0 transition-all ${idx === selectedImageIndex ? 'border-primary-500 ring-2 ring-primary-500/20' : 'border-white/5 hover:border-white/20'}`}
+                                            className={`w-24 aspect-square rounded-2xl bg-[var(--bg-secondary)] border overflow-hidden flex-shrink-0 transition-all ${idx === selectedImageIndex ? 'border-primary-500 ring-4 ring-primary-500/10' : 'border-[var(--border-primary)] hover:border-primary-500/50'}`}
                                         >
                                             <img src={url} alt={`${product.name} ${idx}`} className={`w-full h-full object-cover transition-opacity ${idx === selectedImageIndex ? 'opacity-100' : 'opacity-40 hover:opacity-100'}`} />
                                         </button>
@@ -174,7 +168,7 @@ export default function ProductDetail() {
                                         }`}>
                                         {product.inStock ? 'Available Now' : 'Out of Stock'}
                                     </span>
-                                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">{product.categoryName || 'PREMIUM'}</p>
+                                    <p className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em]">{product.categoryName || 'PREMIUM'}</p>
                                 </div>
                                 <h1 className="text-5xl lg:text-6xl font-black text-adaptive tracking-tighter leading-[1.05] mb-4">{product.name}</h1>
 
@@ -182,12 +176,12 @@ export default function ProductDetail() {
                                 <div className="flex items-center gap-4">
                                     <div className="flex items-center gap-1">
                                         {[1, 2, 3, 4, 5].map(star => (
-                                            <span key={star} className={`material-symbols-rounded text-lg ${star <= Math.round(product.rating || 0) ? 'text-amber-400' : 'text-white/10'}`}>star</span>
+                                            <span key={star} className={`material-symbols-rounded text-lg ${star <= Math.round(product.rating || 0) ? 'text-amber-500' : 'text-[var(--border-primary)]'}`}>star</span>
                                         ))}
-                                        <span className="text-sm font-black text-white ml-2">{product.rating || '0.0'}</span>
+                                        <span className="text-sm font-black text-adaptive ml-2">{product.rating ? parseFloat(product.rating).toFixed(1) : '0.0'}</span>
                                     </div>
-                                    <div className="w-px h-4 bg-white/10"></div>
-                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{product.reviewsCount || 0} Customer Reviews</span>
+                                    <div className="w-px h-4 bg-[var(--border-primary)]"></div>
+                                    <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest">{product.reviewsCount || 0} Customer Reviews</span>
                                 </div>
                             </div>
 
@@ -201,10 +195,10 @@ export default function ProductDetail() {
                             {/* Feature Highlights */}
                             {product.highlights?.length > 0 && (
                                 <div className="space-y-4">
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Key Highlights</p>
+                                    <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em]">Key Highlights</p>
                                     <ul className="space-y-3">
                                         {product.highlights.map((h, i) => (
-                                            <li key={i} className="flex items-center gap-3 text-slate-300">
+                                            <li key={i} className="flex items-center gap-3 text-[var(--text-secondary)]">
                                                 <span className="material-symbols-outlined text-primary-500 text-lg">check_circle</span>
                                                 <span className="text-sm font-medium">{h}</span>
                                             </li>
@@ -214,12 +208,12 @@ export default function ProductDetail() {
                             )}
 
                             <div className="border-y border-[var(--border-primary)] py-8">
-                                <p className="text-slate-500 leading-relaxed font-medium mb-8">
+                                <p className="text-[var(--text-secondary)] leading-relaxed font-medium mb-8">
                                     {product.description || 'Experience the future of lifestyle technology with our meticulously crafted collection. Designed for the discerning individual who values performance, elegance, and quality.'}
                                 </p>
                                 <div className="flex flex-wrap gap-2">
                                     {(product.tags || ['Premium', 'Innovation', 'Curated']).map(tag => (
-                                        <span key={tag} className="px-4 py-1.5 bg-[var(--bg-glass)] border border-[var(--border-primary)] text-slate-500 text-[10px] font-black uppercase rounded-full tracking-widest hover:border-primary-500/50 hover:text-primary-500 transition-all cursor-default">
+                                        <span key={tag} className="px-4 py-1.5 bg-[var(--bg-glass)] border border-[var(--border-primary)] text-[var(--text-muted)] text-[10px] font-black uppercase rounded-full tracking-widest hover:border-primary-500/50 hover:text-primary-500 transition-all cursor-default">
                                             {tag}
                                         </span>
                                     ))}
@@ -229,11 +223,11 @@ export default function ProductDetail() {
                             <div className="space-y-6">
                                 <div className="flex items-center gap-6">
                                     <div className="flex flex-col gap-1.5">
-                                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-1">Quantity</span>
-                                        <div className="flex items-center bg-white/5 border border-white/10 rounded-xl p-1 h-12">
+                                        <span className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest pl-1">Quantity</span>
+                                        <div className="flex items-center bg-[var(--bg-glass)] border border-[var(--border-primary)] rounded-xl p-1 h-12 shadow-inner">
                                             <button
                                                 onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                                                className="w-10 h-full flex items-center justify-center hover:bg-white/5 rounded-lg text-slate-400 transition-all"
+                                                className="w-10 h-full flex items-center justify-center hover:bg-[var(--bg-secondary)] rounded-lg text-[var(--text-muted)] transition-all"
                                             >
                                                 <span className="material-symbols-outlined text-sm">remove</span>
                                             </button>
@@ -241,11 +235,11 @@ export default function ProductDetail() {
                                                 type="number"
                                                 value={quantity}
                                                 readOnly
-                                                className="w-10 text-center bg-transparent border-none text-white font-bold text-sm focus:ring-0"
+                                                className="w-10 text-center bg-transparent border-none text-adaptive font-bold text-sm focus:ring-0"
                                             />
                                             <button
                                                 onClick={() => setQuantity(q => Math.min(q + 1, product.quantity || 99))}
-                                                className="w-10 h-full flex items-center justify-center hover:bg-white/5 rounded-lg text-slate-400 transition-all"
+                                                className="w-10 h-full flex items-center justify-center hover:bg-[var(--bg-secondary)] rounded-lg text-[var(--text-muted)] transition-all"
                                             >
                                                 <span className="material-symbols-outlined text-sm">add</span>
                                             </button>
@@ -266,25 +260,25 @@ export default function ProductDetail() {
                                     </div>
                                 </div>
 
-                                <button className="w-full h-12 flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white font-bold rounded-xl hover:bg-white/10 transition-all">
+                                <button className="w-full h-12 flex items-center justify-center gap-3 bg-[var(--bg-glass)] border border-[var(--border-primary)] text-adaptive font-bold rounded-xl hover:bg-[var(--bg-secondary)] transition-all shadow-sm">
                                     <span className="material-symbols-outlined text-sm">favorite</span>
                                     Add to Wishlist
                                 </button>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4 mt-4">
-                                <div className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-2xl">
+                                <div className="flex items-center gap-3 p-4 bg-[var(--bg-glass)] border border-[var(--border-primary)] rounded-2xl shadow-sm">
                                     <span className="material-symbols-outlined text-primary-500">local_shipping</span>
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] font-black text-white uppercase tracking-wider">Free Delivery</span>
-                                        <span className="text-[10px] text-slate-500 font-bold uppercase">2-3 Business Days</span>
+                                        <span className="text-[10px] font-black text-adaptive uppercase tracking-wider">Free Delivery</span>
+                                        <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase">2-3 Business Days</span>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-2xl">
+                                <div className="flex items-center gap-3 p-4 bg-[var(--bg-glass)] border border-[var(--border-primary)] rounded-2xl shadow-sm">
                                     <span className="material-symbols-outlined text-primary-500">verified_user</span>
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] font-black text-white uppercase tracking-wider">3yr Warranty</span>
-                                        <span className="text-[10px] text-slate-500 font-bold uppercase">Enterprise Support</span>
+                                        <span className="text-[10px] font-black text-adaptive uppercase tracking-wider">3yr Warranty</span>
+                                        <span className="text-[10px] text-[var(--text-muted)] font-bold uppercase">Enterprise Support</span>
                                     </div>
                                 </div>
                             </div>
@@ -294,7 +288,7 @@ export default function ProductDetail() {
                     {/* Related Solutions */}
                     <section className="mt-24">
                         <div className="flex items-center justify-between mb-10">
-                            <h3 className="text-3xl font-black text-white tracking-tight">Related Solutions</h3>
+                            <h3 className="text-3xl font-black text-adaptive tracking-tight">Related Solutions</h3>
                             <Link to="/products" className="text-primary-500 font-bold flex items-center gap-1 hover:underline text-sm uppercase tracking-widest">
                                 View Marketplace
                                 <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -302,7 +296,7 @@ export default function ProductDetail() {
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                             {relatedProducts.map(p => (
-                                <Link key={p.id} to={`/products/${p.id}`} className="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-primary-500/50 transition-all flex flex-col">
+                                <Link key={p.id} to={`/products/${p.id}`} className="group bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-2xl overflow-hidden hover:border-primary-500/50 transition-all flex flex-col shadow-sm">
                                     <div className="aspect-square bg-slate-800 relative overflow-hidden">
                                         {p.imageUrls?.[0] ? (
                                             <img src={p.imageUrls[0]} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
@@ -311,7 +305,7 @@ export default function ProductDetail() {
                                         )}
                                     </div>
                                     <div className="p-4">
-                                        <h4 className="font-bold text-white text-sm truncate mb-1">{p.name}</h4>
+                                        <h4 className="font-bold text-adaptive text-sm truncate mb-1">{p.name}</h4>
                                         <span className="text-primary-500 font-black text-sm">₹{p.price?.toLocaleString()}</span>
                                     </div>
                                 </Link>

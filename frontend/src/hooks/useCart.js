@@ -11,7 +11,7 @@ const useCart = create(
             isSyncing: false,
 
             // Add an item to the cart, or increment if it already exists
-            addItem: (product) => {
+            addItem: (product, requestedQuantity = 1) => {
                 if (!product.id) {
                     console.error('addItem: Missing product id', product);
                     return;
@@ -22,7 +22,8 @@ const useCart = create(
                 const stock = Number(product.stockQuantity || product.quantity || DEFAULT_STOCK_LIMIT);
 
                 if (existingItem) {
-                    if (existingItem.quantity >= stock) {
+                    const newQuantity = existingItem.quantity + requestedQuantity;
+                    if (newQuantity > stock) {
                         toast.error(`Stock limit reached! Only ${stock} available.`);
                         return;
                     }
@@ -30,14 +31,18 @@ const useCart = create(
                     set({
                         items: currentItems.map((item) =>
                             String(item.productId) === String(product.id)
-                                ? { ...item, quantity: item.quantity + 1 }
+                                ? { ...item, quantity: newQuantity }
                                 : item
                         )
                     });
-                    toast.success(`Updated ${product.name} quantity`);
+                    toast.success(`Updated ${product.name} quantity to ${newQuantity}`);
                 } else {
                     if (stock <= 0) {
                         toast.error('Out of stock');
+                        return;
+                    }
+                    if (requestedQuantity > stock) {
+                        toast.error(`Only ${stock} available.`);
                         return;
                     }
 
@@ -47,12 +52,12 @@ const useCart = create(
                             skuCode: product.skuCode || product.sku,
                             name: product.name,
                             price: product.price,
-                            quantity: 1,
+                            quantity: requestedQuantity,
                             stockQuantity: stock,
                             product: product
                         }]
                     });
-                    toast.success(`Added ${product.name} to cart`);
+                    toast.success(`Added ${requestedQuantity} ${product.name} to cart`);
                 }
             },
 

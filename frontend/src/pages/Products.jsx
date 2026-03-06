@@ -102,15 +102,10 @@ export default function Products() {
                 {/* Sidebar Filters */}
                 <aside className="w-full md:w-64 flex-shrink-0 space-y-10">
                     <div>
-                        <h3 className="text-xl font-black text-white mb-6 flex items-center gap-2">
-                            <span className="material-symbols-outlined text-primary-500">filter_list</span>
-                            Filters
-                        </h3>
-
                         {/* Category Filter */}
                         <div className="flex items-center justify-between mb-8">
-                            <h3 className="text-xl font-black text-adaptive tracking-tight">Luxury Filter</h3>
-                            <p className="text-xs font-bold uppercase tracking-widest text-slate-500">Category</p>
+                            <h3 className="text-xl font-black text-adaptive tracking-tight">Filters</h3>
+                            <p className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Category</p>
                         </div>
                         <div className="space-y-1">
                             {categories.map(cat => (
@@ -119,7 +114,7 @@ export default function Products() {
                                     onClick={() => setSelectedCategory(cat)}
                                     className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${selectedCategory === cat
                                         ? 'bg-primary-500/10 text-primary-500 font-bold'
-                                        : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
+                                        : 'text-[var(--text-secondary)] hover:bg-[var(--bg-glass)] hover:text-[var(--text-primary)]'
                                         }`}
                                 >
                                     <span className="text-sm">{cat === 'ALL' ? 'All Products' : cat}</span>
@@ -141,9 +136,9 @@ export default function Products() {
                                     step="1000"
                                     value={priceRange}
                                     onChange={e => setPriceRange(parseInt(e.target.value))}
-                                    className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary-500"
+                                    className="w-full h-1.5 bg-[var(--border-primary)] rounded-lg appearance-none cursor-pointer accent-primary-500"
                                 />
-                                <div className="flex justify-between mt-3 text-[10px] font-bold text-slate-500 uppercase">
+                                <div className="flex justify-between mt-3 text-[10px] font-bold text-[var(--text-muted)] uppercase">
                                     <span>₹0</span>
                                     <span>₹{priceRange.toLocaleString()}+</span>
                                 </div>
@@ -157,13 +152,13 @@ export default function Products() {
                     {/* Header & Search */}
                     <div className="mb-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
                         <div>
-                            <div className="flex items-center gap-2 text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">
+                            <div className="flex items-center gap-2 text-[var(--text-muted)] text-xs font-bold uppercase tracking-wider mb-2">
                                 <Link to="/home" className="hover:text-primary-500">Home</Link>
                                 <span className="material-symbols-outlined text-[10px]">chevron_right</span>
                                 <span className="text-primary-500">Marketplace</span>
                             </div>
                             <h1 className="text-4xl font-black text-adaptive tracking-tight">Catalog</h1>
-                            <p className="text-slate-500 text-sm mt-1 font-medium">Premium hardware optimized for luxury living.</p>
+                            <p className="text-[var(--text-secondary)] text-sm mt-1 font-medium">Premium hardware optimized for luxury living.</p>
                         </div>
 
                         <div className="flex flex-col sm:flex-row items-center gap-3">
@@ -174,7 +169,7 @@ export default function Products() {
                                     placeholder="Search catalog..."
                                     value={searchTerm}
                                     onChange={e => setSearchTerm(e.target.value)}
-                                    className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-xl pl-10 pr-4 py-2 text-sm text-adaptive focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all placeholder:text-slate-500"
+                                    className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-xl pl-10 pr-4 py-2 text-sm text-adaptive focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all placeholder:text-[var(--text-muted)]"
                                 />
                             </div>
                             <select
@@ -193,7 +188,7 @@ export default function Products() {
                     {loading ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {[1, 2, 3, 4, 5, 6].map(i => (
-                                <div key={i} className="h-80 bg-white/5 border border-white/10 rounded-2xl animate-pulse"></div>
+                                <div key={i} className="h-80 bg-[var(--bg-glass)] border border-[var(--border-primary)] rounded-2xl animate-pulse"></div>
                             ))}
                         </div>
                     ) : error ? (
@@ -203,10 +198,10 @@ export default function Products() {
                             <button onClick={fetchProducts} className="mt-6 bg-primary-500 px-8 py-3 rounded-xl font-bold text-white hover:bg-primary-600 transition-all">Retry Connection</button>
                         </div>
                     ) : filtered.length === 0 ? (
-                        <div className="bg-white/5 border border-white/10 rounded-3xl p-16 text-center">
-                            <span className="material-symbols-outlined text-6xl text-slate-700 mb-4">search_off</span>
-                            <h3 className="text-white font-bold text-xl mb-2">No components found</h3>
-                            <p className="text-slate-500">Try adjusting your search or filters to find what you need.</p>
+                        <div className="bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-3xl p-16 text-center shadow-lg">
+                            <span className="material-symbols-outlined text-6xl text-[var(--text-muted)] mb-4">search_off</span>
+                            <h3 className="text-[var(--text-primary)] font-bold text-xl mb-2">No components found</h3>
+                            <p className="text-[var(--text-secondary)]">Try adjusting your search or filters to find what you need.</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -241,17 +236,17 @@ export default function Products() {
                                     <div className="p-6 flex flex-col flex-1">
                                         <div className="flex justify-between items-start mb-3">
                                             <div className="flex flex-col gap-1">
-                                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{product.categoryName || 'GENERAL'}</p>
-                                                <h3 className="font-bold text-adaptive group-hover:text-primary-400 transition-colors truncate pr-4">{product.name}</h3>
+                                                <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">{product.categoryName || 'GENERAL'}</p>
+                                                <h3 className="font-bold text-adaptive group-hover:text-primary-500 transition-colors truncate pr-4">{product.name}</h3>
                                             </div>
                                             {product.rating > 0 && (
-                                                <div className="flex items-center gap-1 bg-white/5 px-2 py-1 rounded-lg">
-                                                    <span className="material-symbols-rounded text-sm text-amber-400">star</span>
-                                                    <span className="text-[10px] font-bold text-slate-300">{product.rating}</span>
+                                                <div className="flex items-center gap-1 bg-[var(--bg-glass)] px-2 py-1 rounded-lg border border-[var(--border-primary)]">
+                                                    <span className="material-symbols-rounded text-sm text-amber-500">star</span>
+                                                    <span className="text-[10px] font-bold text-[var(--text-secondary)]">{product.rating}</span>
                                                 </div>
                                             )}
                                         </div>
-                                        <p className="text-xs text-slate-500 mb-6 line-clamp-2 leading-relaxed font-medium">{product.description}</p>
+                                        <p className="text-xs text-[var(--text-secondary)] mb-6 line-clamp-2 leading-relaxed font-medium">{product.description}</p>
                                         <div className="mt-auto pt-6 border-t border-[var(--border-primary)] flex items-center justify-between">
                                             <span className="text-xl font-black text-adaptive">₹{(product.price ?? 0).toLocaleString()}</span>
                                             <button
@@ -273,7 +268,7 @@ export default function Products() {
                         </div>
                     )}
                 </section>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }

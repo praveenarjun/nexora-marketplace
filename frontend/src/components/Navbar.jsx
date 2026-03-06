@@ -45,7 +45,7 @@ export default function Navbar() {
                 <div className="flex items-center gap-6">
                     {/* Notifications (Stitch Detail) */}
                     {isAuthenticated() && (
-                        <button className="relative p-2 rounded-xl hover:bg-white/5 transition-colors text-slate-400 hover:text-white hidden sm:block">
+                        <button className="relative p-2 rounded-xl hover:bg-[var(--bg-glass)] transition-colors text-[var(--text-muted)] hover:text-[var(--text-primary)] hidden sm:block">
                             <span className="material-symbols-outlined">notifications</span>
                             <span className="absolute top-2 right-2 w-2 h-2 bg-primary-500 rounded-full border border-primary-500/50"></span>
                         </button>
@@ -75,16 +75,16 @@ export default function Navbar() {
                     {/* User / Auth */}
                     {isAuthenticated() ? (
                         <div className="flex items-center gap-2 ml-2">
-                            <Link to="/profile" className="w-10 h-10 rounded-full border-2 border-white/10 hover:border-primary-500/50 transition-all overflow-hidden bg-slate-800 flex items-center justify-center">
+                            <Link to="/profile" className="w-10 h-10 rounded-full border-2 border-[var(--border-primary)] hover:border-primary-500/50 transition-all overflow-hidden bg-[var(--bg-secondary)] flex items-center justify-center">
                                 {user?.avatarUrl ? (
                                     <img src={user.avatarUrl} alt="profile" className="w-full h-full object-cover" />
                                 ) : (
-                                    <span className="material-symbols-outlined text-slate-500">person</span>
+                                    <span className="material-symbols-outlined text-[var(--text-muted)]">person</span>
                                 )}
                             </Link>
                             <button
                                 onClick={handleLogout}
-                                className="hidden lg:flex items-center justify-center w-10 h-10 rounded-xl hover:bg-red-500/10 text-slate-500 hover:text-red-400 transition-colors"
+                                className="hidden lg:flex items-center justify-center w-10 h-10 rounded-xl hover:bg-red-500/10 text-[var(--text-muted)] hover:text-red-500 transition-colors"
                                 title="Logout"
                             >
                                 <span className="material-symbols-outlined">logout</span>
@@ -104,7 +104,7 @@ export default function Navbar() {
                     {/* Mobile Toggle */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden p-2 rounded-xl bg-white/5 text-slate-300 ml-2"
+                        className="md:hidden p-2 rounded-xl bg-[var(--bg-glass)] text-[var(--text-muted)] ml-2"
                     >
                         <span className="material-symbols-outlined">{isOpen ? 'close' : 'menu'}</span>
                     </button>
@@ -113,20 +113,20 @@ export default function Navbar() {
 
             {/* Mobile Navigation Dropdown */}
             {isOpen && (
-                <div className="absolute top-[72px] left-0 w-full bg-[#0a0b10] border-b border-white/10 p-6 md:hidden space-y-4 animate-in fade-in slide-in-from-top-4 duration-200">
+                <div className="absolute top-[72px] left-0 w-full bg-[var(--bg-primary)] border-b border-[var(--border-primary)] p-6 md:hidden space-y-4 animate-in fade-in slide-in-from-top-4 duration-200 shadow-2xl">
                     <div className="relative mb-6">
-                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">search</span>
+                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]">search</span>
                         <input
                             type="text"
                             placeholder="Search..."
-                            className="w-full bg-[#1c1d26] border border-white/5 rounded-xl pl-10 pr-4 py-3 text-sm text-white"
+                            className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-xl pl-10 pr-4 py-3 text-sm text-[var(--text-primary)]"
                         />
                     </div>
 
                     <nav className="grid grid-cols-1 gap-1">
-                        <Link to="/products?category=electronics" onClick={() => setIsOpen(false)} className="px-4 py-3 rounded-xl hover:bg-white/5 text-slate-400 font-bold uppercase tracking-widest text-xs">Electronics</Link>
-                        <Link to="/products?category=fashion" onClick={() => setIsOpen(false)} className="px-4 py-3 rounded-xl hover:bg-white/5 text-slate-400 font-bold uppercase tracking-widest text-xs">Fashion</Link>
-                        <Link to="/products?category=living" onClick={() => setIsOpen(false)} className="px-4 py-3 rounded-xl hover:bg-white/5 text-slate-400 font-bold uppercase tracking-widest text-xs">Living</Link>
+                        <Link to="/products?category=electronics" onClick={() => setIsOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[var(--bg-glass)] text-[var(--text-secondary)] font-bold uppercase tracking-widest text-xs">Electronics</Link>
+                        <Link to="/products?category=fashion" onClick={() => setIsOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[var(--bg-glass)] text-[var(--text-secondary)] font-bold uppercase tracking-widest text-xs">Fashion</Link>
+                        <Link to="/products?category=living" onClick={() => setIsOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[var(--bg-glass)] text-[var(--text-secondary)] font-bold uppercase tracking-widest text-xs">Living</Link>
                     </nav>
 
                     <div className="pt-6 border-t border-[var(--border-primary)] flex flex-col gap-3">
