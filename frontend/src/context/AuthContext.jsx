@@ -36,14 +36,28 @@ export const AuthProvider = ({ children }) => {
         return response.data;
     }, []);
 
-    const logout = useCallback(() => {
+    const logout = useCallback(async () => {
+        // 1. Flush cart to backend while token still exists
+        try {
+            const cart = useCart.getState();
+            if (user && cart.items.length > 0) {
+                console.log('Final cart flush before logout...');
+                const currentCartString = JSON.stringify(cart.items);
+                // Use the raw api instance to ensure headers are kept
+                await api.post('/api/users/profile/cart', currentCartString, {
+                    headers: { 'Content-Type': 'text/plain' }
+                });
+            }
+        } catch (err) {
+            console.warn('Final cart flush failed, proceeding with logout', err);
+        }
+
+        // 2. Clear local storage and state
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        // Clear local cart storage safely
         localStorage.removeItem('shopease-cart-storage');
-        // Reset the cart state in the store
+
         try {
-            // Access the store directly to clear it
             const cart = useCart.getState();
             if (cart && cart.clearCart) {
                 cart.clearCart();
@@ -52,7 +66,7 @@ export const AuthProvider = ({ children }) => {
             console.error('Logout cart clear failed', err);
         }
         setUser(null);
-    }, []);
+    }, [user]);
 
     const isAdmin = useCallback(() => {
         return user?.role === 'ADMIN';

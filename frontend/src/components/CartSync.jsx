@@ -107,10 +107,10 @@ export default function CartSync() {
         return () => clearTimeout(reminderTimer);
     }, [cart.items.length, isAuthenticated, user?.email]);
 
-    // 4. Handle Cleanup / Tab Close / Logout race condition
+    // 4. Handle Cleanup (No longer flushing on unmount to avoid race conditions with logout state clearing)
     useEffect(() => {
         return () => {
-            flushCart();
+            if (pushTimeoutRef.current) clearTimeout(pushTimeoutRef.current);
         };
     }, []);
 
