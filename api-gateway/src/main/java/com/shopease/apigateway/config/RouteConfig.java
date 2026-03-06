@@ -89,6 +89,10 @@ public class RouteConfig {
                                                                 authFilter.apply(new AuthenticationFilter.Config())))
                                                 .uri("lb://inventory-service"))
 
+                                .route("notification-service-public", r -> r
+                                                .path("/api/notifications/**")
+                                                .uri("lb://notification-service"))
+
                                 .build();
         }
 }
