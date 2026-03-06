@@ -8,12 +8,18 @@ const useCart = create(
     persist(
         (set, get) => ({
             items: [],
+            isSyncing: false,
 
             // Add an item to the cart, or increment if it already exists
             addItem: (product) => {
+                if (!product.id) {
+                    console.error('addItem: Missing product id', product);
+                    return;
+                }
                 const currentItems = get().items;
-                const existingItem = currentItems.find((item) => item.productId === product.id);
-                const stock = product.stockQuantity ?? DEFAULT_STOCK_LIMIT;
+                // Normalize IDs to handle string/number mismatch
+                const existingItem = currentItems.find((item) => String(item.productId) === String(product.id));
+                const stock = product.stockQuantity || product.quantity || DEFAULT_STOCK_LIMIT;
 
                 if (existingItem) {
                     // Check if we hit inventory limits (Assuming max 5 per customer for safety if missing stock data)
@@ -24,7 +30,7 @@ const useCart = create(
 
                     set({
                         items: currentItems.map((item) =>
-                            item.productId === product.id
+                            String(item.productId) === String(product.id)
                                 ? { ...item, quantity: item.quantity + 1 }
                                 : item
                         )
@@ -39,17 +45,22 @@ const useCart = create(
                     set({
                         items: [...currentItems, {
                             productId: product.id,
-                            skuCode: product.skuCode,
+                            skuCode: product.skuCode || product.sku,
                             name: product.name,
                             price: product.price,
-                            quantity: 1,
-                            stockQuantity: product.stockQuantity,
+                            quantity: product.quantity || 1,
+                            stockQuantity: stock,
                             // Keep original product data for rendering
                             product: product
                         }]
                     });
                     toast.success(`Added ${product.name} to cart`);
                 }
+            },
+
+            // Set items directly (used for backend sync)
+            setItems: (items) => {
+                set({ items: Array.isArray(items) ? items : [] });
             },
 
             // Remove item completely

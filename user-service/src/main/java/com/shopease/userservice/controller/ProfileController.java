@@ -31,4 +31,17 @@ public class ProfileController {
     public ResponseEntity<UserProfileResponse> getInternalUser(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getInternalUserById(userId));
     }
+
+    @GetMapping("/profile/cart")
+    public ResponseEntity<String> getCart(@RequestHeader("X-User-Id") Long userId) {
+        return ResponseEntity.ok(userService.getCartData(userId));
+    }
+
+    @PostMapping("/profile/cart")
+    public ResponseEntity<Void> updateCart(
+            @RequestHeader("X-User-Id") Long userId,
+            @RequestBody String cartData) {
+        userService.updateCartData(userId, cartData);
+        return ResponseEntity.ok().build();
+    }
 }

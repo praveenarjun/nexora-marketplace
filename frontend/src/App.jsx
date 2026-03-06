@@ -23,6 +23,8 @@ import AdminProducts from './pages/admin/AdminProducts';
 import AdminInventory from './pages/admin/AdminInventory';
 import AdminOrders from './pages/admin/AdminOrders';
 
+import CartSync from './components/CartSync';
+
 // Smart root: Landing for guests, Home for logged-in users, OAuthCallback if token present
 function RootRoute() {
   const { isAuthenticated } = useContext(AuthContext);
@@ -36,6 +38,7 @@ function RootRoute() {
 function App() {
   return (
     <>
+      <CartSync />
       {/* Custom cursor trail — desktop only */}
       <div className="hidden lg:block">
         <CursorEffect />

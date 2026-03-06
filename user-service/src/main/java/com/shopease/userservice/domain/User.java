@@ -44,6 +44,9 @@ public class User {
     private String otpCode;
     private LocalDateTime otpExpiryTime;
 
+    @Column(columnDefinition = "TEXT")
+    private String cartData;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;

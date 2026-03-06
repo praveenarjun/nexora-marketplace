@@ -132,6 +132,32 @@ export default function Cart() {
                                 PROCEED TO CHECKOUT
                                 <span className="material-symbols-outlined text-xl">payments</span>
                             </button>
+
+                            <button
+                                onClick={async () => {
+                                    const { user } = await import('../context/AuthContext').then(m => ({ user: JSON.parse(localStorage.getItem('user')) }));
+                                    if (!user) {
+                                        toast.error('Please login to use this feature');
+                                        return;
+                                    }
+                                    const loadingToast = toast.loading('Sending reminder...');
+                                    try {
+                                        await api.post('/api/notifications/abandoned-cart', {
+                                            email: user.email,
+                                            firstName: user.firstName,
+                                            timestamp: new Date().toISOString()
+                                        });
+                                        toast.success('Check your inbox! Reminder sent.', { id: loadingToast });
+                                    } catch (err) {
+                                        toast.error('Failed to send email. Check mail service health.', { id: loadingToast });
+                                    }
+                                }}
+                                className="w-full bg-white/5 border border-white/10 py-3 rounded-2xl font-bold text-slate-300 text-sm hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+                            >
+                                <span className="material-symbols-outlined text-lg">mail</span>
+                                REMIND ME VIA EMAIL
+                            </button>
+
                             <p className="text-[10px] text-slate-600 text-center font-bold uppercase tracking-widest leading-relaxed">
                                 Security encrypted checkout. <br />All transactions are processed via bank-grade SSL.
                             </p>
@@ -142,3 +168,5 @@ export default function Cart() {
         </div>
     );
 }
+
+import api from '../services/api';

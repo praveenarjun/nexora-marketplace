@@ -44,6 +44,20 @@ public class UserService {
         return mapToProfileResponse(user);
     }
 
+    @Transactional(readOnly = true)
+    public String getCartData(Long userId) {
+        User user = getUserByIdOrThrow(userId);
+        return user.getCartData();
+    }
+
+    @Transactional
+    public void updateCartData(Long userId, String cartData) {
+        User user = getUserByIdOrThrow(userId);
+        user.setCartData(cartData);
+        userRepository.save(user);
+        log.info("Updated cart for user ID: {}", userId);
+    }
+
     private User getUserByIdOrThrow(Long userId) {
         if (userId == null) {
             throw new IllegalArgumentException("userId must not be null");
