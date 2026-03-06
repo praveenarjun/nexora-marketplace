@@ -21,11 +21,9 @@ export default function CartSync() {
                         try {
                             const items = JSON.parse(backendCartData);
                             if (Array.isArray(items) && items.length > 0) {
-                                // Merge logic: Prefer backend if it has items, or just overwrite local
-                                // For now, simple overwrite to ensure cross-device consistency
-                                cart.setItems(items);
-                                lastPushedCart.current = JSON.stringify(items);
-                                console.log('✅ Cart synced from backend');
+                                // Smart merge: combine guest items with backend items
+                                cart.mergeItems(items);
+                                console.log('✅ Cart merged from backend');
                             }
                         } catch (e) {
                             console.error('Failed to parse backend cart', e);
@@ -35,6 +33,8 @@ export default function CartSync() {
                 .catch(err => console.error('Failed to fetch cart from backend', err))
                 .finally(() => {
                     isInitialSync.current = false;
+                    // Seed lastPushedCart after merge to avoid immediate push back
+                    lastPushedCart.current = JSON.stringify(cart.items);
                 });
         }
     }, [user, isAuthenticated, cart.setItems]);

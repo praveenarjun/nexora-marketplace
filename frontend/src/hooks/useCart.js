@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { toast } from 'react-hot-toast';
 
-const DEFAULT_STOCK_LIMIT = 5;
+const DEFAULT_STOCK_LIMIT = 99;
 
 const useCart = create(
     persist(
@@ -19,12 +19,11 @@ const useCart = create(
                 const currentItems = get().items;
                 // Normalize IDs to handle string/number mismatch
                 const existingItem = currentItems.find((item) => String(item.productId) === String(product.id));
-                const stock = product.stockQuantity || product.quantity || DEFAULT_STOCK_LIMIT;
+                const stock = Number(product.stockQuantity || product.quantity || DEFAULT_STOCK_LIMIT);
 
                 if (existingItem) {
-                    // Check if we hit inventory limits (Assuming max 5 per customer for safety if missing stock data)
                     if (existingItem.quantity >= stock) {
-                        toast.error(`Cannot add more. Only ${stock} in stock!`);
+                        toast.error(`Stock limit reached! Only ${stock} available.`);
                         return;
                     }
 
@@ -35,10 +34,10 @@ const useCart = create(
                                 : item
                         )
                     });
-                    toast.success(`Increased ${product.name} quantity`);
+                    toast.success(`Updated ${product.name} quantity`);
                 } else {
                     if (stock <= 0) {
-                        toast.error('This product is out of stock');
+                        toast.error('Out of stock');
                         return;
                     }
 
@@ -48,9 +47,8 @@ const useCart = create(
                             skuCode: product.skuCode || product.sku,
                             name: product.name,
                             price: product.price,
-                            quantity: product.quantity || 1,
+                            quantity: 1,
                             stockQuantity: stock,
-                            // Keep original product data for rendering
                             product: product
                         }]
                     });
@@ -63,31 +61,57 @@ const useCart = create(
                 set({ items: Array.isArray(items) ? items : [] });
             },
 
+            // Merge items (used for guest -> user transitions)
+            mergeItems: (backendItems) => {
+                const localItems = get().items;
+                const mergedMap = new Map();
+
+                // Start with local items (guest cart)
+                localItems.forEach(item => mergedMap.set(String(item.productId), { ...item }));
+
+                // Merge backend items
+                backendItems.forEach(backendItem => {
+                    const id = String(backendItem.productId);
+                    if (mergedMap.has(id)) {
+                        // If exists in both, prefer higher quantity or sum (taking sum for better UX)
+                        const existing = mergedMap.get(id);
+                        const newQty = Math.min(existing.quantity + backendItem.quantity, backendItem.stockQuantity || DEFAULT_STOCK_LIMIT);
+                        mergedMap.set(id, { ...existing, quantity: newQty });
+                    } else {
+                        mergedMap.set(id, { ...backendItem });
+                    }
+                });
+
+                set({ items: Array.from(mergedMap.values()) });
+            },
+
             // Remove item completely
             removeItem: (productId) => {
                 set({
-                    items: get().items.filter((item) => item.productId !== productId)
+                    items: get().items.filter((item) => String(item.productId) !== String(productId))
                 });
-                toast.success('Item removed from cart');
+                toast.success('Item removed');
             },
 
             // Update specific quantity
             updateQuantity: (productId, quantity) => {
+                const id = String(productId);
                 if (quantity < 1) {
-                    get().removeItem(productId);
+                    get().removeItem(id);
                     return;
                 }
 
-                const item = get().items.find((i) => i.productId === productId);
-                const stock = item?.product?.stockQuantity ?? DEFAULT_STOCK_LIMIT;
+                const item = get().items.find((i) => String(i.productId) === id);
+                const stock = Number(item?.stockQuantity || DEFAULT_STOCK_LIMIT);
+
                 if (quantity > stock) {
-                    toast.error(`Cannot set quantity above ${stock} (stock limit)`);
+                    toast.error(`Only ${stock} units available`);
                     return;
                 }
 
                 set({
                     items: get().items.map((item) =>
-                        item.productId === productId ? { ...item, quantity } : item
+                        String(item.productId) === id ? { ...item, quantity } : item
                     )
                 });
             },
