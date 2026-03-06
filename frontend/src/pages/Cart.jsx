@@ -1,10 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
 import useCart from '../hooks/useCart';
 import { toast } from 'react-hot-toast';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import api from '../services/api';
 
 export default function Cart() {
     const cart = useCart();
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
 
     const subtotal = cart.getSubtotal();
     const shipping = cart.getShipping();
@@ -135,7 +139,6 @@ export default function Cart() {
 
                             <button
                                 onClick={async () => {
-                                    const { user } = await import('../context/AuthContext').then(m => ({ user: JSON.parse(localStorage.getItem('user')) }));
                                     if (!user) {
                                         toast.error('Please login to use this feature');
                                         return;
@@ -168,5 +171,3 @@ export default function Cart() {
         </div>
     );
 }
-
-import api from '../services/api';

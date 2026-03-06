@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import api from '../services/api';
+import useCart from '../hooks/useCart';
 
 export const AuthContext = createContext();
 
@@ -38,10 +39,19 @@ export const AuthProvider = ({ children }) => {
     const logout = useCallback(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        setUser(null);
         // Clear local cart storage safely
         localStorage.removeItem('shopease-cart-storage');
-        // If we want to be reactive, we'd need to import useCart here or handle it in a listener
+        // Reset the cart state in the store
+        try {
+            // Access the store directly to clear it
+            const cart = useCart.getState();
+            if (cart && cart.clearCart) {
+                cart.clearCart();
+            }
+        } catch (err) {
+            console.error('Logout cart clear failed', err);
+        }
+        setUser(null);
     }, []);
 
     const isAdmin = useCallback(() => {
