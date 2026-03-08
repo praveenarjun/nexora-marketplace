@@ -30,14 +30,14 @@ public class RouteConfig {
                                                 .path("/login/oauth2/code/**")
                                                 .uri("lb://user-service"))
                                 .route("product-service-public-get", r -> r
-                                                .method(HttpMethod.GET)
+                                                .method(HttpMethod.GET, HttpMethod.OPTIONS)
                                                 .and()
                                                 .path("/api/products/**")
                                                 .filters(f -> f.rewritePath("/api/products(?<segment>.*)",
                                                                 "/api/v1/products${segment}"))
                                                 .uri("lb://product-service"))
                                 .route("category-service-public-get", r -> r
-                                                .method(HttpMethod.GET)
+                                                .method(HttpMethod.GET, HttpMethod.OPTIONS)
                                                 .and()
                                                 .path("/api/categories/**")
                                                 .filters(f -> f.rewritePath("/api/categories(?<segment>.*)",
