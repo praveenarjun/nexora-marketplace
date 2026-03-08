@@ -28,6 +28,12 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
 
+            // Permit OPTIONS requests for CORS preflight (tokens are usually not sent with
+            // OPTIONS)
+            if (request.getMethod().name().equals("OPTIONS")) {
+                return chain.filter(exchange);
+            }
+
             // Check if Authorization header is present
             if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                 log.error("Missing authorization header");
@@ -51,7 +57,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             try {
                 jwtUtil.validateToken(authHeader);
                 Claims claims = jwtUtil.getClaims(authHeader);
-                
+
                 String userId = claims.getSubject();
                 // We use dynamic extraction since roles/emails could be mapped differently
                 String email = claims.get("email", String.class);
