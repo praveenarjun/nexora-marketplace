@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -30,7 +31,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
             // Permit OPTIONS requests for CORS preflight (tokens are usually not sent with
             // OPTIONS)
-            if (request.getMethod().name().equals("OPTIONS")) {
+            if (HttpMethod.OPTIONS.equals(request.getMethod())) {
                 return chain.filter(exchange);
             }
 
