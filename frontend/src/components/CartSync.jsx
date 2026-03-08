@@ -33,31 +33,40 @@ export default function CartSync() {
         }
 
         if (isAuthenticated() && isInitialSync.current) {
-            console.log('📡 Syncing cart from backend for user:', user.email);
+            console.log('📡 [CartSync] Syncing cart from backend for user:', user.email);
             api.get('/api/users/profile/cart')
                 .then(res => {
                     const backendCartData = res.data;
+                    const guestItems = cart.items;
+
                     if (backendCartData) {
                         try {
                             const items = JSON.parse(backendCartData);
-                            if (Array.isArray(items) && items.length > 0) {
-                                // Smart merge: combine guest items with backend items
+                            if (Array.isArray(items)) {
+                                console.log(`✅ [CartSync] Found ${items.length} items on backend. Merging...`);
                                 cart.mergeItems(items);
-                                console.log('✅ Cart merged from backend');
                             }
                         } catch (e) {
-                            console.error('Failed to parse backend cart', e);
+                            console.error('❌ [CartSync] Failed to parse backend cart JSON', e);
                         }
+                    } else if (guestItems.length > 0) {
+                        // If backend is empty but guest has items, push them now!
+                        console.log('📤 [CartSync] Backend empty, pushing guest cart to server...');
+                        const guestCartString = JSON.stringify(guestItems);
+                        api.post('/api/users/profile/cart', guestCartString, {
+                            headers: { 'Content-Type': 'text/plain' }
+                        }).catch(err => console.error('Guest push failed', err));
                     }
                 })
-                .catch(err => console.error('Failed to fetch cart from backend', err))
+                .catch(err => console.error('❌ [CartSync] Failed to fetch cart from backend', err))
                 .finally(() => {
                     isInitialSync.current = false;
-                    // Seed lastPushedCart after merge to avoid immediate push back
-                    lastPushedCart.current = JSON.stringify(cart.items);
+                    // Seed lastPushedCart with current state to prevent immediate re-push
+                    lastPushedCart.current = JSON.stringify(useCart.getState().items);
+                    console.log('🏁 [CartSync] Initial sync complete');
                 });
         }
-    }, [user?.id, isAuthenticated, cart.mergeItems]);
+    }, [user?.id, isAuthenticated]);
 
     // 2. Push Local Changes to Backend
     useEffect(() => {

@@ -15,8 +15,9 @@ spring:
               - DELETE
               - OPTIONS
             allowedHeaders: "*"
-      default-filters:
-        - name: PreserveHostHeader
+      discovery:
+        locator:
+          enabled: false
       x-forwarded:
         enabled: true
         for-enabled: true
@@ -24,47 +25,6 @@ spring:
         port-enabled: true
         proto-enabled: true
         prefix-enabled: true
-      routes:
-        - id: product-service
-          uri: lb://product-service
-          predicates:
-            - Path=/api/products/**
-          filters:
-            - RewritePath=/api/products(?<segment>.*), /api/v1/products${segment}
-        - id: category-service
-          uri: lb://product-service
-          predicates:
-            - Path=/api/categories/**
-          filters:
-            - RewritePath=/api/categories(?<segment>.*), /api/v1/categories${segment}
-        - id: order-service
-          uri: lb://order-service
-          predicates:
-            - Path=/api/orders/**
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/api/users/**
-        - id: auth-service
-          uri: lb://user-service
-          predicates:
-            - Path=/api/auth/**
-        - id: oauth2-auth
-          uri: lb://user-service
-          predicates:
-            - Path=/oauth2/**
-        - id: oauth2-login
-          uri: lb://user-service
-          predicates:
-            - Path=/login/oauth2/**
-        - id: inventory-service
-          uri: lb://inventory-service
-          predicates:
-            - Path=/api/inventory/**
-        - id: notification-service
-          uri: lb://notification-service
-          predicates:
-            - Path=/api/notifications/**
 
 eureka:
   instance:
