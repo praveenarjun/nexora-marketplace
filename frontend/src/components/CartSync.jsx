@@ -41,13 +41,21 @@ export default function CartSync() {
 
                     if (backendCartData) {
                         try {
-                            const items = JSON.parse(backendCartData);
+                            // If it's already an object (parsed by axios), use it. 
+                            // Otherwise, parse it.
+                            let items = backendCartData;
+                            if (typeof backendCartData === 'string') {
+                                items = JSON.parse(backendCartData);
+                            }
+
                             if (Array.isArray(items)) {
                                 console.log(`✅ [CartSync] Found ${items.length} items on backend. Merging...`);
                                 cart.mergeItems(items);
+                            } else {
+                                console.warn('⚠️ [CartSync] Backend cart data is not an array:', items);
                             }
                         } catch (e) {
-                            console.error('❌ [CartSync] Failed to parse backend cart JSON', e);
+                            console.error('❌ [CartSync] Failed to parse backend cart', e);
                         }
                     } else if (guestItems.length > 0) {
                         // If backend is empty but guest has items, push them now!
