@@ -148,11 +148,8 @@ public class ProductServiceImpl implements ProductService {
                 Product product = productRepository.findById(id)
                                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
 
-                // Soft-delete: set status to ARCHIVED so it is excluded from all filter
-                // queries.
-                // ProductSpecification already filters out ARCHIVED and DELETED products.
-                product.setStatus("ARCHIVED");
-                productRepository.save(product);
+                // Hard-delete: Remove from database entirely.
+                productRepository.delete(product);
                 eventPublisher.publishProductDeleted(id);
         }
 
@@ -160,7 +157,7 @@ public class ProductServiceImpl implements ProductService {
         @Transactional(readOnly = true)
         @org.springframework.cache.annotation.Cacheable(value = "products", key = "'featured_' + #pageable.pageNumber + '_' + #pageable.pageSize + '_' + #pageable.sort.toString()")
         public Page<ProductDTO> getFeaturedProducts(Pageable pageable) {
-                return productRepository.findByFeaturedTrue(pageable)
+                return productRepository.findByFeaturedTrueAndStatus("ACTIVE", pageable)
                                 .map(productMapper::toDTO);
         }
 

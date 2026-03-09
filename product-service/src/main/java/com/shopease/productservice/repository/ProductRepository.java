@@ -14,29 +14,29 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>,
-        org.springframework.data.jpa.repository.JpaSpecificationExecutor<Product> {
-    @Override
-    @NonNull
-    @EntityGraph(attributePaths = { "category", "images", "highlights", "tags" })
-    Page<Product> findAll(@NonNull org.springframework.data.jpa.domain.Specification<Product> spec,
-            @NonNull Pageable pageable);
+                org.springframework.data.jpa.repository.JpaSpecificationExecutor<Product> {
+        @Override
+        @NonNull
+        @EntityGraph(attributePaths = { "category", "images", "highlights", "tags" })
+        Page<Product> findAll(@NonNull org.springframework.data.jpa.domain.Specification<Product> spec,
+                        @NonNull Pageable pageable);
 
-    @Override
-    @NonNull
-    @EntityGraph(attributePaths = { "category", "images", "highlights", "tags" })
-    Page<Product> findAll(@NonNull Pageable pageable);
+        @Override
+        @NonNull
+        @EntityGraph(attributePaths = { "category", "images", "highlights", "tags" })
+        Page<Product> findAll(@NonNull Pageable pageable);
 
-    @EntityGraph(attributePaths = { "category", "images", "highlights", "tags" })
-    Optional<Product> findBySku(String sku);
+        @EntityGraph(attributePaths = { "category", "images", "highlights", "tags" })
+        Optional<Product> findBySku(String sku);
 
-    boolean existsBySku(String sku);
+        boolean existsBySku(String sku);
 
-    long countByCategoryId(Long categoryId);
+        long countByCategoryId(Long categoryId);
 
-    @EntityGraph(attributePaths = { "category", "images", "highlights", "tags" })
-    Page<Product> findByFeaturedTrue(Pageable pageable);
+        @EntityGraph(attributePaths = { "category", "images", "highlights", "tags" })
+        Page<Product> findByFeaturedTrueAndStatus(String status, Pageable pageable);
 
-    @EntityGraph(attributePaths = { "category", "images", "highlights", "tags" })
-    @Query("SELECT p FROM Product p WHERE p.quantity <= COALESCE(p.lowStockThreshold, 5)")
-    Page<Product> findLowStockProducts(Pageable pageable);
+        @EntityGraph(attributePaths = { "category", "images", "highlights", "tags" })
+        @Query("SELECT p FROM Product p WHERE p.quantity <= COALESCE(p.lowStockThreshold, 5) AND p.status = 'ACTIVE'")
+        Page<Product> findLowStockProducts(Pageable pageable);
 }
