@@ -1,6 +1,9 @@
 server:
   port: 8085
 
+app:
+  frontend-url: ${FRONTEND_URL:https://shop.praveen-challa.tech}
+
 spring:
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}

@@ -1,8 +1,8 @@
 package com.shopease.notificationservice.service;
 
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -12,12 +12,18 @@ import java.text.DecimalFormat;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
+    private final String frontendUrl;
     private static final DecimalFormat DF = new DecimalFormat("#,##,##0.00");
     private static final String FROM_EMAIL = "shopeasemicroservices@gmail.com";
+
+    public EmailService(JavaMailSender javaMailSender,
+            @Value("${app.frontend-url:https://shop.praveen-challa.tech}") String frontendUrl) {
+        this.javaMailSender = javaMailSender;
+        this.frontendUrl = frontendUrl;
+    }
 
     private static final String COMMON_STYLES = """
             <style>
@@ -98,7 +104,7 @@ public class EmailService {
                                     </div>
 
                                     <div class="btn-container">
-                                        <a href="https://shop.praveen-challa.tech/orders" class="btn">Track Deployment</a>
+                                        <a href="%s/orders" class="btn">Track Deployment</a>
                                     </div>
                                 </div>
                                 <div class="footer">
@@ -110,7 +116,7 @@ public class EmailService {
                     </body>
                     </html>
                     """
-                    .formatted(COMMON_STYLES, safeName, safeOrderNumber, amountFormatted, safeAddress);
+                    .formatted(COMMON_STYLES, safeName, safeOrderNumber, amountFormatted, safeAddress, frontendUrl);
 
             helper.setFrom(FROM_EMAIL);
             if (email == null || email.isBlank())
@@ -160,7 +166,7 @@ public class EmailService {
                                     </div>
 
                                     <div class="btn-container">
-                                        <a href="https://shop.praveen-challa.tech/products" class="btn" style="background-color: #1e293b; box-shadow: none;">Return to Marketplace</a>
+                                        <a href="%s/products" class="btn" style="background-color: #1e293b; box-shadow: none;">Return to Marketplace</a>
                                     </div>
                                 </div>
                                 <div class="footer">
@@ -171,7 +177,7 @@ public class EmailService {
                     </body>
                     </html>
                     """
-                    .formatted(COMMON_STYLES, safeName, safeOrderNumber);
+                    .formatted(COMMON_STYLES, safeName, safeOrderNumber, frontendUrl);
 
             helper.setFrom(FROM_EMAIL);
             if (email == null || email.isBlank())
@@ -225,7 +231,7 @@ public class EmailService {
                                     </div>
 
                                     <div class="btn-container">
-                                        <a href="https://shop.praveen-challa.tech/products" class="btn">Initialize Marketplace</a>
+                                        <a href="%s/products" class="btn">Initialize Marketplace</a>
                                     </div>
                                 </div>
                                 <div class="footer">
@@ -236,7 +242,7 @@ public class EmailService {
                     </body>
                     </html>
                     """
-                    .formatted(COMMON_STYLES, firstName);
+                    .formatted(COMMON_STYLES, firstName, frontendUrl);
 
             helper.setFrom(FROM_EMAIL);
             if (email == null || email.isBlank())
@@ -285,7 +291,7 @@ public class EmailService {
                                     </div>
 
                                     <div class="btn-container">
-                                        <a href="https://shop.praveen-challa.tech/cart" class="btn">Resume Acquisition</a>
+                                        <a href="%s/cart" class="btn">Resume Acquisition</a>
                                     </div>
                                 </div>
                                 <div class="footer">
@@ -296,7 +302,7 @@ public class EmailService {
                     </body>
                     </html>
                     """
-                    .formatted(COMMON_STYLES, safeName);
+                    .formatted(COMMON_STYLES, safeName, frontendUrl);
 
             helper.setFrom(FROM_EMAIL);
             if (email == null || email.isBlank())
