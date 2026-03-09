@@ -114,22 +114,50 @@ export default function CartSync() {
         }
     }, [cart.items, isAuthenticated]);
 
-    // 3. Automated Abandoned Cart Notification
-    // Trigger "Remind me" email if user is idle with items in cart
+    // 3. Automated Abandoned Cart Notification (Robust & Persistent)
     useEffect(() => {
-        if (!isAuthenticated() || cart.items.length === 0) return;
+        if (!isAuthenticated() || cart.items.length === 0) {
+            localStorage.removeItem('shopease_last_cart_activity');
+            return;
+        }
 
-        // Auto-send reminder after 5 minutes of having items in cart (for demo/UX)
-        const reminderTimer = setTimeout(() => {
-            console.log('⏰ Auto-triggering abandoned cart email...');
-            api.post('/api/notifications/abandoned-cart', {
-                email: user.email,
-                firstName: user.firstName || 'Customer'
-            }).catch(err => console.warn('Auto-reminder failed (likely expected on dev)', err));
-        }, 300000); // 5 minutes
+        // Initialize activity timestamp if not present
+        if (!localStorage.getItem('shopease_last_cart_activity')) {
+            localStorage.setItem('shopease_last_cart_activity', Date.now().toString());
+        }
 
-        return () => clearTimeout(reminderTimer);
-    }, [cart.items.length, isAuthenticated, user?.email]);
+        const checkInactivity = () => {
+            const lastActivity = parseInt(localStorage.getItem('shopease_last_cart_activity'));
+            const lastEmailSent = parseInt(localStorage.getItem('shopease_last_abandoned_email_sent') || '0');
+            const now = Date.now();
+
+            // 5 minutes = 300,000ms
+            const INACTIVITY_LIMIT = 300000;
+            // Cooldown 24 hours = 86,400,000ms (to prevent spam)
+            const EMAIL_COOLDOWN = 86400000;
+
+            if (now - lastActivity >= INACTIVITY_LIMIT && now - lastEmailSent >= EMAIL_COOLDOWN) {
+                console.log('⏰ Inactivity limit reached. Triggering abandoned cart email...');
+                api.post('/api/notifications/abandoned-cart', {
+                    email: user.email,
+                    firstName: user.firstName || 'Customer'
+                })
+                    .then(() => {
+                        localStorage.setItem('shopease_last_abandoned_email_sent', now.toString());
+                        console.log('📧 Abandoned cart email sent & cooldown started.');
+                    })
+                    .catch(err => console.warn('Abandoned cart trigger failed:', err));
+            }
+        };
+
+        // Check every 30 seconds
+        const interval = setInterval(checkInactivity, 30000);
+
+        // Update activity on cart changes (handled by dependency array)
+        localStorage.setItem('shopease_last_cart_activity', Date.now().toString());
+
+        return () => clearInterval(interval);
+    }, [cart.items.length, isAuthenticated, user?.email, user?.firstName]);
 
     // 4. Handle Cleanup (No longer flushing on unmount to avoid race conditions with logout state clearing)
     useEffect(() => {
