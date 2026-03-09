@@ -119,7 +119,10 @@ public class ProductServiceImpl implements ProductService {
         @Transactional(readOnly = true)
         @org.springframework.cache.annotation.Cacheable(value = "products", key = "#pageable.pageNumber + '_' + #pageable.pageSize")
         public Page<ProductDTO> getAllProducts(Pageable pageable) {
-                return productRepository.findAll(pageable)
+                // Use specification to filter out ARCHIVED and DELETED by default
+                org.springframework.data.jpa.domain.Specification<Product> spec = com.shopease.productservice.repository.spec.ProductSpecification
+                                .filterProducts(null, null, null, null, null, null, null, null);
+                return productRepository.findAll(spec, pageable)
                                 .map(productMapper::toDTO);
         }
 

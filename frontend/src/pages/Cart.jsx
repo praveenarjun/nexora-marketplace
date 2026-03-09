@@ -33,18 +33,18 @@ export default function Cart() {
 
     return (
         <div className="max-w-7xl mx-auto w-full px-6 py-12">
-            <div className="flex items-center gap-4 mb-12">
-                <h1 className="text-5xl font-black text-adaptive tracking-tighter">Inventory</h1>
-                <span className="bg-primary-500/10 text-primary-500 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest border border-primary-500/20">
+            <div className="flex items-center gap-4 mb-8 md:mb-12">
+                <h1 className="text-3xl md:text-5xl font-black text-adaptive tracking-tighter">Inventory</h1>
+                <span className="bg-primary-500/10 text-primary-500 px-3 py-1 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest border border-primary-500/20">
                     {cart.getTotalItems()} Units
                 </span>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                 {/* Cart Items */}
-                <div className="lg:col-span-8 space-y-4">
+                <div className="lg:col-span-8 space-y-3 md:space-y-4">
                     {cart.items.map((item) => (
-                        <div key={item.productId} className="flex flex-col sm:flex-row items-center gap-6 p-6 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-3xl group hover:border-primary-500/30 transition-all shadow-sm">
+                        <div key={item.productId} className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 p-4 md:p-6 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-3xl group hover:border-primary-500/30 transition-all shadow-sm">
                             {/* Image */}
                             <div className="w-28 h-28 bg-slate-800 rounded-2xl overflow-hidden flex-shrink-0">
                                 {item.product?.imageUrls?.[0] ? (
@@ -73,25 +73,25 @@ export default function Cart() {
                                     <span className="text-primary-500/80">Available</span>
                                 </div>
 
-                                <div className="flex flex-wrap items-center justify-between gap-4">
+                                <div className="flex items-center justify-between gap-4 mt-4">
                                     <div className="flex items-center bg-[var(--bg-glass)] rounded-xl p-1 border border-[var(--border-primary)] h-10">
                                         <button
                                             onClick={() => cart.updateQuantity(item.productId, item.quantity - 1)}
                                             className="w-8 h-full flex items-center justify-center hover:bg-[var(--bg-glass)] rounded-lg text-[var(--text-secondary)] transition-all"
                                         >
-                                            <span className="material-symbols-outlined text-sm">remove</span>
+                                            <span className="material-symbols-outlined text-xs md:text-sm">remove</span>
                                         </button>
-                                        <span className="w-10 text-center text-adaptive font-bold text-sm">{item.quantity}</span>
+                                        <span className="w-8 md:w-10 text-center text-adaptive font-bold text-xs md:text-sm">{item.quantity}</span>
                                         <button
                                             onClick={() => cart.updateQuantity(item.productId, item.quantity + 1)}
                                             className="w-8 h-full flex items-center justify-center hover:bg-[var(--bg-glass)] rounded-lg text-[var(--text-secondary)] transition-all"
                                         >
-                                            <span className="material-symbols-outlined text-sm">add</span>
+                                            <span className="material-symbols-outlined text-xs md:text-sm">add</span>
                                         </button>
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-xs text-[var(--text-muted)] uppercase font-bold tracking-widest mb-0.5">Price</div>
-                                        <div className="text-xl font-black text-adaptive">₹{(item.price * item.quantity).toLocaleString()}</div>
+                                        <div className="text-[8px] md:text-xs text-[var(--text-muted)] uppercase font-bold tracking-widest mb-0.5">Price</div>
+                                        <div className="text-lg md:text-xl font-black text-adaptive">₹{(item.price * item.quantity).toLocaleString()}</div>
                                     </div>
                                 </div>
                             </div>
@@ -123,8 +123,8 @@ export default function Cart() {
                                 <span className="text-adaptive font-bold">₹{tax.toLocaleString()}</span>
                             </div>
                             <div className="flex justify-between items-end pt-4">
-                                <span className="text-xs text-[var(--text-muted)] font-black uppercase tracking-[0.2em]">Total Amount</span>
-                                <span className="text-4xl font-black text-adaptive tracking-tighter">₹{total.toLocaleString()}</span>
+                                <span className="text-[10px] md:text-xs text-[var(--text-muted)] font-black uppercase tracking-[0.2em]">Total Amount</span>
+                                <span className="text-3xl md:text-4xl font-black text-adaptive tracking-tighter">₹{total.toLocaleString()}</span>
                             </div>
                         </div>
 

@@ -15,9 +15,28 @@ import java.text.DecimalFormat;
 @RequiredArgsConstructor
 public class EmailService {
 
-    private final JavaMailSender javaMailSender;
-    private static final String FROM_EMAIL = "shopeasemicroservices@gmail.com";
-    private static final DecimalFormat DF = new DecimalFormat("#,##0.00");
+    private static final String COMMON_STYLES = """
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+                body { font-family: 'Inter', system-ui, sans-serif; background-color: #0c0e14; margin: 0; padding: 0; color: #ffffff; -webkit-font-smoothing: antialiased; }
+                .wrapper { width: 100%; table-layout: fixed; background-color: #0c0e14; padding-bottom: 40px; }
+                .container { max-width: 600px; margin: 0 auto; background-color: #161821; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; overflow: hidden; margin-top: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+                .header { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 60px 40px; text-align: center; }
+                .header h1 { margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; }
+                .content { padding: 48px 40px; }
+                .greeting { font-size: 24px; font-weight: 800; margin-bottom: 16px; color: #ffffff; }
+                .message { font-size: 16px; line-height: 1.6; color: #94a3b8; margin-bottom: 32px; }
+                .card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 24px; margin-bottom: 32px; }
+                .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
+                .detail-row:last-child { margin-bottom: 0; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-weight: 700; color: #ffffff; font-size: 18px; }
+                .label { color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 12px; }
+                .value { color: #f8fafc; text-align: right; }
+                .btn-container { text-align: center; margin: 40px 0; }
+                .btn { display: inline-block; background-color: #4f46e5; color: #ffffff; text-decoration: none; padding: 18px 36px; border-radius: 14px; font-weight: 700; font-size: 16px; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3); }
+                .footer { padding: 32px 40px; text-align: center; font-size: 12px; color: #475569; border-top: 1px solid rgba(255, 255, 255, 0.04); }
+                .badge { display: inline-block; padding: 4px 12px; border-radius: 99px; font-size: 11px; font-weight: 800; text-transform: uppercase; background: rgba(79, 70, 229, 0.2); color: #818cf8; border: 1px solid rgba(79, 70, 229, 0.3); }
+            </style>
+            """;
 
     public void sendOrderConfirmation(String email, String name, String orderNumber, BigDecimal totalAmount,
             String shippingAddress) {
@@ -26,7 +45,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
             String safeOrderNumber = orderNumber != null ? orderNumber : "Unknown";
-            String subject = "Order Confirmation: " + safeOrderNumber;
+            String subject = "Order Secured: " + safeOrderNumber;
             String amountFormatted = totalAmount != null ? DF.format(totalAmount) : "0.00";
             String safeAddress = shippingAddress != null ? shippingAddress.replace("\n", "<br>") : "Not provided";
             String safeName = name != null ? name : "Valued Customer";
@@ -36,85 +55,69 @@ public class EmailService {
                     <html lang="en">
                     <head>
                         <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <style>
-                            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; color: #333; }
-                            .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-                            .header { background-color: #4f46e5; color: #ffffff; padding: 30px 40px; text-align: center; }
-                            .header h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 0.5px; }
-                            .content { padding: 40px; }
-                            .greeting { font-size: 18px; margin-bottom: 20px; color: #1f2937; }
-                            .order-details { background-color: #f9fafb; border-radius: 6px; padding: 25px; margin: 25px 0; border: 1px solid #e5e7eb; }
-                            .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px; }
-                            .detail-row:last-child { margin-bottom: 0; padding-top: 12px; border-top: 1px solid #e5e7eb; font-weight: 600; font-size: 16px; color: #111827; }
-                            .label { color: #6b7280; }
-                            .value { color: #111827; text-align: right; }
-                            .shippingbox { margin-top: 25px; padding-top: 25px; border-top: 1px solid #e5e7eb; }
-                            .shippingbox h3 { font-size: 15px; color: #4b5563; margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-                            .shippingbox p { margin: 0; color: #111827; line-height: 1.5; font-size: 15px; }
-                            .message { line-height: 1.6; margin-bottom: 30px; font-size: 15px; color: #4b5563; }
-                            .footer { background-color: #f9fafb; padding: 20px 40px; text-align: center; font-size: 13px; color: #6b7280; border-top: 1px solid #e5e7eb; }
-                        </style>
+                        %s
                     </head>
                     <body>
-                        <div class="container">
-                            <div class="header">
-                                <h1>ShopEase</h1>
-                            </div>
-                            <div class="content">
-                                <div class="greeting">Hello %s,</div>
-                                <div class="message">
-                                    Thank you for shopping with us! We have received your order and we're getting it ready to be shipped.
+                        <div class="wrapper">
+                            <div class="container">
+                                <div class="header">
+                                    <h1>ShopEase</h1>
                                 </div>
-
-                                <div class="order-details">
-                                    <div class="detail-row">
-                                        <span class="label">Order Number</span>
-                                        <span class="value">%s</span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="label">Status</span>
-                                        <span class="value" style="color: #059669; font-weight: 500;">Confirmed</span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="label">Total Amount</span>
-                                        <span class="value">₹%s</span>
+                                <div class="content">
+                                    <div class="greeting">Component Secured, %s.</div>
+                                    <div class="message">
+                                        Your acquisition request has been successfully processed. We are now preparing your digital assets for deployment.
                                     </div>
 
-                                    <div class="shippingbox">
-                                        <h3>Shipping Address</h3>
-                                        <p>%s</p>
+                                    <div class="card">
+                                        <div class="detail-row">
+                                            <span class="label">Reference ID</span>
+                                            <span class="value">%s</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="label">Priority Status</span>
+                                            <span class="value"><span class="badge">Confirmed</span></span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="label">Shipping Channel</span>
+                                            <span class="value">Standard Priority</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="label">Total Acquisition Cost</span>
+                                            <span class="value">₹%s</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="message" style="font-size: 14px;">
+                                        <strong>Destination Layout:</strong><br>
+                                        %s
+                                    </div>
+                                    
+                                    <div class="btn-container">
+                                        <a href="https://shop.praveen-challa.tech/orders" class="btn">Track Deployment</a>
                                     </div>
                                 </div>
-
-                                <div class="message">
-                                    We'll send you another email when your order has shipped.<br>If you have any questions, reply to this email or contact our support team.
+                                <div class="footer">
+                                    &copy; 2026 ShopEase Laboratory. All rights reserved.<br>
+                                    Encrypted with bank-grade security protocols.
                                 </div>
-                            </div>
-                            <div class="footer">
-                                &copy; 2026 ShopEase inc. All rights reserved.<br>
-                                This is an automated message, please do not reply.
                             </div>
                         </div>
                     </body>
                     </html>
                     """
-                    .formatted(safeName, safeOrderNumber, amountFormatted, safeAddress);
+                    .formatted(COMMON_STYLES, safeName, safeOrderNumber, amountFormatted, safeAddress);
 
             helper.setFrom(FROM_EMAIL);
-            if (email == null || email.isBlank()) {
-                log.warn("Skipping email send: recipient email is null or blank");
-                return;
-            }
+            if (email == null || email.isBlank()) return;
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
 
             javaMailSender.send(mimeMessage);
-            log.info("Email sent successfully: [HTML Confirmation] -> {}", email);
+            log.info("Email sent successfully: [Premium Confirmation] -> {}", email);
         } catch (Exception e) {
-            log.warn("Failed to send HTML order confirmation email for order {}. Cause: {}", orderNumber,
-                    e.getMessage());
+            log.warn("Failed to send HTML order confirmation email. Cause: {}", e.getMessage());
         }
     }
 
@@ -124,7 +127,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
             String safeOrderNumber = orderNumber != null ? orderNumber : "Unknown";
-            String subject = "Order Cancellation: " + safeOrderNumber;
+            String subject = "Deployment Cancelled: " + safeOrderNumber;
             String safeName = name != null ? name : "Valued Customer";
 
             String htmlContent = """
@@ -132,64 +135,49 @@ public class EmailService {
                     <html lang="en">
                     <head>
                         <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <style>
-                            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; color: #333; }
-                            .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-                            .header { background-color: #dc2626; color: #ffffff; padding: 30px 40px; text-align: center; }
-                            .header h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 0.5px; }
-                            .content { padding: 40px; }
-                            .greeting { font-size: 18px; margin-bottom: 20px; color: #1f2937; }
-                            .message { line-height: 1.6; margin-bottom: 20px; font-size: 15px; color: #4b5563; }
-                            .alert-box { background-color: #fef2f2; border-left: 4px solid #dc2626; padding: 15px 20px; margin: 25px 0; color: #991b1b; }
-                            .order-id { font-weight: 600; color: #111827; }
-                            .footer { background-color: #f9fafb; padding: 20px 40px; text-align: center; font-size: 13px; color: #6b7280; border-top: 1px solid #e5e7eb; }
-                        </style>
+                        %s
                     </head>
                     <body>
-                        <div class="container">
-                            <div class="header">
-                                <h1>ShopEase</h1>
-                            </div>
-                            <div class="content">
-                                <div class="greeting">Hello %s,</div>
-
-                                <div class="alert-box">
-                                    Your order <span class="order-id">%s</span> has been successfully cancelled.
+                        <div class="wrapper">
+                            <div class="container">
+                                <div class="header" style="background: linear-gradient(135deg, #ef4444 0%%, #b91c1c 100%%);">
+                                    <h1>ShopEase</h1>
                                 </div>
+                                <div class="content">
+                                    <div class="greeting">Deployment Terminated, %s.</div>
+                                    <div class="message">
+                                        As requested, we have halted the shipment of order <strong>%s</strong>. Any captured funds have been released and will reflect in your account within 48-72 hours.
+                                    </div>
 
-                                <div class="message">
-                                    As requested, we have cancelled your recent order. If you have already been charged for this purchase, a full refund has been initiated and will appear on your original payment method within 3-5 business days.
-                                </div>
+                                    <div class="card" style="border-left: 4px solid #ef4444;">
+                                        <div class="label" style="color: #ef4444; margin-bottom: 8px;">Status Report</div>
+                                        <div class="message" style="margin-bottom: 0;">Access to these components has been revoked. If this was unintended, please restart the acquisition process.</div>
+                                    </div>
 
-                                <div class="message">
-                                    We hope to see you again soon.<br>If this cancellation was a mistake or if you need assistance, please contact our support team.
+                                    <div class="btn-container">
+                                        <a href="https://shop.praveen-challa.tech/products" class="btn" style="background-color: #1e293b; box-shadow: none;">Return to Marketplace</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="footer">
-                                &copy; 2026 ShopEase inc. All rights reserved.<br>
-                                This is an automated message, please do not reply.
+                                <div class="footer">
+                                    &copy; 2026 ShopEase Laboratory. All rights reserved.
+                                </div>
                             </div>
                         </div>
                     </body>
                     </html>
                     """
-                    .formatted(safeName, safeOrderNumber);
+                    .formatted(COMMON_STYLES, safeName, safeOrderNumber);
 
             helper.setFrom(FROM_EMAIL);
-            if (email == null || email.isBlank()) {
-                log.warn("Skipping cancellation email: recipient email is null or blank");
-                return;
-            }
+            if (email == null || email.isBlank()) return;
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
 
             javaMailSender.send(mimeMessage);
-            log.info("Email sent successfully: [HTML Cancellation] -> {}", email);
+            log.info("Email sent successfully: [Premium Cancellation] -> {}", email);
         } catch (Exception e) {
-            log.warn("Failed to send HTML order cancellation email for order {}. Cause: {}", orderNumber,
-                    e.getMessage());
+            log.warn("Failed to send HTML order cancellation email. Cause: {}", e.getMessage());
         }
     }
 
@@ -198,84 +186,62 @@ public class EmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            String subject = "Welcome to ShopEase!";
+            String subject = "Network Access Granted - Welcome to ShopEase";
 
             String htmlContent = """
                     <!DOCTYPE html>
                     <html lang="en">
                     <head>
                         <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <style>
-                            body { font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; color: #333; }
-                            .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
-                            .header { background: linear-gradient(135deg, #4f46e5 0%%, #7c3aed 100%%); color: #ffffff; padding: 40px; text-align: center; }
-                            .header h1 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -1px; }
-                            .content { padding: 40px; }
-                            .greeting { font-size: 22px; font-weight: 700; margin-bottom: 20px; color: #1f2937; }
-                            .message { line-height: 1.6; margin-bottom: 25px; font-size: 16px; color: #4b5563; }
-                            .features { background-color: #f9fafb; border-radius: 8px; padding: 25px; margin: 30px 0; border: 1px solid #e5e7eb; }
-                            .feature-row { display: flex; align-items: flex-start; margin-bottom: 15px; }
-                            .feature-icon { color: #4f46e5; margin-right: 12px; font-size: 18px; }
-                            .feature-text { font-size: 14px; color: #6b7280; }
-                            .btn-container { text-align: center; margin-top: 35px; }
-                            .btn { display: inline-block; background-color: #4f46e5; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s; }
-                            .footer { background-color: #f9fafb; padding: 25px 40px; text-align: center; font-size: 13px; color: #94a3b8; border-top: 1px solid #e5e7eb; }
-                        </style>
+                        %s
                     </head>
                     <body>
-                        <div class="container">
-                            <div class="header">
-                                <h1>ShopEase</h1>
-                            </div>
-                            <div class="content">
-                                <div class="greeting">Welcome to the family, %s!</div>
-                                <div class="message">
-                                    We're thrilled to have you on board! ShopEase is more than just a marketplace; it's a showcase of modern microservices architecture and seamless user experiences.
+                        <div class="wrapper">
+                            <div class="container">
+                                <div class="header">
+                                    <h1>ShopEase</h1>
                                 </div>
+                                <div class="content">
+                                    <div class="greeting">Welcome to the Network, %s.</div>
+                                    <div class="message">
+                                        Your account has been successfully initialized. You now have full access to our premium microservice component marketplace.
+                                    </div>
 
-                                <div class="features">
-                                    <div class="feature-row">
-                                        <div class="feature-icon">✓</div>
-                                        <div class="feature-text"><strong>Priority Access:</strong> Be the first to know about new product drops and flash sales.</div>
+                                    <div class="card">
+                                        <div class="detail-row">
+                                            <span class="label" style="text-align: left;">Available Protocols</span>
+                                        </div>
+                                        <div class="message" style="font-size: 14px; margin-bottom: 0;">
+                                            • Priority acquisition of high-demand assets<br>
+                                            • Real-time deployment tracking<br>
+                                            • Encrypted session management
+                                        </div>
                                     </div>
-                                    <div class="feature-row">
-                                        <div class="feature-icon">✓</div>
-                                        <div class="feature-text"><strong>Real-time Tracking:</strong> Event-driven architecture ensures you always know where your order is.</div>
-                                    </div>
-                                    <div class="feature-row">
-                                        <div class="feature-icon">✓</div>
-                                        <div class="feature-text"><strong>Premium Security:</strong> Enterprise-grade OAuth2 and JWT protection for your peace of mind.</div>
-                                    </div>
-                                </div>
 
-                                <div class="btn-container">
-                                    <a href="http://localhost:5173/products" class="btn">Start Shopping</a>
+                                    <div class="btn-container">
+                                        <a href="https://shop.praveen-challa.tech/products" class="btn">Initialize Marketplace</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="footer">
-                                &copy; 2026 ShopEase Inc. Built with Microservices Architecture.<br>
-                                This email was sent to %s.
+                                <div class="footer">
+                                    &copy; 2026 ShopEase Laboratory. All rights reserved.
+                                </div>
                             </div>
                         </div>
                     </body>
                     </html>
                     """
-                    .formatted(firstName, email);
+                    .formatted(COMMON_STYLES, firstName);
 
             helper.setFrom(FROM_EMAIL);
-            if (email == null || email.isBlank()) {
-                log.warn("Skipping welcome email: recipient email is null or blank");
-                return;
-            }
+            if (email == null || email.isBlank()) return;
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
 
             javaMailSender.send(mimeMessage);
-            log.info("Email sent successfully: [HTML Welcome] -> {}", email);
+            log.info("Email sent successfully: [Premium Welcome] -> {}", email);
         } catch (Exception e) {
-            log.warn("Failed to send HTML welcome email to {}. Cause: {}", email, e.getMessage());
+            log.warn("Failed to send HTML welcome email. Cause: {}", e.getMessage());
         }
     }
 
@@ -284,7 +250,7 @@ public class EmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            String subject = "You left something behind! - ShopEase";
+            String subject = "Action Required: Digital Assets Remaining in Transit";
             String safeName = firstName != null ? firstName : "there";
 
             String htmlContent = """
@@ -292,50 +258,47 @@ public class EmailService {
                     <html lang="en">
                     <head>
                         <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <style>
-                            body { font-family: 'Segoe UI', sans-serif; background-color: #f8fafc; margin: 0; padding: 0; color: #1e293b; }
-                            .container { max-width: 600px; margin: 40px auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
-                            .header { background: #6366f1; color: white; padding: 40px; text-align: center; }
-                            .header h1 { margin: 0; font-size: 24px; }
-                            .content { padding: 40px; text-align: center; }
-                            .greeting { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
-                            .message { line-height: 1.6; margin-bottom: 30px; color: #475569; }
-                            .btn { display: inline-block; background: #6366f1; color: white; text-decoration: none; padding: 14px 30px; border-radius: 8px; font-weight: 600; }
-                            .footer { background: #f1f5f9; padding: 20px; text-align: center; font-size: 13px; color: #64748b; }
-                        </style>
+                        %s
                     </head>
                     <body>
-                        <div class="container">
-                            <div class="header"><h1>ShopEase</h1></div>
-                            <div class="content">
-                                <div class="greeting">Hey %s, we noticed you left some items in your cart!</div>
-                                <div class="message">
-                                    Don't worry, we've saved them for you. But they're selling fast! Come back and finish your checkout now to secure your items.
+                        <div class="wrapper">
+                            <div class="container">
+                                <div class="header" style="background: linear-gradient(135deg, #6366f1 0%%, #4338ca 100%%);">
+                                    <h1>ShopEase</h1>
                                 </div>
-                                <a href="http://localhost:5173/cart" class="btn">Finish My Order</a>
-                            </div>
-                            <div class="footer">
-                                &copy; 2026 ShopEase Inc.<br>
-                                You're receiving this because you have items saved in your ShopEase cart.
+                                <div class="content">
+                                    <div class="greeting">Incomplete Session Detected.</div>
+                                    <div class="message">
+                                        Hey %s, we noticed your digital inventory contains unassigned components. These assets are currently reserved but at risk of being reallocated to other network users.
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="label" style="color: #6366f1; margin-bottom: 8px;">Reservation Status</div>
+                                        <div class="message" style="margin-bottom: 0; font-size: 14px;">Your selection is being held temporarily. Complete the acquisition process to secure these units permanently.</div>
+                                    </div>
+
+                                    <div class="btn-container">
+                                        <a href="https://shop.praveen-challa.tech/cart" class="btn">Resume Acquisition</a>
+                                    </div>
+                                </div>
+                                <div class="footer">
+                                    &copy; 2026 ShopEase Laboratory. All rights reserved.
+                                </div>
                             </div>
                         </div>
                     </body>
                     </html>
                     """
-                    .formatted(safeName);
+                    .formatted(COMMON_STYLES, safeName);
 
             helper.setFrom(FROM_EMAIL);
-            if (email == null || email.isBlank()) {
-                log.warn("Skipping email send: recipient email is null or blank");
-                return;
-            }
+            if (email == null || email.isBlank()) return;
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
 
             javaMailSender.send(mimeMessage);
-            log.info("Email sent successfully: [Abandoned Cart] -> {}", email);
+            log.info("Email sent successfully: [Premium Abandoned Cart] -> {}", email);
         } catch (Exception e) {
             log.warn("Failed to send Abandoned Cart email. Cause: {}", e.getMessage());
         }
@@ -346,72 +309,56 @@ public class EmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            String subject = "Your Password Reset OTP - ShopEase";
+            String subject = "Security Protocol: Identity Verification";
 
             String htmlContent = """
                     <!DOCTYPE html>
                     <html lang="en">
                     <head>
                         <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <style>
-                            body { font-family: 'Inter', 'Segoe UI', sans-serif; background-color: #0f172a; margin: 0; padding: 0; color: #f8fafc; }
-                            .container { max-width: 600px; margin: 40px auto; background: rgba(30, 41, 59, 0.7); border-radius: 16px; overflow: hidden; backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
-                            .header { background: linear-gradient(135deg, #f59e0b 0%%, #d97706 100%%); color: white; padding: 30px; text-align: center; }
-                            .header h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-                            .content { padding: 40px; text-align: center; }
-                            .message { line-height: 1.6; margin-bottom: 30px; font-size: 16px; color: #cbd5e1; }
-                            .otp-container { background: rgba(255, 255, 255, 0.05); border: 1px dashed rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 30px; margin: 30px 0; }
-                            .otp-code { font-family: monospace; font-size: 42px; font-weight: 800; color: #fbbf24; letter-spacing: 8px; margin: 0; }
-                            .warning { color: #ef4444; font-size: 14px; margin-top: 20px; font-weight: 500; }
-                            .footer { background: rgba(15, 23, 42, 0.8); padding: 24px 40px; text-align: center; font-size: 13px; color: #64748b; border-top: 1px solid rgba(255, 255, 255, 0.05); }
-                        </style>
+                        %s
                     </head>
                     <body>
-                        <div class="container">
-                            <div class="header">
-                                <h1>ShopEase Security</h1>
-                            </div>
-                            <div class="content">
-                                <div class="message">
-                                    We received a request to reset the password for your ShopEase account associated with this email address.
-                                    Please use the One-Time Password (OTP) below to reset your password.
+                        <div class="wrapper">
+                            <div class="container">
+                                <div class="header" style="background: linear-gradient(135deg, #f59e0b 0%%, #d97706 100%%);">
+                                    <h1>ShopEase</h1>
                                 </div>
+                                <div class="content" style="text-align: center;">
+                                    <div class="greeting">Authentication Required.</div>
+                                    <div class="message">
+                                        A request to reset your network access credentials has been initiated. Use the following One-Time Protocol code to proceed.
+                                    </div>
 
-                                <div class="otp-container">
-                                    <div class="otp-code">%s</div>
-                                </div>
+                                    <div class="card" style="background: rgba(245, 158, 11, 0.05); border: 2px dashed rgba(245, 158, 11, 0.3);">
+                                        <div style="font-family: monospace; font-size: 48px; font-weight: 800; color: #fbbf24; letter-spacing: 12px; margin: 10px 0;">%s</div>
+                                    </div>
 
-                                <div class="message" style="font-size: 14px;">
-                                    This OTP is valid for the next <b>15 minutes</b>.
+                                    <div class="message" style="font-size: 13px; color: #ef4444;">
+                                        <strong>⚠️ Security Alert:</strong> This code expires in 15 minutes. If you did not initiate this request, contact system security immediately.
+                                    </div>
                                 </div>
-                                <div class="warning">
-                                    If you did not request a password reset, please ignore this email or contact support if you have concerns.
+                                <div class="footer">
+                                    &copy; 2026 ShopEase Laboratory. Security Division.
                                 </div>
-                            </div>
-                            <div class="footer">
-                                &copy; 2026 ShopEase Inc. Built with Microservices Architecture.<br>
-                                This email was sent to %s.
                             </div>
                         </div>
                     </body>
                     </html>
                     """
-                    .formatted(otp, email);
+                    .formatted(COMMON_STYLES, otp, email);
 
             helper.setFrom(FROM_EMAIL);
-            if (email == null || email.isBlank()) {
-                log.warn("Skipping email send: recipient email is null or blank");
-                return;
-            }
+            if (email == null || email.isBlank()) return;
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
 
             javaMailSender.send(mimeMessage);
-            log.info("Email sent successfully: [HTML OTP] -> {}", email);
+            log.info("Email sent successfully: [Premium OTP] -> {}", email);
         } catch (Exception e) {
-            log.warn("Failed to send HTML OTP email to {}. Cause: {}", email, e.getMessage());
+            log.warn("Failed to send HTML OTP email. Cause: {}", e.getMessage());
         }
     }
+}
 }

@@ -125,8 +125,8 @@ export default function ProductDetail() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                         {/* Left: Image Showcase & Gallery */}
-                        <div className="lg:col-span-7 space-y-6">
-                            <div className="aspect-[4/5] bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-[40px] overflow-hidden relative group shadow-2xl">
+                        <div className="lg:col-span-7 space-y-4 md:space-y-6">
+                            <div className="aspect-[4/5] bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-3xl md:rounded-[40px] overflow-hidden relative group shadow-2xl">
                                 {product.imageUrls?.[selectedImageIndex] ? (
                                     <img src={product.imageUrls[selectedImageIndex]} alt={product.name} className="w-full h-full object-cover transition-all duration-700" />
                                 ) : (
@@ -134,8 +134,8 @@ export default function ProductDetail() {
                                 )}
 
                                 {product.badge && (
-                                    <div className="absolute top-8 left-8">
-                                        <span className="bg-primary-500 text-white text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-[0.2em] shadow-2xl">
+                                    <div className="absolute top-4 left-4 md:top-8 md:left-8">
+                                        <span className="bg-primary-500 text-white text-[8px] md:text-[10px] font-black px-3 py-1.5 md:px-4 md:py-2 rounded-full uppercase tracking-[0.2em] shadow-2xl">
                                             {product.badge}
                                         </span>
                                     </div>
@@ -168,9 +168,9 @@ export default function ProductDetail() {
                                         }`}>
                                         {product.inStock ? 'Available Now' : 'Out of Stock'}
                                     </span>
-                                    <p className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em]">{product.categoryName || 'PREMIUM'}</p>
+                                    <p className="text-[var(--text-muted)] text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em]">{product.categoryName || 'PREMIUM'}</p>
                                 </div>
-                                <h1 className="text-5xl lg:text-6xl font-black text-adaptive tracking-tighter leading-[1.05] mb-4">{product.name}</h1>
+                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-adaptive tracking-tighter leading-[1.1] mb-4">{product.name}</h1>
 
                                 {/* Rating & Reviews */}
                                 <div className="flex items-center gap-4">
@@ -185,10 +185,10 @@ export default function ProductDetail() {
                                 </div>
                             </div>
 
-                            <div className="flex items-baseline gap-4">
-                                <span className="text-5xl font-black text-primary-500 tracking-tighter">₹{(product.price ?? 0).toLocaleString()}</span>
+                            <div className="flex items-baseline gap-3">
+                                <span className="text-3xl md:text-5xl font-black text-primary-500 tracking-tighter">₹{(product.price ?? 0).toLocaleString()}</span>
                                 {product.compareAtPrice && (
-                                    <span className="text-slate-500 line-through text-xl font-medium">₹{product.compareAtPrice.toLocaleString()}</span>
+                                    <span className="text-slate-500 line-through text-base md:text-xl font-medium">₹{product.compareAtPrice.toLocaleString()}</span>
                                 )}
                             </div>
 
@@ -221,13 +221,13 @@ export default function ProductDetail() {
                             </div>
 
                             <div className="space-y-6">
-                                <div className="flex items-center gap-6">
+                                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6">
                                     <div className="flex flex-col gap-1.5">
                                         <span className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest pl-1">Quantity</span>
                                         <div className="flex items-center bg-[var(--bg-glass)] border border-[var(--border-primary)] rounded-xl p-1 h-12 shadow-inner">
                                             <button
                                                 onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                                                className="w-10 h-full flex items-center justify-center hover:bg-[var(--bg-secondary)] rounded-lg text-[var(--text-muted)] transition-all"
+                                                className="w-12 h-full flex items-center justify-center hover:bg-[var(--bg-secondary)] rounded-lg text-[var(--text-muted)] transition-all"
                                             >
                                                 <span className="material-symbols-outlined text-sm">remove</span>
                                             </button>
@@ -235,21 +235,21 @@ export default function ProductDetail() {
                                                 type="number"
                                                 value={quantity}
                                                 readOnly
-                                                className="w-10 text-center bg-transparent border-none text-adaptive font-bold text-sm focus:ring-0"
+                                                className="w-12 text-center bg-transparent border-none text-adaptive font-bold text-sm focus:ring-0"
                                             />
                                             <button
                                                 onClick={() => setQuantity(q => Math.min(q + 1, product.quantity || 99))}
-                                                className="w-10 h-full flex items-center justify-center hover:bg-[var(--bg-secondary)] rounded-lg text-[var(--text-muted)] transition-all"
+                                                className="w-12 h-full flex items-center justify-center hover:bg-[var(--bg-secondary)] rounded-lg text-[var(--text-muted)] transition-all"
                                             >
                                                 <span className="material-symbols-outlined text-sm">add</span>
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="flex-1 pt-5">
+                                    <div className="flex-1 sm:pt-5">
                                         <button
                                             onClick={handleAddToCart}
                                             disabled={!product.inStock || adding}
-                                            className={`w-full h-12 flex items-center justify-center gap-3 rounded-xl font-bold transition-all shadow-lg ${adding
+                                            className={`w-full h-12 md:h-14 flex items-center justify-center gap-3 rounded-xl font-bold transition-all shadow-lg ${adding
                                                 ? 'bg-green-500 text-white scale-95'
                                                 : 'bg-primary-500 text-white hover:bg-primary-600 shadow-primary-500/20 active:scale-95'
                                                 } ${!product.inStock ? 'opacity-30 cursor-not-allowed grayscale' : ''}`}

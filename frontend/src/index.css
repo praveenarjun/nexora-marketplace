@@ -69,6 +69,22 @@
   .text-adaptive-secondary {
     color: var(--text-secondary);
   }
+
+  /* ── Mobile-Specific Font Scales ── */
+  @media (max-width: 640px) {
+    .text-adaptive {
+      @apply text-base;
+    }
+
+    .text-4xl,
+    .text-5xl {
+      @apply text-2xl;
+    }
+
+    .text-xl {
+      @apply text-lg;
+    }
+  }
 }
 
 @layer components {

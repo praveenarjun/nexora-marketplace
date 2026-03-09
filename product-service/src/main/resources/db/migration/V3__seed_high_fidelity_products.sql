@@ -17,11 +17,11 @@ ON CONFLICT (sku) DO NOTHING;
 
 -- Product Images
 INSERT INTO product_images (product_id, image_url)
-SELECT id, 'https://images.unsplash.com/photo-1695468122159-4f7f6da9fc02?auto=format&fit=crop&q=80&w=800' FROM products WHERE sku = 'ELEC-IPH-15PRO'
+SELECT id, 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=800' FROM products WHERE sku = 'ELEC-IPH-15PRO'
 UNION ALL
 SELECT id, 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=800' FROM products WHERE sku = 'ELEC-MBP-14'
 UNION ALL
-SELECT id, 'https://images.unsplash.com/photo-1644747069123-6e8dd1217fc7?auto=format&fit=crop&q=80&w=800' FROM products WHERE sku = 'ELEC-SNY-XM5'
+SELECT id, 'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop&q=80&w=800' FROM products WHERE sku = 'ELEC-SNY-XM5'
 UNION ALL
 SELECT id, 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=800' FROM products WHERE sku = 'ELEC-IPD-PRO'
 ON CONFLICT DO NOTHING;
@@ -66,7 +66,7 @@ ON CONFLICT (sku) DO NOTHING;
 
 -- Product Images: Home & Living
 INSERT INTO product_images (product_id, image_url)
-SELECT id, 'https://images.unsplash.com/photo-1589384267710-7a25993e9391?auto=format&fit=crop&q=80&w=800' FROM products WHERE sku = 'HOME-HMN-AERO'
+SELECT id, 'https://images.unsplash.com/photo-1688578735427-994ecdea3ea4?auto=format&fit=crop&q=80&w=800' FROM products WHERE sku = 'HOME-HMN-AERO'
 UNION ALL
 SELECT id, 'https://images.unsplash.com/photo-1510972527921-ce03766a1cf1?auto=format&fit=crop&q=80&w=800' FROM products WHERE sku = 'HOME-BRV-ORCL'
 UNION ALL
