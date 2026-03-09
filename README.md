@@ -1,51 +1,18 @@
-# Nexora Marketplace
+# Architecture Diagram
 
-## Overview
-This project is a marketplace application built on modern web technologies, designed to facilitate seamless transactions between buyers and sellers.
+## Microservices
 
-## Features
-- User authentication and authorization
-- Product listing and search functionality
-- Shopping cart management
-- Order processing and management
-- Intuitive user interface
+The architecture for the microservices is depicted in the diagram below, showcasing the various components and how they interact with one another.
 
-## Tech Stack
-- **Frontend:** React.js
-- **Backend:** Node.js, Express
-- **Database:** MongoDB
-- **Styling:** CSS, Bootstrap
+![Architecture Diagram](link_to_architecture_diagram.png)
 
-## Installation Instructions
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/praveenarjun/nexora-marketplace.git
-   cd nexora-marketplace
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Set up environment variables as required in `.env` file.
-4. Start the application:
-   ```bash
-   npm start
-   ```
+### Key Components:
+- **Service A**: Description of Service A.
+- **Service B**: Description of Service B.
+- **Service C**: Description of Service C.
 
-## Usage Guidelines
-- Navigate to your browser and enter the URL provided after starting the application.
-- You can register as a new user or log in if you already have an account.
-- Explore the platform, search for products, and manage your shopping cart.
+### Communication
+These services communicate over a lightweight protocol, ensuring efficiency and scalability. 
 
-## Documentation
-For detailed documentation, refer to the [documentation folder](LINK_TO_DOCUMENTATION).
-
-## Architecture Diagrams
-![Architecture Diagram](LINK_TO_ARCHITECTURE_DIAGRAM)
-
-## License
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
-
----
-
-*Last updated: 2026-03-09 07:02:51 UTC*
+### Scalability
+The architecture supports horizontal scaling, allowing multiple instances of services to run concurrently to handle increased loads.
