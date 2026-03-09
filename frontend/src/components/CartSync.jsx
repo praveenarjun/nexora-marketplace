@@ -49,8 +49,15 @@ export default function CartSync() {
                             }
 
                             if (Array.isArray(items)) {
-                                console.log(`✅ [CartSync] Found ${items.length} items on backend. Merging...`);
-                                cart.mergeItems(items);
+                                const currentLocalString = JSON.stringify(cart.items);
+                                const backendString = JSON.stringify(items);
+
+                                if (currentLocalString === backendString) {
+                                    console.log('✨ [CartSync] Local cart already in sync with backend. Skipping merge.');
+                                } else {
+                                    console.log(`✅ [CartSync] Found ${items.length} items on backend. Merging...`);
+                                    cart.mergeItems(items);
+                                }
                             } else {
                                 console.warn('⚠️ [CartSync] Backend cart data is not an array:', items);
                             }
