@@ -15,6 +15,10 @@ import java.text.DecimalFormat;
 @RequiredArgsConstructor
 public class EmailService {
 
+    private final JavaMailSender javaMailSender;
+    private static final DecimalFormat DF = new DecimalFormat("#,##,##0.00");
+    private static final String FROM_EMAIL = "shopeasemicroservices@gmail.com";
+
     private static final String COMMON_STYLES = """
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
@@ -92,7 +96,7 @@ public class EmailService {
                                         <strong>Destination Layout:</strong><br>
                                         %s
                                     </div>
-                                    
+
                                     <div class="btn-container">
                                         <a href="https://shop.praveen-challa.tech/orders" class="btn">Track Deployment</a>
                                     </div>
@@ -109,7 +113,8 @@ public class EmailService {
                     .formatted(COMMON_STYLES, safeName, safeOrderNumber, amountFormatted, safeAddress);
 
             helper.setFrom(FROM_EMAIL);
-            if (email == null || email.isBlank()) return;
+            if (email == null || email.isBlank())
+                return;
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
@@ -169,7 +174,8 @@ public class EmailService {
                     .formatted(COMMON_STYLES, safeName, safeOrderNumber);
 
             helper.setFrom(FROM_EMAIL);
-            if (email == null || email.isBlank()) return;
+            if (email == null || email.isBlank())
+                return;
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
@@ -233,7 +239,8 @@ public class EmailService {
                     .formatted(COMMON_STYLES, firstName);
 
             helper.setFrom(FROM_EMAIL);
-            if (email == null || email.isBlank()) return;
+            if (email == null || email.isBlank())
+                return;
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
@@ -292,7 +299,8 @@ public class EmailService {
                     .formatted(COMMON_STYLES, safeName);
 
             helper.setFrom(FROM_EMAIL);
-            if (email == null || email.isBlank()) return;
+            if (email == null || email.isBlank())
+                return;
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
@@ -346,10 +354,11 @@ public class EmailService {
                     </body>
                     </html>
                     """
-                    .formatted(COMMON_STYLES, otp, email);
+                    .formatted(COMMON_STYLES, otp);
 
             helper.setFrom(FROM_EMAIL);
-            if (email == null || email.isBlank()) return;
+            if (email == null || email.isBlank())
+                return;
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
@@ -360,5 +369,4 @@ public class EmailService {
             log.warn("Failed to send HTML OTP email. Cause: {}", e.getMessage());
         }
     }
-}
 }
