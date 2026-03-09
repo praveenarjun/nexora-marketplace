@@ -117,7 +117,7 @@ public class ProductServiceImpl implements ProductService {
 
         @Override
         @Transactional(readOnly = true)
-        @org.springframework.cache.annotation.Cacheable(value = "products", key = "#pageable.pageNumber + '_' + #pageable.pageSize")
+        @org.springframework.cache.annotation.Cacheable(value = "products", key = "#pageable.pageNumber + '_' + #pageable.pageSize + '_' + #pageable.sort.toString()")
         public Page<ProductDTO> getAllProducts(Pageable pageable) {
                 // Use specification to filter out ARCHIVED and DELETED by default
                 org.springframework.data.jpa.domain.Specification<Product> spec = com.shopease.productservice.repository.spec.ProductSpecification
@@ -128,7 +128,7 @@ public class ProductServiceImpl implements ProductService {
 
         @Override
         @Transactional(readOnly = true)
-        @org.springframework.cache.annotation.Cacheable(value = "products", key = "'search_' + T(java.util.Objects).hash(#search, #categoryId, #brand, #minPrice, #maxPrice, #status, #inStock, #featured, #pageable.pageNumber, #pageable.pageSize)")
+        @org.springframework.cache.annotation.Cacheable(value = "products", key = "'search_' + T(java.util.Objects).hash(#search, #categoryId, #brand, #minPrice, #maxPrice, #status, #inStock, #featured, #pageable.pageNumber, #pageable.pageSize, #pageable.sort.toString())")
         public Page<ProductDTO> searchProducts(String search, Long categoryId, String brand,
                         java.math.BigDecimal minPrice,
                         java.math.BigDecimal maxPrice, String status, Boolean inStock, Boolean featured,
@@ -158,7 +158,7 @@ public class ProductServiceImpl implements ProductService {
 
         @Override
         @Transactional(readOnly = true)
-        @org.springframework.cache.annotation.Cacheable(value = "products", key = "'featured_' + #pageable.pageNumber")
+        @org.springframework.cache.annotation.Cacheable(value = "products", key = "'featured_' + #pageable.pageNumber + '_' + #pageable.pageSize + '_' + #pageable.sort.toString()")
         public Page<ProductDTO> getFeaturedProducts(Pageable pageable) {
                 return productRepository.findByFeaturedTrue(pageable)
                                 .map(productMapper::toDTO);
@@ -166,7 +166,7 @@ public class ProductServiceImpl implements ProductService {
 
         @Override
         @Transactional(readOnly = true)
-        @org.springframework.cache.annotation.Cacheable(value = "products", key = "'lowstock_' + #pageable.pageNumber")
+        @org.springframework.cache.annotation.Cacheable(value = "products", key = "'lowstock_' + #pageable.pageNumber + '_' + #pageable.pageSize + '_' + #pageable.sort.toString()")
         public Page<ProductDTO> getLowStockProducts(Pageable pageable) {
                 return productRepository.findLowStockProducts(pageable)
                                 .map(productMapper::toDTO);
@@ -180,7 +180,14 @@ public class ProductServiceImpl implements ProductService {
                 Product product = productRepository.findById(id)
                                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
 
-                product.setStatus(status);
+                // Validate status
+                java.util.Set<String> validStatuses = java.util.Set.of("ACTIVE", "DRAFT", "INACTIVE", "ARCHIVED",
+                                "DELETED");
+                if (!validStatuses.contains(status.toUpperCase())) {
+                        throw new IllegalArgumentException("Invalid product status: " + status);
+                }
+
+                product.setStatus(status.toUpperCase());
                 Product savedProduct = productRepository.save(product);
                 return productMapper.toDTO(savedProduct);
         }
