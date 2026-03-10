@@ -246,11 +246,11 @@ export default function Products() {
                                             </div>
                                         )}
                                     </div>
-                                    <div className="p-2.5 md:p-6 flex flex-col flex-1">
-                                        <div className="flex justify-between items-start mb-1 md:mb-2">
-                                            <div className="flex flex-col gap-0.5">
-                                                <p className="text-[7px] md:text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">{product.categoryName || 'GENERAL'}</p>
-                                                <h3 className="text-[11px] md:text-base font-bold text-adaptive group-hover:text-primary-500 transition-colors truncate lg:pr-4">{product.name}</h3>
+                                    <div className="p-1.5 md:p-6 flex flex-col flex-1">
+                                        <div className="flex justify-between items-start mb-0.5 md:mb-2">
+                                            <div className="flex flex-col gap-0">
+                                                <p className="text-[6px] md:text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">{product.categoryName || 'GENERAL'}</p>
+                                                <h3 className="text-[10px] md:text-base font-bold text-adaptive group-hover:text-primary-500 transition-colors truncate lg:pr-4 leading-tight">{product.name}</h3>
                                             </div>
                                             {product.rating > 0 && (
                                                 <div className="hidden md:flex items-center gap-1 bg-[var(--bg-glass)] px-2 py-1 rounded-lg border border-[var(--border-primary)]">
